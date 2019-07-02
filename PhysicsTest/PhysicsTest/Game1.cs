@@ -39,10 +39,11 @@ namespace PhysicsTest
             currentSelected = null;
             currentUpdatePosition = 0;
             sim = new PhysicsSim();
-            MovingObject obj = new MovingObject(new Vector2[] { new Vector2(-8, -8), new Vector2(8, -8), new Vector2(8, 8), new Vector2(-8, 8) }, new Vector2(276, 270), 1);
+            float size = 16;
+            MovingObject obj = new MovingObject(new Vector2[] { new Vector2(-size, -size), new Vector2(size, -size), new Vector2(size, size), new Vector2(-size, size) }, new Vector2(276, 128), 1);
             obj.Velocity = new Vector2(0, 2);
             sim.MovingObjects.Add(obj);
-            ImmobileObject imObj = new ImmobileObject(new Vector2[] { new Vector2(-16, -8), new Vector2(0, -64), new Vector2(64, -48), new Vector2(128, -8), new Vector2(128, 128), new Vector2(-16, 128) }, new Vector2(256, 320));
+            ImmobileObject imObj = new ImmobileObject(new Vector2[] { new Vector2(-16, -8), new Vector2(0, -48), new Vector2(32, -64), new Vector2(64, -56), new Vector2(128, -8), new Vector2(128, 128), new Vector2(-16, 128) }, new Vector2(256, 320));
             sim.ImmobileObjects.Add(imObj);
             base.Initialize();
         }
