@@ -8,14 +8,18 @@ namespace PlatformerEngine
     /// </summary>
     public static class Program
     {
+        public static PlatformerGame Game;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
         {
-            using (var game = new PlatformerGame())
-                game.Run();
+            using (Game = new PlatformerGame())
+            {
+                ConsoleManager.Start();
+                Game.Run();
+            }
         }
     }
 #endif
