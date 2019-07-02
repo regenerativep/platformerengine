@@ -45,8 +45,8 @@ namespace PhysicsTest
             for (int i = 0; i < aVertices.Length; i++) aVertices[i] += a.Position;
             Vector2[] bVertices = b.GetAllVertices();
             for (int i = 0; i < bVertices.Length; i++) bVertices[i] += b.Position;
-            Vector2 closestOnA = GetClosestPoint(b.Center + b.Position, aVertices); //somehow making the center actually at the center messes everything up
-            Vector2 closestOnB = GetClosestPoint(closestOnA, bVertices);
+            Vector2 closestOnB = ClosestPointToLine(a.Center + a.Position, linePoints[2], linePoints[3]);
+            Vector2 closestOnA = GetClosestPoint(closestOnB, aVertices);
             Game1.testA = closestOnA;
             Game1.testB = closestOnB;
             a.Position -= closestOnA - closestOnB;

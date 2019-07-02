@@ -42,7 +42,7 @@ namespace PhysicsTest
             MovingObject obj = new MovingObject(new Vector2[] { new Vector2(-8, -8), new Vector2(8, -8), new Vector2(8, 8), new Vector2(-8, 8) }, new Vector2(276, 270), 1);
             obj.Velocity = new Vector2(0, 2);
             sim.MovingObjects.Add(obj);
-            ImmobileObject imObj = new ImmobileObject(new Vector2[] { new Vector2(-16, -8), new Vector2(64, -16), new Vector2(128, -8), new Vector2(128, 128), new Vector2(-16, 128) }, new Vector2(256, 320));
+            ImmobileObject imObj = new ImmobileObject(new Vector2[] { new Vector2(-16, -8), new Vector2(0, -64), new Vector2(64, -48), new Vector2(128, -8), new Vector2(128, 128), new Vector2(-16, 128) }, new Vector2(256, 320));
             sim.ImmobileObjects.Add(imObj);
             base.Initialize();
         }
