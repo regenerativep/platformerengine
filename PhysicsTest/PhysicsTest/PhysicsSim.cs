@@ -39,7 +39,7 @@ namespace PhysicsTest
                 }
             }
         }
-        public void Collide(MovingObject a, PhysicsObject b, Vector2[] linePoints)
+        public void Collide(MovingObject a, ImmobileObject b, Vector2[] linePoints)
         {
             Vector2[] aVertices = a.GetAllVertices();
             for (int i = 0; i < aVertices.Length; i++) aVertices[i] += a.Position;
@@ -49,12 +49,22 @@ namespace PhysicsTest
             Vector2 closestOnB = GetClosestPoint(closestOnA, bVertices);
             Game1.testA = closestOnA;
             Game1.testB = closestOnB;
-            Vector2 difference = (closestOnA - closestOnB);
-            a.Position -= difference;
+            a.Position -= closestOnA - closestOnB;
             Vector2 bVector = linePoints[3] - linePoints[2];
             bVector.Normalize();
             bVector *= a.Velocity.Length();
             a.Velocity = ClosestPointToLine(a.Velocity, -bVector, bVector);
+            Vector2 normalizedVelocity = new Vector2(a.Velocity.X, a.Velocity.Y);
+            normalizedVelocity.Normalize();
+            if(a.Velocity.LengthSquared() > b.Friction * b.Friction)
+            {
+                a.Velocity -= normalizedVelocity * b.Friction;
+            }
+            else
+            {
+                a.Velocity.X = 0;
+                a.Velocity.Y = 0;
+            }
         }
         public Vector2 GetVectorInDirection(Vector2 vec, float dir)
         {

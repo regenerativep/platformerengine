@@ -15,10 +15,8 @@ namespace PhysicsTest
         public Vector2 Position;
         public Vector2 Center { get { return center; } }
         private Vector2 center;
-        public float Friction;
         public PhysicsObject(Vector2[] vertices, Vector2 pos)
         {
-            Friction = 0.5f;
             this.vertices = vertices;
             center = new Vector2(0, 0);
             foreach (Vector2 vertex in vertices)
