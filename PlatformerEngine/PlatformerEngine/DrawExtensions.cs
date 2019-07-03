@@ -25,7 +25,7 @@ namespace PlatformerEngine
         /// <param name="b">ending point of the line</param>
         /// <param name="color">color of the line</param>
         /// <param name="depth">layer to draw the line at</param>
-        public static void DrawLine(this SpriteBatch sb, Vector2 a, Vector2 b, Color color, DrawLayer layer)
+        public static void DrawLine(this SpriteBatch sb, Vector2 a, Vector2 b, Color color, LayerData layer)
         {
             if(singlePixel == null)
             {
@@ -42,7 +42,7 @@ namespace PlatformerEngine
         /// <param name="sb">this spritebatch</param>
         /// <param name="pos">the center location of the X</param>
         /// <param name="size">width of the X</param>
-        public static void DrawX(this SpriteBatch sb, Vector2 pos, float size, DrawLayer layer)
+        public static void DrawX(this SpriteBatch sb, Vector2 pos, float size, LayerData layer)
         {
             Vector2 sizeVec = new Vector2(size / 2);
             DrawLine(sb, pos - sizeVec, pos + sizeVec, Color.Black, layer);

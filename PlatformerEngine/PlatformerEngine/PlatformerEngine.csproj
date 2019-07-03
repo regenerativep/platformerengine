@@ -62,13 +62,15 @@
     <Compile Include="AssetManager.cs" />
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="DrawExtensions.cs" />
-    <Compile Include="DrawLayer.cs" />
+    <Compile Include="LayerData.cs" />
+    <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="PlatformerGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="SoundManager.cs" />
+    <Compile Include="SpriteData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

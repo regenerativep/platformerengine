@@ -9,7 +9,7 @@ namespace PlatformerEngine
     /// <summary>
     /// wrapper for easily separating layers of drawing
     /// </summary>
-    public class DrawLayer
+    public class LayerData
     {
         /// <summary>
         /// the layer (0 -> 100) to draw at
@@ -32,18 +32,18 @@ namespace PlatformerEngine
         /// creates a new draw layer
         /// </summary>
         /// <param name="layer">the layer</param>
-        public DrawLayer(int layer)
+        public LayerData(int layer)
         {
             Layer = layer;
         }
         /// <summary>
         /// gets a whole layer at 100
         /// </summary>
-        public static DrawLayer Default
+        public static LayerData Default
         {
             get
             {
-                return new DrawLayer(100);
+                return new LayerData(100);
             }
         }
     }
