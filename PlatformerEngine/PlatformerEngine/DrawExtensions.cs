@@ -14,6 +14,17 @@ namespace PlatformerEngine
     public static class DrawExtensions
     {
         /// <summary>
+        /// draws a line to the spritebatch
+        /// </summary>
+        /// <param name="sb">this spritebatch</param>
+        /// <param name="a">beginning point of the line</param>
+        /// <param name="b">ending point of the line</param>
+        /// <param name="color">color of the line</param>
+        public static void DrawLine(this SpriteBatch sb, Vector2 a, Vector2 b, Color color)
+        {
+            DrawLine(sb, a, b, color, new LayerData(0));
+        }
+        /// <summary>
         /// a texture with a single white pixel
         /// </summary>
         private static Texture2D singlePixel = null;

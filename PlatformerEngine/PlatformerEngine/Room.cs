@@ -33,7 +33,7 @@ namespace PlatformerEngine
         /// <summary>
         /// the parent game
         /// </summary>
-        public PlatformerGame Game;
+        public Game Game;
         /// <summary>
         /// the view offset that corresponds to the view position
         /// </summary>
@@ -46,7 +46,7 @@ namespace PlatformerEngine
         /// creates an instance of a room
         /// </summary>
         /// <param name="game">the parent game</param>
-        public Room(PlatformerGame game)
+        public Room(Game game)
         {
             Game = game;
             Sounds = new SoundManager();

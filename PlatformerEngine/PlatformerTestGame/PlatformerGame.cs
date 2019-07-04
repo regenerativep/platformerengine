@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace PlatformerEngine
+namespace PlatformerTestGame
 {
     /// <summary>
     /// main area for the platformer game

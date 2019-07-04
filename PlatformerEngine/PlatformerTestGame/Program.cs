@@ -1,6 +1,7 @@
 ﻿using System;
+using PlatformerEngine;
 
-namespace PlatformerEngine
+namespace PlatformerTestGame
 {
 #if WINDOWS || LINUX
     /// <summary>

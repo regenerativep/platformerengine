@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26228.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlatformerEngine", "PlatformerEngine\PlatformerEngine.csproj", "{BBC01141-AF3C-4CA0-98A4-AF547EFA584D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlatformerPhysicsEngine", "PlatformerPhysicsEngine\PlatformerPhysicsEngine.csproj", "{F1814C5C-CE5C-4FDE-B11F-0537A7E6F1D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlatformerTestGame", "PlatformerTestGame\PlatformerTestGame.csproj", "{12BC9F85-4D69-432C-8BFA-9ED4458A2534}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,14 +21,14 @@ Global
 		{BBC01141-AF3C-4CA0-98A4-AF547EFA584D}.Release|Any CPU.ActiveCfg = Release|x86
 		{BBC01141-AF3C-4CA0-98A4-AF547EFA584D}.Release|x86.ActiveCfg = Release|x86
 		{BBC01141-AF3C-4CA0-98A4-AF547EFA584D}.Release|x86.Build.0 = Release|x86
-		{F1814C5C-CE5C-4FDE-B11F-0537A7E6F1D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1814C5C-CE5C-4FDE-B11F-0537A7E6F1D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1814C5C-CE5C-4FDE-B11F-0537A7E6F1D1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F1814C5C-CE5C-4FDE-B11F-0537A7E6F1D1}.Debug|x86.Build.0 = Debug|Any CPU
-		{F1814C5C-CE5C-4FDE-B11F-0537A7E6F1D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1814C5C-CE5C-4FDE-B11F-0537A7E6F1D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1814C5C-CE5C-4FDE-B11F-0537A7E6F1D1}.Release|x86.ActiveCfg = Release|Any CPU
-		{F1814C5C-CE5C-4FDE-B11F-0537A7E6F1D1}.Release|x86.Build.0 = Release|Any CPU
+		{12BC9F85-4D69-432C-8BFA-9ED4458A2534}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12BC9F85-4D69-432C-8BFA-9ED4458A2534}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12BC9F85-4D69-432C-8BFA-9ED4458A2534}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{12BC9F85-4D69-432C-8BFA-9ED4458A2534}.Debug|x86.Build.0 = Debug|Any CPU
+		{12BC9F85-4D69-432C-8BFA-9ED4458A2534}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12BC9F85-4D69-432C-8BFA-9ED4458A2534}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12BC9F85-4D69-432C-8BFA-9ED4458A2534}.Release|x86.ActiveCfg = Release|Any CPU
+		{12BC9F85-4D69-432C-8BFA-9ED4458A2534}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
