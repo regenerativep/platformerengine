@@ -17,8 +17,9 @@ namespace PlatformerEngine
         {
             using (Game = new PlatformerGame())
             {
-                ConsoleManager.Start();
+                Action endCb = ConsoleManager.Start();
                 Game.Run();
+                endCb();
             }
         }
     }

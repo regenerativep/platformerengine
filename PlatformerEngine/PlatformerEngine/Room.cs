@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using PlatformerEngine.GameObjects;
-using PlatformerEngine.GameTiles;
 using System;
 using System.Collections.Generic;
 using System.IO;

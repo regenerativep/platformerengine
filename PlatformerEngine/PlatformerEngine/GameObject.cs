@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlatformerEngine.GameObjects
+namespace PlatformerEngine
 {
     /// <summary>
     /// a (non programming) object that can be put inside the game world

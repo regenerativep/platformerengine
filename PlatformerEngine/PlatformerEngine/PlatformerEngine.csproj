@@ -62,9 +62,9 @@
     <Compile Include="AssetManager.cs" />
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="DrawExtensions.cs" />
-    <Compile Include="GameTiles\GameTile.cs" />
+    <Compile Include="GameTile.cs" />
     <Compile Include="LayerData.cs" />
-    <Compile Include="GameObjects\GameObject.cs" />
+    <Compile Include="GameObject.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="PlatformerMath.cs" />
     <Compile Include="PlatformerGame.cs" />

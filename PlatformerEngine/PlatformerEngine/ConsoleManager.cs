@@ -29,6 +29,7 @@ namespace PlatformerEngine
         /// </summary>
         public static List<ICommand> Commands = new List<ICommand>();
         private static int flavorLength = 4;
+        private static bool isRunning = false;
         /// <summary>
         /// write a line to the console
         /// </summary>
@@ -75,12 +76,13 @@ namespace PlatformerEngine
         /// <summary>
         /// starts the console manager (to start reading user input)
         /// </summary>
-        public static void Start()
+        public static Action Start()
         {
             Task.Run(() =>
             {
+                isRunning = true;
                 WriteLine("started");
-                while (Program.Game.IsRunning)
+                while (isRunning)
                 {
                     ConsoleKeyInfo key = Console.ReadKey();
                     if(key.Key == ConsoleKey.Enter)
@@ -104,6 +106,10 @@ namespace PlatformerEngine
                 }
                 WriteLine("closing");
             });
+            return () =>
+            {
+                isRunning = false;
+            };
         }
         /// <summary>
         /// calls a command

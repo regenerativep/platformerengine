@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlatformerEngine.GameTiles
+namespace PlatformerEngine
 {
     /// <summary>
     /// a tile that can be put into the game world
