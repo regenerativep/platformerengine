@@ -51,7 +51,7 @@ namespace PlatformerEngine
         /// <summary>
         /// the layer to draw to
         /// </summary>
-        public LayerData Layer;
+        public LayerData LayerData;
         /// <summary>
         /// the frames of the sprite
         /// </summary>
@@ -67,7 +67,7 @@ namespace PlatformerEngine
         {
             FrameIndex = 0;
             Speed = 1;
-            Layer = new LayerData(0);
+            LayerData = new LayerData(0);
             Offset = new Vector2(0, 0);
             Size = new Vector2(0, 0);
             SpriteEffect = SpriteEffects.None;
@@ -111,7 +111,7 @@ namespace PlatformerEngine
             if (Frames != null)
             {
                 Rectangle drawRect = new Rectangle((int)position.X, (int)position.Y, (int)Size.X, (int)Size.Y);
-                spriteBatch.Draw(Frames[FrameIndex], drawRect, Source, color, Angle, Offset, SpriteEffect, Layer.ActualLayer);
+                spriteBatch.Draw(Frames[FrameIndex], drawRect, Source, color, Angle, Offset, SpriteEffect, LayerData.ActualLayer);
             }
         }
         /// <summary>

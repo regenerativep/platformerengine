@@ -86,7 +86,7 @@ namespace PlatformerEngine
                     if(key.Key == ConsoleKey.Enter)
                     {
                         WriteLine("<" + CurrentInput);
-                        DoCommand(CurrentInput);
+                        ProcessCommand(CurrentInput);
                         CurrentInput = "";
                         WriteInput();
                     }
@@ -109,7 +109,7 @@ namespace PlatformerEngine
         /// calls a command
         /// </summary>
         /// <param name="input">the string input of the command</param>
-        public static void DoCommand(string input)
+        public static void ProcessCommand(string input)
         {
             string[] parts = input.Split(' ');
             if (parts.Length == 0) return;
