@@ -13,6 +13,7 @@ namespace PlatformerEngine
     /// </summary>
     public abstract class GameObject
     {
+        public static Dictionary<string, Type> NameToType = new Dictionary<string, Type>();
         /// <summary>
         /// the position of the object
         /// </summary>
@@ -40,7 +41,7 @@ namespace PlatformerEngine
             Room = room;
             Position = position;
             Velocity = velocity;
-            Sprite = null;
+            Sprite = new SpriteData();
         }
         /// <summary>
         /// updates this game object
@@ -57,6 +58,7 @@ namespace PlatformerEngine
         /// <param name="viewPosition">the offset to match the view position</param>
         public virtual void Draw(SpriteBatch spriteBatch, Vector2 viewPosition)
         {
+            //ConsoleManager.WriteLine(Sprite.Frames == null, "verb");
             Sprite?.Draw(spriteBatch, Position - viewPosition);
         }
         /// <summary>
@@ -64,12 +66,11 @@ namespace PlatformerEngine
         /// </summary>
         /// <param name="name">name of the object as a string</param>
         /// <returns>the corresponding game object type</returns>
-        public static Type GetObjectFromName(string name)
+        public static Type GetTypeFromName(string name)
         {
-            switch(name)
+            if(NameToType.ContainsKey(name))
             {
-                case "":
-                    return typeof(GameObject);
+                return NameToType[name];
             }
             return null;
         }

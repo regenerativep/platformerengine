@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using PlatformerEngine;
+using PlatformerTestGame.GameObjects;
 
 namespace PlatformerTestGame
 {
@@ -14,6 +16,7 @@ namespace PlatformerTestGame
         /// </summary>
         public GraphicsDeviceManager Graphics;
         private SpriteBatch spriteBatch;
+        private Room currentRoom;
         /// <summary>
         /// creates a new instance of the platformer game
         /// </summary>
@@ -28,6 +31,12 @@ namespace PlatformerTestGame
         protected override void Initialize()
         {
             ChangeResolution(1024, 768);
+
+            GameObject.NameToType["block"] = typeof(BlockObject); //if there is a better way to go about doing this please tell
+
+            currentRoom = new Room(this);
+            currentRoom.Load("Levels\\test.txt");
+
             base.Initialize();
         }
         /// <summary>
@@ -50,7 +59,26 @@ namespace PlatformerTestGame
             Graphics.PreferredBackBufferHeight = height;
             Graphics.ApplyChanges();
         }
-
+        /// <summary>
+        /// changes to a different room
+        /// </summary>
+        /// <param name="newRoom"></param>
+        /// <param name="trans"></param>
+        public void ChangeRoom(Room newRoom, ITransition trans = null)
+        {
+            if (trans != null)
+            {
+                currentRoom.ApplyTransition(trans.Perform(false, () =>
+                {
+                    currentRoom = newRoom;
+                    currentRoom.ApplyTransition(trans.Perform(true));
+                }));
+            }
+            else
+            {
+                currentRoom = newRoom;
+            }
+        }
         /// <summary>
         /// loads game content
         /// LoadContent will be called once per game
@@ -58,7 +86,8 @@ namespace PlatformerTestGame
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            // TODO: use this.Content to load your game content here
+            AssetManager.Content = Content;
+            AssetManager.LoadTexture("block", "sprites\\blockplaceholder");
         }
 
         /// <summary>
@@ -76,11 +105,14 @@ namespace PlatformerTestGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            KeyboardState keyState = Keyboard.GetState();
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || keyState.IsKeyDown(Keys.Escape))
                 Exit();
-
-            // TODO: Add your update logic here
-
+            if(keyState.IsKeyDown(Keys.Space))
+            {
+                ChangeRoom((new Room(this)).Load("Levels\\test2.txt"), new FadeTransition());
+            }
+            currentRoom.Update();
             base.Update(gameTime);
         }
         
@@ -91,9 +123,9 @@ namespace PlatformerTestGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
-
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);
+            currentRoom.Draw(spriteBatch);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }

@@ -120,11 +120,12 @@ namespace PlatformerEngine
         /// <param name="newSprite">the texture</param>
         public void Change(Texture2D newSprite)
         {
-            if(Frames != null && Frames.Length > 0 && Frames[0] != newSprite)
+            if(Frames != null && Frames.Length > 0 && Frames[0] == newSprite)
             {
-                Frames = new Texture2D[] { newSprite };
-                FrameIndex = 0;
+                return;
             }
+            Frames = new Texture2D[] { newSprite };
+            FrameIndex = 0;
         }
         /// <summary>
         /// changes the sprite to the given framed texture

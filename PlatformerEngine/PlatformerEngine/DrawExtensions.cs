@@ -47,6 +47,15 @@ namespace PlatformerEngine
             float angle = (float)Math.Atan2(dist.Y, dist.X);
             sb.Draw(singlePixel, a, null, color, angle, Vector2.Zero, new Vector2(dist.Length(), 1), SpriteEffects.None, layer.ActualLayer);
         }
+        public static void DrawRectangle(this SpriteBatch sb, Vector2 a, Vector2 b, Color color, LayerData layer)
+        {
+            if (singlePixel == null)
+            {
+                singlePixel = new Texture2D(sb.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+                singlePixel.SetData(new Color[] { Color.White });
+            }
+            sb.Draw(singlePixel, a, null, color, 0f, Vector2.Zero, b - a, SpriteEffects.None, layer.ActualLayer);
+        }
         /// <summary>
         /// draws an X
         /// </summary>

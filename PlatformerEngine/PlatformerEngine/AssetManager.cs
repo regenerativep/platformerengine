@@ -40,14 +40,16 @@ namespace PlatformerEngine
             {
                 frames[i] = Content.Load<Texture2D>(location + i.ToString());
             }
-            foreach (KeyValuePair<string, Action<Texture2D[]>> req in framedTextureAssetRequests)
+            for (int i = framedTextureAssetRequests.Count - 1; i >= 0; i--)
             {
+                var req = framedTextureAssetRequests[i];
                 if (req.Key.Equals(internalName))
                 {
                     req.Value.Invoke(frames);
-                    framedTextureAssetRequests.Remove(req);
+                    framedTextureAssetRequests.RemoveAt(i);
                 }
             }
+            ConsoleManager.WriteLine("loaded framed texture \"" + internalName + "\" from " + location, "load");
             framedTextureAssets[internalName] = frames;
             return frames;
         }
@@ -60,14 +62,16 @@ namespace PlatformerEngine
         public static Texture2D LoadTexture(string internalName, string location)
         {
             Texture2D texture = Content.Load<Texture2D>(location);
-            foreach (KeyValuePair<string, Action<Texture2D>> req in textureAssetRequests)
+            for(int i = textureAssetRequests.Count - 1; i >= 0; i--)
             {
+                var req = textureAssetRequests[i];
                 if (req.Key.Equals(internalName))
                 {
                     req.Value.Invoke(texture);
-                    textureAssetRequests.Remove(req);
+                    textureAssetRequests.RemoveAt(i);
                 }
             }
+            ConsoleManager.WriteLine("loaded texture \"" + internalName + "\" from " + location, "load");
             textureAssets[internalName] = texture;
             return texture;
         }
@@ -80,14 +84,16 @@ namespace PlatformerEngine
         public static SoundEffect LoadSound(string internalName, string location)
         {
             SoundEffect sound = Content.Load<SoundEffect>(location);
-            foreach (KeyValuePair<string, Action<SoundEffect>> req in soundAssetRequests)
+            for (int i = soundAssetRequests.Count - 1; i >= 0; i--)
             {
+                var req = soundAssetRequests[i];
                 if (req.Key.Equals(internalName))
                 {
                     req.Value.Invoke(sound);
-                    soundAssetRequests.Remove(req);
+                    soundAssetRequests.RemoveAt(i);
                 }
             }
+            ConsoleManager.WriteLine("loaded sound \"" + internalName + "\" from " + location, "load");
             soundAssets[internalName] = sound;
             return sound;
         }

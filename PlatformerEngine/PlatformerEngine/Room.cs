@@ -42,6 +42,7 @@ namespace PlatformerEngine
         /// sound manager
         /// </summary>
         public SoundManager Sounds;
+        private ITransition currentTransition;
         /// <summary>
         /// creates an instance of a room
         /// </summary>
@@ -61,6 +62,11 @@ namespace PlatformerEngine
         /// </summary>
         public void Update()
         {
+            if (currentTransition != null && currentTransition.IsActive)
+            {
+                currentTransition.Update();
+                return;
+            }
             foreach(GameObject obj in GameObjectList)
             {
                 obj.Update();
@@ -76,6 +82,10 @@ namespace PlatformerEngine
         /// <param name="spriteBatch">the sprite batch to draw to</param>
         public void Draw(SpriteBatch spriteBatch)
         {
+            if (currentTransition != null && currentTransition.IsActive)
+            {
+                currentTransition.Draw(spriteBatch);
+            }
             Vector2 ceiledOffset = new Vector2((float)(Math.Ceiling(Math.Abs(ViewPosition.X) * Math.Sign(ViewPosition.X))), (float)(Math.Ceiling(Math.Abs(ViewPosition.Y) * Math.Sign(ViewPosition.Y))));
             foreach (GameObject obj in GameObjectList)
             {
@@ -103,10 +113,10 @@ namespace PlatformerEngine
                     break;
                 case "createobject":
                     {
-                        Type type = GameObject.GetObjectFromName(parts[1]);
+                        Type type = GameObject.GetTypeFromName(parts[1]);
                         Vector2 position = new Vector2(int.Parse(parts[2]), int.Parse(parts[3]));
                         GameObject obj = (GameObject)type.GetConstructor(new Type[] { typeof(Room), typeof(Vector2) }).Invoke(new object[] { this, position });
-                        obj.Sprite.LayerData.Layer = int.Parse(parts[4]);
+                        obj.Sprite.LayerData.Layer = int.Parse(parts[4]); //TODO: make layer take in string instead of int
                         GameObjectList.Add(obj);
                         break;
                     }
@@ -120,6 +130,14 @@ namespace PlatformerEngine
                         break;
                     }
             }
+        }
+        /// <summary>
+        /// applies a transition to this room
+        /// </summary>
+        /// <param name="trans">the transition to apply</param>
+        public void ApplyTransition(ITransition trans)
+        {
+            currentTransition = trans;
         }
         /// <summary>
         /// checks for collision against all other tiles
@@ -182,7 +200,7 @@ namespace PlatformerEngine
             for (int i = 0; i < GameObjectList.Count; i++)
             {
                 GameObject obj = GameObjectList[i];
-                if (obj.GetType() == GameObject.GetObjectFromName(name))
+                if (obj.GetType() == GameObject.GetTypeFromName(name))
                 {
                     return obj;
                 }
@@ -200,7 +218,7 @@ namespace PlatformerEngine
             for (int i = 0; i < GameObjectList.Count; i++)
             {
                 GameObject obj = GameObjectList[i];
-                if (obj.GetType() == GameObject.GetObjectFromName(name))
+                if (obj.GetType() == GameObject.GetTypeFromName(name))
                 {
                     if (PlatformerMath.RectangleInRectangle(collider, PlatformerMath.AddVectorToRect(new Rectangle((int)obj.Position.X, (int)obj.Position.Y, (int)obj.Sprite.Size.X, (int)obj.Sprite.Size.Y), obj.Position)))
                     {
@@ -214,14 +232,14 @@ namespace PlatformerEngine
         /// loads the room from a file
         /// </summary>
         /// <param name="filename">the filename with the room data</param>
-        public void Load(string filename)
+        public Room Load(string filename)
         {
             string[] lines = File.ReadAllLines(filename, Encoding.UTF8);
             for (int i = 0; i < lines.Length; i++)
             {
                 ProcessCommand(lines[i]);
             }
-
+            return this;
         }
     }
 }

@@ -73,6 +73,7 @@
     <Compile Include="Room.cs" />
     <Compile Include="SoundManager.cs" />
     <Compile Include="SpriteData.cs" />
+    <Compile Include="ITransition.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

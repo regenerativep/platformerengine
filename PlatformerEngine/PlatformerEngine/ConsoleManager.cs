@@ -34,6 +34,16 @@ namespace PlatformerEngine
         /// write a line to the console
         /// </summary>
         /// <param name="text"></param>
+        /// <param name="flavor">type of message</param>
+        public static void WriteLine(object obj, string flavor = "info")
+        {
+            WriteLine(obj.ToString(), flavor);
+        }
+        /// <summary>
+        /// write a line to the console
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="flavor">type of message</param>
         public static void WriteLine(string text, string flavor = "info")
         {
             CurrentWriteLine++;
