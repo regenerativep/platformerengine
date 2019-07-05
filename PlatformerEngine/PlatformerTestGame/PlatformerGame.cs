@@ -15,15 +15,10 @@ namespace PlatformerTestGame
         public GraphicsDeviceManager Graphics;
         private SpriteBatch spriteBatch;
         /// <summary>
-        /// if this game is currently running
-        /// </summary>
-        public bool IsRunning { get; private set; }
-        /// <summary>
         /// creates a new instance of the platformer game
         /// </summary>
         public PlatformerGame()
         {
-            IsRunning = true;
             Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
@@ -100,15 +95,6 @@ namespace PlatformerTestGame
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
-        }
-        /// <summary>
-        /// called when this is being disposed of
-        /// </summary>
-        /// <param name="disposing">(idk what it is but i dont use it here)</param>
-        protected override void Dispose(bool disposing)
-        {
-            IsRunning = false;
-            base.Dispose(disposing);
         }
     }
 }
