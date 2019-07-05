@@ -6,33 +6,33 @@ class LevelElement extends UIElement
     super(new Vector2(0, 0), new Vector2(width, height), 10);
     viewOffset = new Vector2(0, 0);
   }
-  public void draw()
+  public void draw(PGraphics pg)
   {
-    pushMatrix();
-    translate(viewOffset);
+    pg.pushMatrix();
+    pg.translate(viewOffset.x, viewOffset.y);
     if(showGrid)
     {
-      stroke(0, 0, 255);
-      noFill();
-      rect(0, 0, roomSize.x, roomSize.y);
-      stroke(0);
+      pg.stroke(0, 0, 255);
+      pg.noFill();
+      pg.rect(0, 0, roomSize.x, roomSize.y);
+      pg.stroke(0);
       for(int i = 0; i < roomSize.x; i += snap.x)
       {
-        line(i, 0, i, roomSize.y);
+        pg.line(i, 0, i, roomSize.y);
       }
       for(int i = 0; i < roomSize.y; i += snap.y)
       {
-        line(0, i, roomSize.x, i);
+        pg.line(0, i, roomSize.x, i);
       }
     }
     for(WorldLayer worldLayer : worldLayers)
     {
       for(WorldItem item : worldLayer.worldItems)
       {
-        item.draw();
+        item.draw(pg);
       }
     }
-    popMatrix();
+    pg.popMatrix();
   }
   public void update()
   {
@@ -41,11 +41,5 @@ class LevelElement extends UIElement
       viewOffset.x += mouseX - pmouseX;
       viewOffset.y += mouseY - pmouseY;
     }
-  }
-  public void mousePressed()
-  {
-  }
-  public void mouseReleased()
-  {
   }
 }

@@ -7,19 +7,19 @@ class WorldItem
     this.type = type;
     this.position = position;
   }
-  public void draw()
+  public void draw(PGraphics pg)
   {
-    this.draw(255);
+    this.draw(pg, 255);
   }
-  public void draw(int alpha)
+  public void draw(PGraphics pg, int alpha)
   {
-    fill(255, alpha);
-    stroke(0);
-    rect(position, type.size);
-    fill(0);
-    noStroke();
-    textAlign(LEFT, TOP);
-    text(type.name, position);
+    pg.fill(255, alpha);
+    pg.stroke(0);
+    pg.rect(position.x, position.y, type.size.x, type.size.y);
+    pg.fill(0);
+    pg.noStroke();
+    pg.textAlign(LEFT, TOP);
+    pg.text(type.name, position.x, position.y);
   }
 }
 class WorldItemType
