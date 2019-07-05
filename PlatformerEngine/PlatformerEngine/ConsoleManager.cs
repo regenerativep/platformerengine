@@ -33,7 +33,7 @@ namespace PlatformerEngine
         /// <summary>
         /// write a line to the console
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="obj">the object to write to the console</param>
         /// <param name="flavor">type of message</param>
         public static void WriteLine(object obj, string flavor = "info")
         {
@@ -42,7 +42,7 @@ namespace PlatformerEngine
         /// <summary>
         /// write a line to the console
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="text">the text to write to the console</param>
         /// <param name="flavor">type of message</param>
         public static void WriteLine(string text, string flavor = "info")
         {

@@ -10,7 +10,7 @@ namespace PlatformerTestGame.GameObjects
 {
     public class BlockObject : GameObject
     {
-        public BlockObject(Room room, Vector2 position) : base(room, position, new Vector2(0, 0))
+        public BlockObject(Room room, Vector2 position) : base(room, position)
         {
             AssetManager.RequestTexture("block", (tex) =>
             {

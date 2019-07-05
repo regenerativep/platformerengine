@@ -14,6 +14,10 @@ namespace PlatformerEngine
     public abstract class GameTile
     {
         /// <summary>
+        /// gets a game tile type from its corresponding string name
+        /// </summary>
+        public static Dictionary<string, Type> NameToType = new Dictionary<string, Type>();
+        /// <summary>
         /// position of the tile
         /// </summary>
         public Vector2 Position;
@@ -57,12 +61,11 @@ namespace PlatformerEngine
         /// </summary>
         /// <param name="name">name of the tile as a string</param>
         /// <returns>the corresonding tile object type</returns>
-        public static Type GetTileFromName(string name)
+        public static Type GetTypeFromName(string name)
         {
-            switch(name)
+            if (NameToType.ContainsKey(name))
             {
-                case "":
-                    return typeof(GameTile);
+                return NameToType[name];
             }
             return null;
         }

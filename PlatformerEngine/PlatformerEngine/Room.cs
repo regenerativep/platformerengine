@@ -122,7 +122,7 @@ namespace PlatformerEngine
                     }
                 case "createtile":
                     {
-                        Type type = GameTile.GetTileFromName(parts[1]);
+                        Type type = GameTile.GetTypeFromName(parts[1]);
                         Vector2 position = new Vector2(int.Parse(parts[2]), int.Parse(parts[3]));
                         GameTile obj = (GameTile)type.GetConstructor(new Type[] { typeof(Room), typeof(Vector2) }).Invoke(new object[] { this, position });
                         obj.Sprite.LayerData.Layer = int.Parse(parts[4]);

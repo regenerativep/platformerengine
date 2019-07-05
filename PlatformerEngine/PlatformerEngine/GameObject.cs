@@ -13,15 +13,14 @@ namespace PlatformerEngine
     /// </summary>
     public abstract class GameObject
     {
+        /// <summary>
+        /// gets a game object type from its corresponding string name
+        /// </summary>
         public static Dictionary<string, Type> NameToType = new Dictionary<string, Type>();
         /// <summary>
         /// the position of the object
         /// </summary>
         public Vector2 Position;
-        /// <summary>
-        /// the velocity of the object
-        /// </summary>
-        public Vector2 Velocity;
         /// <summary>
         /// the sprite of the object
         /// </summary>
@@ -36,11 +35,10 @@ namespace PlatformerEngine
         /// <param name="room">the room with the object</param>
         /// <param name="position">the position of the object</param>
         /// <param name="velocity">the velocity of the object</param>
-        public GameObject(Room room, Vector2 position, Vector2 velocity)
+        public GameObject(Room room, Vector2 position)
         {
             Room = room;
             Position = position;
-            Velocity = velocity;
             Sprite = new SpriteData();
         }
         /// <summary>
@@ -48,7 +46,6 @@ namespace PlatformerEngine
         /// </summary>
         public virtual void Update()
         {
-            Position += Velocity;
             Sprite?.Update();
         }
         /// <summary>
