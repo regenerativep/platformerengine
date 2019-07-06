@@ -14,6 +14,10 @@ class Vector2
   {
     return new Vector2(x + other.x, y + other.y);
   }
+  public Vector2 subtract(Vector2 other)
+  {
+    return new Vector2(x - other.x, y - other.y);
+  }
 }
 public void translate(Vector2 amount)
 {

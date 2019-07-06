@@ -1,15 +1,17 @@
 ArrayList<UIElement> uiElements;
 ArrayList<WorldLayer> worldLayers;
+ArrayList<WorldItemType> objectTypeList;
+ArrayList<WorldItemType> tileTypeList;
 boolean showGrid;
 boolean mouseIsPressed;
 PGraphics mainGraphics;
 Vector2 roomSize;
 Vector2 snap;
 float scrollMultiplier;
-ListElement layerListElement;
+ListElement layerListElement, objectListElement, tileListElement;
 WorldLayer currentLayer;
-TextInputElement addLayerTextInput;
-TextInputElement selectedTextInputElement;
+TextInputElement addLayerTextInput, selectedTextInputElement;
+WorldItemType currentWorldItemType;
 
 void setup()
 {
@@ -22,10 +24,32 @@ void setup()
   snap = new Vector2(32, 32);
   currentLayer = null;
   selectedTextInputElement = null;
+  currentWorldItemType = null;
   uiElements = new ArrayList<UIElement>();
   worldLayers = new ArrayList<WorldLayer>();
+  objectTypeList = new ArrayList<WorldItemType>();
+  tileTypeList = new ArrayList<WorldItemType>();
   
   uiElements.add(new LevelElement());
+  
+  objectListElement = new ListElement(new Vector2(0, 256), new Vector2(128, 256), 10);
+  objectListElement.addElement(new ButtonElement("-none-", new Vector2(0, 0), new Vector2(80, 28), 9)
+  {
+    public void mousePressed()
+    {
+      currentWorldItemType = null;
+    }
+  });
+  uiElements.add(objectListElement);
+  tileListElement = new ListElement(new Vector2(0, 512), new Vector2(128, 256), 10);
+  tileListElement.addElement(new ButtonElement("-none-", new Vector2(0, 0), new Vector2(80, 28), 9)
+  {
+    public void mousePressed()
+    {
+      currentWorldItemType = null;
+    }
+  });
+  uiElements.add(tileListElement);
   layerListElement = new ListElement(new Vector2(0, 0), new Vector2(128, 256), 10);
   addLayerTextInput = new TextInputElement(new Vector2(64, 0), new Vector2(64, 32), 9);
   layerListElement.addElement(new UIElement[] {
@@ -42,6 +66,27 @@ void setup()
     addLayerTextInput
   }, new Vector2(0, 32));
   uiElements.add(layerListElement);
+  
+  JSONObject allTypes = loadJSONObject("types.json");
+  JSONArray objectTypes = allTypes.getJSONArray("objectTypes");
+  for(int i = 0; i < objectTypes.size(); i++)
+  {
+    JSONObject obj = objectTypes.getJSONObject(i);
+    addGameObject(JSONObjectToType(obj, false));
+  }
+  JSONArray tileTypes = allTypes.getJSONArray("tileTypes");
+  for(int i = 0; i < tileTypes.size(); i++)
+  {
+    JSONObject obj = tileTypes.getJSONObject(i);
+    addTileType(JSONObjectToType(obj, true));
+  }
+}
+WorldItemType JSONObjectToType(JSONObject obj, boolean isTile)
+{
+  String name = obj.getString("name");
+  String internalName = obj.getString("internalName");
+  Vector2 size = new Vector2(obj.getInt("width"), obj.getInt("height"));
+  return new WorldItemType(name, internalName, size, isTile);
 }
 void draw()
 {
@@ -168,13 +213,26 @@ void addWorldLayer(WorldLayer worldLayer)
     worldLayers.add(worldLayer);
   }
   final int actualLayer = worldLayer.layer;
-  layerListElement.addElement(new ButtonElement("layer " + worldLayer.layer, new Vector2(0, 0), new Vector2(96, 24), 9)
-  {
-    public void mousePressed()
+  layerListElement.addElement(new UIElement[] {
+    new ButtonElement("layer " + worldLayer.layer, new Vector2(0, 0), new Vector2(96, 24), 9)
     {
-      currentLayer = getWorldLayer(actualLayer);
+      public void mousePressed()
+      {
+        currentLayer = getWorldLayer(actualLayer);
+      }
+    },
+    new CheckboxElement(new Vector2(96, 0), new Vector2(24, 24), 9, true)
+    {
+      public void onTick()
+      {
+        getWorldLayer(actualLayer).display = true;
+      }
+      public void onUntick()
+      {
+        getWorldLayer(actualLayer).display = false;
+      }
     }
-  });
+  }, new Vector2(0, 24));
 }
 WorldLayer getWorldLayer(int layer)
 {
@@ -187,4 +245,85 @@ WorldLayer getWorldLayer(int layer)
     }
   }
   return null;
+}
+boolean checkGameObjectExists(String internalName)
+{
+  for(WorldItemType type : objectTypeList)
+  {
+    if(type.internalName.equals(internalName))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+void addGameObject(WorldItemType item)
+{
+  if(checkGameObjectExists(item.internalName))
+  {
+    println("tried to add a game object when a game object of the same name already exists \"" + item.internalName + "\"");
+    return;
+  }
+  final int itemId = objectTypeList.size(); //TODO: may want to change this to a string in case we want to be able to change order of types or remove types
+  objectTypeList.add(item);
+  objectListElement.addElement(new ButtonElement(item.name, new Vector2(0, 0), new Vector2(120, 24), 9)
+  {
+    public void mousePressed()
+    {
+      currentWorldItemType = objectTypeList.get(itemId);
+    }
+  });
+}
+boolean checkTileTypeExists(String internalName)
+{
+  for(WorldItemType type : tileTypeList)
+  {
+    if(type.internalName.equals(internalName))
+    {
+      return true;
+    }
+  }
+  return false;
+}
+void addTileType(WorldItemType item)
+{
+  if(checkTileTypeExists(item.internalName))
+  {
+    println("tried to add a tile type when a tile type of the same name already exists \"" + item.internalName + "\"");
+    return;
+  }
+  final int itemId = tileTypeList.size(); //TODO: may want to change this to a string in case we want to be able to change order of types or remove types
+  tileTypeList.add(item);
+  tileListElement.addElement(new ButtonElement(item.name, new Vector2(0, 0), new Vector2(120, 24), 9)
+  {
+    public void mousePressed()
+    {
+      currentWorldItemType = tileTypeList.get(itemId);
+    }
+  });
+}
+WorldItem getItemAtPosition(Vector2 pos)
+{
+  if(currentLayer == null) return null;
+  for(WorldItem item : currentLayer.worldItems)
+  {
+    if(pointInRectangle(pos, item.position, item.type.size))
+    {
+      return item;
+    }
+  }
+  return null;
+}
+void removeItemAtPosition(Vector2 pos)
+{
+  if(currentLayer == null) return;
+  for(int i = 0; i < currentLayer.worldItems.size(); i++)
+  {
+    WorldItem item = currentLayer.worldItems.get(i);
+    if(pointInRectangle(pos, item.position, item.type.size))
+    {
+      currentLayer.worldItems.remove(i);
+      return;
+    }
+  }
 }

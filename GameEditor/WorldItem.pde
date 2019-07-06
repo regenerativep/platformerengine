@@ -24,11 +24,14 @@ class WorldItem
 }
 class WorldItemType
 {
-  public String name;
+  public String name, internalName;
   public Vector2 size;
-  public WorldItemType(String name, Vector2 size)
+  public boolean isTile;
+  public WorldItemType(String name, String internalName, Vector2 size, boolean isTile)
   {
     this.name = name;
+    this.internalName = internalName;
     this.size = size;
+    this.isTile = isTile;
   }
 }
