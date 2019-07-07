@@ -8,7 +8,7 @@ abstract class UIElement
     size = sze;
     this.layer = layer;
   }
-  public void mousePressed() {}
+  public void mousePressed(Vector2 mousePos) {}
   public void mouseReleased() {}
   public void update() {}
   public void draw(PGraphics pg) {}

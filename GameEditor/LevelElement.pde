@@ -81,7 +81,7 @@ class LevelElement extends UIElement
       viewOffset.y += mouseY - pmouseY;
     }
   }
-  public void mousePressed()
+  public void mousePressed(Vector2 mousePos)
   {
     if(mouseButton == LEFT)
     {

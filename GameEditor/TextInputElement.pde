@@ -4,8 +4,9 @@ class TextInputElement extends ButtonElement
   {
     super("", position, sze, layer);
   }
-  public void mousePressed()
+  public void mousePressed(Vector2 mousePos)
   {
     selectedTextInputElement = this;
+    super.mousePressed(mousePos);
   }
 }

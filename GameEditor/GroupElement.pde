@@ -8,15 +8,15 @@ class GroupElement extends UIElement
     elements = new ArrayList<UIElement>();
     graphics = createGraphics(sze.x, sze.y);
   }
-  public void mousePressed()
+  public void mousePressed(Vector2 mousePos)
   {
-    Vector2 mousePos = new Vector2(mouseX - position.x, mouseY - position.y);
+    //Vector2 mousePos = new Vector2(mouseX - position.x, mouseY - position.y);
     for(int i = elements.size() - 1; i >= 0; i--)
     {
       UIElement currentElement = elements.get(i);
       if(pointInRectangle(mousePos, currentElement.position, currentElement.size))
       {
-        currentElement.mousePressed();
+        currentElement.mousePressed(mousePos.subtract(currentElement.position));
         return;
       }
     }

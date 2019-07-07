@@ -6,7 +6,7 @@ class CheckboxElement extends UIElement
     super(pos, sze, layer);
     this.ticked = ticked;
   }
-  public void mousePressed()
+  public void mousePressed(Vector2 mousePos)
   {
     ticked = !ticked;
     if(ticked)

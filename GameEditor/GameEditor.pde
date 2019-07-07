@@ -10,7 +10,8 @@ Vector2 snap;
 float scrollMultiplier;
 ListElement layerListElement, objectListElement, tileListElement;
 WorldLayer currentLayer;
-TextInputElement addLayerTextInput, selectedTextInputElement;
+TextInputElement addLayerTextInput, saveFileTextInput;
+TextInputElement selectedTextInputElement;
 WorldItemType currentWorldItemType;
 
 void setup()
@@ -20,52 +21,58 @@ void setup()
   mainGraphics = createGraphics(width, height);
   mouseIsPressed = false;
   showGrid = true;
+  selectedTextInputElement = null;
+  currentWorldItemType = null;
   roomSize = new Vector2(512, 512);
   snap = new Vector2(32, 32);
   currentLayer = null;
-  selectedTextInputElement = null;
-  currentWorldItemType = null;
-  uiElements = new ArrayList<UIElement>();
   worldLayers = new ArrayList<WorldLayer>();
+  uiElements = new ArrayList<UIElement>();
   objectTypeList = new ArrayList<WorldItemType>();
   tileTypeList = new ArrayList<WorldItemType>();
-  
   uiElements.add(new LevelElement());
+  saveFileTextInput = new TextInputElement(new Vector2(128, 0), new Vector2(128, 32), 9);
+  uiElements.add(saveFileTextInput);
+  resetLayerList();
   
   objectListElement = new ListElement(new Vector2(0, 256), new Vector2(128, 256), 10);
   objectListElement.addElement(new ButtonElement("-none-", new Vector2(0, 0), new Vector2(80, 28), 9)
   {
-    public void mousePressed()
+    public void mousePressed(Vector2 mousePos)
     {
       currentWorldItemType = null;
+      super.mousePressed(mousePos);
     }
   });
   uiElements.add(objectListElement);
   tileListElement = new ListElement(new Vector2(0, 512), new Vector2(128, 256), 10);
   tileListElement.addElement(new ButtonElement("-none-", new Vector2(0, 0), new Vector2(80, 28), 9)
   {
-    public void mousePressed()
+    public void mousePressed(Vector2 mousePos)
     {
       currentWorldItemType = null;
+      super.mousePressed(mousePos);
     }
   });
   uiElements.add(tileListElement);
-  layerListElement = new ListElement(new Vector2(0, 0), new Vector2(128, 256), 10);
-  addLayerTextInput = new TextInputElement(new Vector2(64, 0), new Vector2(64, 32), 9);
-  layerListElement.addElement(new UIElement[] {
-    new ButtonElement("add layer", new Vector2(0, 0), new Vector2(64, 32), 9)
+  uiElements.add(new ButtonElement("load", new Vector2(256, 0), new Vector2(48, 32), 9)
+  {
+    public void mousePressed(Vector2 mousePos)
     {
-      public void mousePressed()
-      {
-        int layer = parseInt(addLayerTextInput.text.text);
-        WorldLayer worldLayer = new WorldLayer(layer);
-        addWorldLayer(worldLayer);
-        addLayerTextInput.text.text = "";
-      }
-    },
-    addLayerTextInput
-  }, new Vector2(0, 32));
-  uiElements.add(layerListElement);
+      String filename = saveFileTextInput.text.text;
+      loadLevel(filename);
+      super.mousePressed(mousePos);
+    }
+  });
+  uiElements.add(new ButtonElement("save", new Vector2(304, 0), new Vector2(48, 32), 9)
+  {
+    public void mousePressed(Vector2 mousePos)
+    {
+      String filename = saveFileTextInput.text.text;
+      saveLevel(filename);
+      super.mousePressed(mousePos);
+    }
+  });
   
   JSONObject allTypes = loadJSONObject("types.json");
   JSONArray objectTypes = allTypes.getJSONArray("objectTypes");
@@ -80,6 +87,49 @@ void setup()
     JSONObject obj = tileTypes.getJSONObject(i);
     addTileType(JSONObjectToType(obj, true));
   }
+}
+void removeElement(UIElement element)
+{
+  for(int i = uiElements.size() - 1; i >= 0; i--)
+  {
+    UIElement currentElement = uiElements.get(i);
+    if(currentElement == element)
+    {
+      uiElements.remove(i);
+      return;
+    }
+  }
+}
+void resetLayerList()
+{
+  if(layerListElement == null)
+  {
+    layerListElement = new ListElement(new Vector2(0, 0), new Vector2(128, 256), 9);
+    uiElements.add(layerListElement);
+  }
+  else
+  {
+    layerListElement.scrollTotal = 0;
+    layerListElement.nextYPosition = 0;
+    layerListElement.elements = new ArrayList<UIElement>();
+  }
+  addLayerTextInput = new TextInputElement(new Vector2(64, 0), new Vector2(64, 32), 9);
+  layerListElement.addElement(new UIElement[] {
+    new ButtonElement("add layer", new Vector2(0, 0), new Vector2(64, 32), 9)
+    {
+      public void mousePressed(Vector2 mousePos)
+      {
+        String layerText = addLayerTextInput.text.text;
+        int layer = parseInt(layerText);
+        WorldLayer worldLayer = new WorldLayer(layer);
+        addWorldLayer(worldLayer);
+        addLayerTextInput.text.text = "";
+        currentLayer = worldLayer;
+        super.mousePressed(mousePos);
+      }
+    },
+    addLayerTextInput
+  }, new Vector2(0, 32));
 }
 WorldItemType JSONObjectToType(JSONObject obj, boolean isTile)
 {
@@ -117,7 +167,7 @@ void mousePressed()
     UIElement currentElement = uiElements.get(i);
     if(pointInRectangle(mousePos, currentElement.position, currentElement.size))
     {
-      currentElement.mousePressed();
+      currentElement.mousePressed(mousePos.subtract(currentElement.position));
       return;
     }
   }
@@ -216,20 +266,23 @@ void addWorldLayer(WorldLayer worldLayer)
   layerListElement.addElement(new UIElement[] {
     new ButtonElement("layer " + worldLayer.layer, new Vector2(0, 0), new Vector2(96, 24), 9)
     {
-      public void mousePressed()
+      public void mousePressed(Vector2 mousePos)
       {
         currentLayer = getWorldLayer(actualLayer);
+      super.mousePressed(mousePos);
       }
     },
     new CheckboxElement(new Vector2(96, 0), new Vector2(24, 24), 9, true)
     {
       public void onTick()
       {
-        getWorldLayer(actualLayer).display = true;
+        WorldLayer layer = getWorldLayer(actualLayer);
+        if(layer != null) layer.display = true;
       }
       public void onUntick()
       {
-        getWorldLayer(actualLayer).display = false;
+        WorldLayer layer = getWorldLayer(actualLayer);
+        if(layer != null) layer.display = false;
       }
     }
   }, new Vector2(0, 24));
@@ -268,9 +321,10 @@ void addGameObject(WorldItemType item)
   objectTypeList.add(item);
   objectListElement.addElement(new ButtonElement(item.name, new Vector2(0, 0), new Vector2(120, 24), 9)
   {
-    public void mousePressed()
+    public void mousePressed(Vector2 mousePos)
     {
       currentWorldItemType = objectTypeList.get(itemId);
+      super.mousePressed(mousePos);
     }
   });
 }
@@ -296,9 +350,10 @@ void addTileType(WorldItemType item)
   tileTypeList.add(item);
   tileListElement.addElement(new ButtonElement(item.name, new Vector2(0, 0), new Vector2(120, 24), 9)
   {
-    public void mousePressed()
+    public void mousePressed(Vector2 mousePos)
     {
       currentWorldItemType = tileTypeList.get(itemId);
+      super.mousePressed(mousePos);
     }
   });
 }
@@ -325,5 +380,107 @@ void removeItemAtPosition(Vector2 pos)
       currentLayer.worldItems.remove(i);
       return;
     }
+  }
+}
+boolean checkLayerNameClean(String text)
+{
+  return true;/*
+  if(text.length() == 0) return false;
+  for(int i = 0; i < text.length(); i++)
+  {
+    String c = text.substring(i, i + 1);
+    if("0123456789".indexOf(c) < 0)
+    {
+      return false;
+    }
+  }
+  return true;*/
+}
+WorldItemType getTypeFromInternalName(String internalName)
+{
+  for(int i = 0; i < objectTypeList.size(); i++)
+  {
+    WorldItemType type = objectTypeList.get(i);
+    if(internalName.equals(type.internalName))
+    {
+      return type;
+    }
+  }
+  for(int i = 0; i < tileTypeList.size(); i++)
+  {
+    WorldItemType type = tileTypeList.get(i);
+    if(internalName.equals(type.internalName))
+    {
+      return type;
+    }
+  }
+  return null;
+}
+void saveLevel(String filename)
+{
+  JSONObject level = new JSONObject();
+  level.setInt("width", roomSize.x);
+  level.setInt("height", roomSize.y);
+  JSONArray layerArray = new JSONArray();
+  for(int i = 0; i < worldLayers.size(); i++)
+  {
+    WorldLayer worldLayer = worldLayers.get(i);
+    JSONObject layerObject = new JSONObject();
+    layerObject.setInt("layer", worldLayer.layer);
+    JSONArray objectArray = new JSONArray();
+    JSONArray tileArray = new JSONArray();
+    int objectArrayInd = 0, tileArrayInd = 0;
+    for(int j = 0; j < worldLayer.worldItems.size(); j++)
+    {
+      WorldItem item = worldLayer.worldItems.get(j);
+      JSONObject itemObject = new JSONObject();
+      itemObject.setString("name", item.type.internalName);
+      itemObject.setInt("x", item.position.x);
+      itemObject.setInt("y", item.position.y);
+      if(item.type.isTile)
+      {
+        tileArray.setJSONObject(tileArrayInd, itemObject);
+        tileArrayInd++;
+      }
+      else
+      {
+        objectArray.setJSONObject(objectArrayInd, itemObject);
+        objectArrayInd++;
+      }
+    }
+    layerObject.setJSONArray("objects", objectArray);
+    layerObject.setJSONArray("tiles", tileArray);
+    layerArray.setJSONObject(i, layerObject);
+  }
+  level.setJSONArray("layers", layerArray);
+  saveJSONObject(level, filename);
+}
+void loadLevel(String filename)
+{
+  JSONObject levelObject = loadJSONObject(filename);
+  resetLayerList();
+  worldLayers = new ArrayList<WorldLayer>();
+  currentLayer = null;
+  roomSize = new Vector2(levelObject.getInt("width"), levelObject.getInt("height"));
+  JSONArray layerArray = levelObject.getJSONArray("layers");
+  for(int i = layerArray.size() - 1; i >= 0; i--)
+  {
+    JSONObject layerObject = layerArray.getJSONObject(i);
+    WorldLayer worldLayer = new WorldLayer(layerObject.getInt("layer"));
+    JSONArray objectArray = layerObject.getJSONArray("objects");
+    JSONArray tileArray = layerObject.getJSONArray("tiles");
+    for(int j = 0; j < 2; j++)
+    {
+      int size = j == 0 ? objectArray.size() : tileArray.size();
+      for(int k = 0; k < size; k++)
+      {
+        JSONObject itemObject = j == 0 ? objectArray.getJSONObject(k) : tileArray.getJSONObject(k);
+        Vector2 position = new Vector2(itemObject.getInt("x"), itemObject.getInt("y"));
+        String internalName = itemObject.getString("name");
+        WorldItem item = new WorldItem(getTypeFromInternalName(internalName), position);
+        worldLayer.worldItems.add(item);
+      }
+    }
+    addWorldLayer(worldLayer);
   }
 }
