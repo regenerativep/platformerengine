@@ -5,7 +5,7 @@ class LevelElement extends UIElement
   public LevelElement()
   {
     super(new Vector2(0, 0), new Vector2(width, height), 10);
-    viewOffset = new Vector2(0, 0);
+    viewOffset = new Vector2(160, 64);
     currentWorldItem = null;
   }
   public void draw(PGraphics pg)

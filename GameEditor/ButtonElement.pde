@@ -3,7 +3,7 @@ class ButtonElement extends UIElement
   public Vector2 textPadding = new Vector2(2, 2);
   public TextElement text;
   public PGraphics clickEffect;
-  public float clickEffectOpacity, clickEffectOpacityChange;
+  public float clickEffectOpacity, clickEffectOpacityChange, clickEffectOpacityReset, clickEffectOpacityMultiplier;
   public int clickEffectCircleWidth, clickEffectWidthChange;
   public Vector2 clickEffectCirclePosition;
   public ButtonElement(String txt, Vector2 position, Vector2 sze, int layer)
@@ -13,6 +13,8 @@ class ButtonElement extends UIElement
     clickEffectCircleWidth = 0;
     clickEffectWidthChange = 8;
     clickEffectOpacityChange = 0.05f;
+    clickEffectOpacityReset = 1f;
+    clickEffectOpacityMultiplier = 1f;
     clickEffectCirclePosition = new Vector2(0, 0);
   }
   public void draw(PGraphics pg)
@@ -30,14 +32,14 @@ class ButtonElement extends UIElement
       clickEffect.noStroke();
       clickEffect.ellipse(clickEffectCirclePosition.x, clickEffectCirclePosition.y, clickEffectCircleWidth, clickEffectCircleWidth);
       clickEffect.endDraw();
-      pg.tint(255, (int)(clickEffectOpacity * 255));
+      pg.tint(255, (int)(clickEffectOpacity * 255 * clickEffectOpacityMultiplier));
       pg.image(clickEffect, position.x, position.y);
       pg.tint(255, 255);
     }
   }
   public void mousePressed(Vector2 mousePos)
   {
-    clickEffectOpacity = 1f;
+    clickEffectOpacity = clickEffectOpacityReset;
     clickEffectCircleWidth = 0;
     clickEffectCirclePosition = mousePos;
   }

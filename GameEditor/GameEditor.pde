@@ -10,7 +10,7 @@ Vector2 snap;
 float scrollMultiplier;
 ListElement layerListElement, objectListElement, tileListElement;
 WorldLayer currentLayer;
-TextInputElement addLayerTextInput, saveFileTextInput;
+TextInputElement addLayerTextInput, saveFileTextInput, snapXTextInput, snapYTextInput;
 TextInputElement selectedTextInputElement;
 WorldItemType currentWorldItemType;
 
@@ -30,11 +30,30 @@ void setup()
   uiElements = new ArrayList<UIElement>();
   objectTypeList = new ArrayList<WorldItemType>();
   tileTypeList = new ArrayList<WorldItemType>();
+  //add level viewer
   uiElements.add(new LevelElement());
-  saveFileTextInput = new TextInputElement(new Vector2(128, 0), new Vector2(128, 32), 9);
+  //file text input
+  saveFileTextInput = new TextInputElement(new Vector2(136, 0), new Vector2(192, 32), 9);
   uiElements.add(saveFileTextInput);
+  //snap buttons
+  snapXTextInput = new TextInputElement(new Vector2(432, 0), new Vector2(48, 32), 9);
+  snapXTextInput.text.text = Integer.toString(snap.x);
+  uiElements.add(snapXTextInput);
+  snapYTextInput = new TextInputElement(new Vector2(480, 0), new Vector2(48, 32), 9);
+  snapYTextInput.text.text = Integer.toString(snap.y);
+  uiElements.add(snapYTextInput);
+  uiElements.add(new ButtonElement("set snap", new Vector2(528, 0), new Vector2(64, 24), 9)
+  {
+    public void mousePressed(Vector2 mousePos)
+    {
+      snap.x = parseInt(snapXTextInput.text.text);
+      snap.y = parseInt(snapYTextInput.text.text);
+      super.mousePressed(mousePos);
+    }
+  });
+  //add layer list
   resetLayerList();
-  
+  //add object list
   objectListElement = new ListElement(new Vector2(0, 256), new Vector2(128, 256), 10);
   objectListElement.addElement(new ButtonElement("-none-", new Vector2(0, 0), new Vector2(80, 28), 9)
   {
@@ -45,6 +64,7 @@ void setup()
     }
   });
   uiElements.add(objectListElement);
+  //add tile list
   tileListElement = new ListElement(new Vector2(0, 512), new Vector2(128, 256), 10);
   tileListElement.addElement(new ButtonElement("-none-", new Vector2(0, 0), new Vector2(80, 28), 9)
   {
@@ -55,7 +75,8 @@ void setup()
     }
   });
   uiElements.add(tileListElement);
-  uiElements.add(new ButtonElement("load", new Vector2(256, 0), new Vector2(48, 32), 9)
+  //load button
+  uiElements.add(new ButtonElement("load", new Vector2(328, 0), new Vector2(48, 24), 9)
   {
     public void mousePressed(Vector2 mousePos)
     {
@@ -64,7 +85,8 @@ void setup()
       super.mousePressed(mousePos);
     }
   });
-  uiElements.add(new ButtonElement("save", new Vector2(304, 0), new Vector2(48, 32), 9)
+  //save button
+  uiElements.add(new ButtonElement("save", new Vector2(376, 0), new Vector2(48, 24), 9)
   {
     public void mousePressed(Vector2 mousePos)
     {
@@ -73,7 +95,7 @@ void setup()
       super.mousePressed(mousePos);
     }
   });
-  
+  //load object and tile types
   JSONObject allTypes = loadJSONObject("types.json");
   JSONArray objectTypes = allTypes.getJSONArray("objectTypes");
   for(int i = 0; i < objectTypes.size(); i++)
@@ -113,7 +135,7 @@ void resetLayerList()
     layerListElement.nextYPosition = 0;
     layerListElement.elements = new ArrayList<UIElement>();
   }
-  addLayerTextInput = new TextInputElement(new Vector2(64, 0), new Vector2(64, 32), 9);
+  addLayerTextInput = new TextInputElement(new Vector2(64, 0), new Vector2(63, 32), 9);
   layerListElement.addElement(new UIElement[] {
     new ButtonElement("add layer", new Vector2(0, 0), new Vector2(64, 32), 9)
     {
