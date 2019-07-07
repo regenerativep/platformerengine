@@ -32,10 +32,10 @@ namespace PlatformerTestGame
         {
             ChangeResolution(1024, 768);
 
-            GameObject.NameToType["block"] = typeof(BlockObject); //if there is a better way to go about doing this please tell
+            GameObject.NameToType["obj_block"] = typeof(BlockObject); //if there is a better way to go about doing this please tell
 
             currentRoom = new Room(this);
-            currentRoom.Load("Levels\\test.txt");
+            currentRoom.Load("Levels\\test2.json");
 
             base.Initialize();
         }
@@ -107,11 +107,11 @@ namespace PlatformerTestGame
         {
             KeyboardState keyState = Keyboard.GetState();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || keyState.IsKeyDown(Keys.Escape))
-                Exit();
+                Exit();/*
             if(keyState.IsKeyDown(Keys.Space))
             {
                 ChangeRoom((new Room(this)).Load("Levels\\test2.txt"), new FadeTransition());
-            }
+            }*/
             currentRoom.Update();
             base.Update(gameTime);
         }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -94,41 +96,6 @@ namespace PlatformerEngine
             foreach (GameTile tle in GameTileList)
             {
                 tle.Draw(spriteBatch, ceiledOffset);
-            }
-        }
-        /// <summary>
-        /// processes a command in running the room
-        /// </summary>
-        /// <param name="input">the inputted command</param>
-        public void ProcessCommand(string input)
-        {
-            string[] parts = input.Split(' ');
-            switch(parts[0])
-            {
-                case "width":
-                    Width = int.Parse(parts[1]);
-                    break;
-                case "height":
-                    Height = int.Parse(parts[1]);
-                    break;
-                case "createobject":
-                    {
-                        Type type = GameObject.GetTypeFromName(parts[1]);
-                        Vector2 position = new Vector2(int.Parse(parts[2]), int.Parse(parts[3]));
-                        GameObject obj = (GameObject)type.GetConstructor(new Type[] { typeof(Room), typeof(Vector2) }).Invoke(new object[] { this, position });
-                        obj.Sprite.LayerData.Layer = int.Parse(parts[4]); //TODO: make layer take in string instead of int
-                        GameObjectList.Add(obj);
-                        break;
-                    }
-                case "createtile":
-                    {
-                        Type type = GameTile.GetTypeFromName(parts[1]);
-                        Vector2 position = new Vector2(int.Parse(parts[2]), int.Parse(parts[3]));
-                        GameTile obj = (GameTile)type.GetConstructor(new Type[] { typeof(Room), typeof(Vector2) }).Invoke(new object[] { this, position });
-                        obj.Sprite.LayerData.Layer = int.Parse(parts[4]);
-                        GameTileList.Add(obj);
-                        break;
-                    }
             }
         }
         /// <summary>
@@ -235,9 +202,51 @@ namespace PlatformerEngine
         public Room Load(string filename)
         {
             string[] lines = File.ReadAllLines(filename, Encoding.UTF8);
+            string json = "";
             for (int i = 0; i < lines.Length; i++)
             {
-                ProcessCommand(lines[i]);
+                json += lines[i] + "\n";
+            }
+            JObject obj = JObject.Parse(json);
+            int width = (int)obj.GetValue("width").ToObject(typeof(int));
+            int height = (int)obj.GetValue("height").ToObject(typeof(int));
+            JArray layerArray = (JArray)obj.GetValue("layers").ToObject(typeof(JArray));
+            foreach(JToken item in layerArray)
+            {
+                JObject layerObject = (JObject)item.ToObject(typeof(JObject));
+                int layer = (int)layerObject.GetValue("layer").ToObject(typeof(int));
+                JArray objectArray = (JArray)layerObject.GetValue("objects").ToObject(typeof(JArray));
+                foreach (JToken gameObjectToken in objectArray)
+                {
+                    JObject gameObjectData = (JObject)gameObjectToken.ToObject(typeof(JObject));
+                    string internalName = (string)gameObjectData.GetValue("name").ToObject(typeof(string));
+                    Type type = GameObject.GetTypeFromName(internalName);
+                    if (type == null)
+                    {
+                        ConsoleManager.WriteLine("could not find object name \"" + internalName + "\"", "err");
+                        continue;
+                    }
+                    Vector2 position = new Vector2((int)gameObjectData.GetValue("x").ToObject(typeof(int)), (int)gameObjectData.GetValue("y").ToObject(typeof(int)));
+                    GameObject gameObject = (GameObject)type.GetConstructor(new Type[] { typeof(Room), typeof(Vector2) }).Invoke(new object[] { this, position });
+                    gameObject.Sprite.LayerData.Layer = layer;
+                    GameObjectList.Add(gameObject);
+                }
+                JArray tileArray = (JArray)layerObject.GetValue("tiles").ToObject(typeof(JArray));
+                foreach (JToken tileToken in tileArray)
+                {
+                    JObject tileData = (JObject)tileToken.ToObject(typeof(JObject));
+                    string internalName = (string)tileData.GetValue("name").ToObject(typeof(string));
+                    Type type = GameTile.GetTypeFromName(internalName);
+                    if (type == null)
+                    {
+                        ConsoleManager.WriteLine("could not find tile name \"" + internalName + "\"", "err");
+                        continue;
+                    }
+                    Vector2 position = new Vector2((int)tileData.GetValue("x").ToObject(typeof(int)), (int)tileData.GetValue("y").ToObject(typeof(int)));
+                    GameTile tile = (GameTile)type.GetConstructor(new Type[] { typeof(Room), typeof(Vector2) }).Invoke(new object[] { this, position });
+                    tile.Sprite.LayerData.Layer = layer;
+                    GameTileList.Add(tile);
+                }
             }
             return this;
         }
