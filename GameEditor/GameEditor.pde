@@ -13,6 +13,7 @@ WorldLayer currentLayer;
 TextInputElement addLayerTextInput, saveFileTextInput, snapXTextInput, snapYTextInput;
 TextInputElement selectedTextInputElement;
 WorldItemType currentWorldItemType;
+TextElement currentLayerText;
 
 void setup()
 {
@@ -95,6 +96,10 @@ void setup()
       super.mousePressed(mousePos);
     }
   });
+  //current layer text
+  currentLayerText = new TextElement("current layer: -none-", color(0), 12, new Vector2(0, 0), 9);
+  currentLayerText.size = new Vector2(128, 24);
+  uiElements.add(currentLayerText);
   //load object and tile types
   JSONObject allTypes = loadJSONObject("types.json");
   JSONArray objectTypes = allTypes.getJSONArray("objectTypes");
@@ -126,7 +131,7 @@ void resetLayerList()
 {
   if(layerListElement == null)
   {
-    layerListElement = new ListElement(new Vector2(0, 0), new Vector2(128, 256), 9);
+    layerListElement = new ListElement(new Vector2(0, 24), new Vector2(128, 232), 9);
     uiElements.add(layerListElement);
   }
   else
@@ -291,7 +296,11 @@ void addWorldLayer(WorldLayer worldLayer)
       public void mousePressed(Vector2 mousePos)
       {
         currentLayer = getWorldLayer(actualLayer);
-      super.mousePressed(mousePos);
+        if(currentLayerText != null)
+        {
+          currentLayerText.text = "current layer: " + actualLayer;
+        }
+        super.mousePressed(mousePos);
       }
     },
     new CheckboxElement(new Vector2(96, 0), new Vector2(24, 24), 9, true)

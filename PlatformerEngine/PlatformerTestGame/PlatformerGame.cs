@@ -35,7 +35,7 @@ namespace PlatformerTestGame
             GameObject.NameToType["obj_block"] = typeof(BlockObject); //if there is a better way to go about doing this please tell
 
             currentRoom = new Room(this);
-            currentRoom.Load("Levels\\test2.json");
+            currentRoom.Load("Levels\\test3.json");
 
             base.Initialize();
         }

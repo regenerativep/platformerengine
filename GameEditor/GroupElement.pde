@@ -10,7 +10,6 @@ class GroupElement extends UIElement
   }
   public void mousePressed(Vector2 mousePos)
   {
-    //Vector2 mousePos = new Vector2(mouseX - position.x, mouseY - position.y);
     for(int i = elements.size() - 1; i >= 0; i--)
     {
       UIElement currentElement = elements.get(i);

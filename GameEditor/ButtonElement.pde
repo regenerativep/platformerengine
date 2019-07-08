@@ -19,10 +19,9 @@ class ButtonElement extends UIElement
   }
   public void draw(PGraphics pg)
   {
+    super.draw(pg);
     text.position = position.add(textPadding);
-    pg.fill(255);
-    pg.stroke(0);
-    pg.rect(position.x, position.y, size.x, size.y);
+    text.showRectangle = false;
     text.draw(pg);
     if(clickEffectOpacity > 0)
     {
@@ -35,6 +34,10 @@ class ButtonElement extends UIElement
       pg.tint(255, (int)(clickEffectOpacity * 255 * clickEffectOpacityMultiplier));
       pg.image(clickEffect, position.x, position.y);
       pg.tint(255, 255);
+    }
+    else if(clickEffect != null)
+    {
+      clickEffect = null;
     }
   }
   public void mousePressed(Vector2 mousePos)

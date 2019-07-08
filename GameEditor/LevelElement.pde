@@ -52,7 +52,7 @@ class LevelElement extends UIElement
     }
     if(currentWorldItem != null)
     {
-      currentWorldItem.draw(pg);
+      currentWorldItem.draw(pg, 204);
     }
     pg.popMatrix();
   }

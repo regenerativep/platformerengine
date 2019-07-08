@@ -22,14 +22,13 @@ class CheckboxElement extends UIElement
   {
     if(ticked)
     {
-      pg.fill(0);
+      backgroundColor = color(0);
     }
     else
     {
-      pg.fill(255);
+      backgroundColor = color(255);
     }
-    pg.stroke(0);
-    pg.rect(position.x, position.y, size.x, size.y);
+    super.draw(pg);
   }
   public void onTick() {}
   public void onUntick() {}
