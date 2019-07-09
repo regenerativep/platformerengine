@@ -12,7 +12,7 @@ namespace PlatformerTestGame.GameObjects
     {
         public BlockObject(Room room, Vector2 position) : base(room, position)
         {
-            AssetManager.RequestTexture("block", (tex) =>
+            room.Engine.Assets.RequestTexture("obj_block", (tex) =>
             {
                 Sprite.Change(tex);
                 Sprite.Size = new Vector2(64, 64);

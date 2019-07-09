@@ -64,6 +64,7 @@
     <Compile Include="LayerData.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="ICommand.cs" />
+    <Compile Include="PEngine.cs" />
     <Compile Include="Physics\ImmobileObject.cs" />
     <Compile Include="Physics\MovingObject.cs" />
     <Compile Include="Physics\PhysicsBasedObject.cs" />

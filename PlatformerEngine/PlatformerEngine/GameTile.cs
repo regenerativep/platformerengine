@@ -14,10 +14,6 @@ namespace PlatformerEngine
     public abstract class GameTile
     {
         /// <summary>
-        /// gets a game tile type from its corresponding string name
-        /// </summary>
-        public static Dictionary<string, Type> NameToType = new Dictionary<string, Type>();
-        /// <summary>
         /// position of the tile
         /// </summary>
         public Vector2 Position;
@@ -55,19 +51,6 @@ namespace PlatformerEngine
         public virtual void Draw(SpriteBatch spriteBatch, Vector2 viewPosition)
         {
             Sprite?.Draw(spriteBatch, Position - viewPosition);
-        }
-        /// <summary>
-        /// gets a tile object type given its corresponding name as a string
-        /// </summary>
-        /// <param name="name">name of the tile as a string</param>
-        /// <returns>the corresonding tile object type</returns>
-        public static Type GetTypeFromName(string name)
-        {
-            if (NameToType.ContainsKey(name))
-            {
-                return NameToType[name];
-            }
-            return null;
         }
     }
 }

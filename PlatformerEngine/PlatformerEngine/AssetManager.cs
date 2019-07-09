@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,19 +15,27 @@ namespace PlatformerEngine
     /// manages all game assets
     /// (textures, animated textures, sounds)
     /// </summary>
-    public static class AssetManager
+    public class AssetManager
     {
-        private static Dictionary<string, Texture2D> textureAssets = new Dictionary<string, Texture2D>();
-        private static Dictionary<string, Texture2D[]> framedTextureAssets = new Dictionary<string, Texture2D[]>();
-        private static Dictionary<string, SoundEffect> soundAssets = new Dictionary<string, SoundEffect>();
-        private static List<KeyValuePair<string, Action<Texture2D>>> textureAssetRequests = new List<KeyValuePair<string, Action<Texture2D>>>();
-        private static List<KeyValuePair<string, Action<Texture2D[]>>> framedTextureAssetRequests = new List<KeyValuePair<string, Action<Texture2D[]>>>();
-        private static List<KeyValuePair<string, Action<SoundEffect>>> soundAssetRequests = new List<KeyValuePair<string, Action<SoundEffect>>>();
+        private Dictionary<string, Texture2D> textureAssets = new Dictionary<string, Texture2D>();
+        private Dictionary<string, Texture2D[]> framedTextureAssets = new Dictionary<string, Texture2D[]>();
+        private Dictionary<string, SoundEffect> soundAssets = new Dictionary<string, SoundEffect>();
+        private List<KeyValuePair<string, Action<Texture2D>>> textureAssetRequests = new List<KeyValuePair<string, Action<Texture2D>>>();
+        private List<KeyValuePair<string, Action<Texture2D[]>>> framedTextureAssetRequests = new List<KeyValuePair<string, Action<Texture2D[]>>>();
+        private List<KeyValuePair<string, Action<SoundEffect>>> soundAssetRequests = new List<KeyValuePair<string, Action<SoundEffect>>>();
         /// <summary>
         /// The content manager to load data from.
         /// Set this before you load with the asset manager.
         /// </summary>
-        public static ContentManager Content;
+        public ContentManager Content;
+        /// <summary>
+        /// creates a new assetmanager
+        /// </summary>
+        /// <param name="content">the content manager to use</param>
+        public AssetManager(ContentManager content)
+        {
+            Content = content;
+        }
         /// <summary>
         /// loads a texture of multiple frames
         /// </summary>
@@ -33,7 +43,7 @@ namespace PlatformerEngine
         /// <param name="location">the location of the asset</param>
         /// <param name="frameCount">number of frames to load</param>
         /// <returns>a texture array with each loaded frame</returns>
-        public static Texture2D[] LoadFramedTexture(string internalName, string location, int frameCount)
+        public Texture2D[] LoadFramedTexture(string internalName, string location, int frameCount)
         {
             Texture2D[] frames = new Texture2D[frameCount];
             for (int i = 0; i < frames.Length; i++)
@@ -59,7 +69,7 @@ namespace PlatformerEngine
         /// <param name="internalName">the name to call the asset in this manager</param>
         /// <param name="location">the location of the asset</param>
         /// <returns>the loaded texture</returns>
-        public static Texture2D LoadTexture(string internalName, string location)
+        public Texture2D LoadTexture(string internalName, string location)
         {
             Texture2D texture = Content.Load<Texture2D>(location);
             for(int i = textureAssetRequests.Count - 1; i >= 0; i--)
@@ -81,7 +91,7 @@ namespace PlatformerEngine
         /// <param name="internalName">the name to call the asset in this manager</param>
         /// <param name="location">the location of the asset</param>
         /// <returns>the loaded sound</returns>
-        public static SoundEffect LoadSound(string internalName, string location)
+        public SoundEffect LoadSound(string internalName, string location)
         {
             SoundEffect sound = Content.Load<SoundEffect>(location);
             for (int i = soundAssetRequests.Count - 1; i >= 0; i--)
@@ -102,7 +112,7 @@ namespace PlatformerEngine
         /// </summary>
         /// <param name="assetName">the name of the asset</param>
         /// <param name="callback">what to call back when we get the frames</param>
-        public static void RequestFramedTexture(string assetName, Action<Texture2D[]> callback)
+        public void RequestFramedTexture(string assetName, Action<Texture2D[]> callback)
         {
             if(framedTextureAssets.ContainsKey(assetName))
             {
@@ -118,7 +128,7 @@ namespace PlatformerEngine
         /// </summary>
         /// <param name="assetName">the name of the asset</param>
         /// <param name="callback">what to call back when we get the texture</param>
-        public static void RequestTexture(string assetName, Action<Texture2D> callback)
+        public void RequestTexture(string assetName, Action<Texture2D> callback)
         {
             if (textureAssets.ContainsKey(assetName))
             {
@@ -134,7 +144,7 @@ namespace PlatformerEngine
         /// </summary>
         /// <param name="assetName">the name of the asset</param>
         /// <param name="callback">what to call back when we get the sound</param>
-        public static void RequestSound(string assetName, Action<SoundEffect> callback)
+        public void RequestSound(string assetName, Action<SoundEffect> callback)
         {
             if (soundAssets.ContainsKey(assetName))
             {
@@ -143,6 +153,45 @@ namespace PlatformerEngine
             else
             {
                 soundAssetRequests.Add(new KeyValuePair<string, Action<SoundEffect>>(assetName, callback));
+            }
+        }
+        /// <summary>
+        /// loads the assets listed in the json file
+        /// </summary>
+        /// <param name="filepath">the path to the json file</param>
+        public void LoadAssetsFromFile(string filepath)
+        {
+            string[] lines = File.ReadAllLines(filepath, Encoding.UTF8);
+            string json = "";
+            for (int i = 0; i < lines.Length; i++)
+            {
+                json += lines[i] + "\n";
+            }
+            JObject obj = JObject.Parse(json);
+            JArray assetList = (JArray)obj.GetValue("assets").ToObject(typeof(JArray));
+            foreach (JToken assetToken in assetList)
+            {
+                JObject assetObject = (JObject)assetToken.ToObject(typeof(JObject));
+                string internalName = (string)assetObject.GetValue("name").ToObject(typeof(string));
+                string typeName = (string)assetObject.GetValue("type").ToObject(typeof(string));
+                string path = (string)assetObject.GetValue("path").ToObject(typeof(string));
+                if(typeName.Equals("texture"))
+                {
+                    LoadTexture(internalName, path);
+                }
+                else if(typeName.Equals("framedTexture"))
+                {
+                    int frameCount = (int)assetObject.GetValue("frames").ToObject(typeof(int));
+                    LoadFramedTexture(internalName, path, frameCount);
+                }
+                else if(typeName.Equals("sound"))
+                {
+                    LoadSound(internalName, path);
+                }
+                else
+                {
+                    ConsoleManager.WriteLine("could not find asset type \"" + typeName + "\"", "err");
+                }
             }
         }
     }

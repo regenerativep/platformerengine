@@ -33,9 +33,9 @@ namespace PlatformerEngine
         /// </summary>
         public int Height;
         /// <summary>
-        /// the parent game
+        /// the parent engine
         /// </summary>
-        public Game Game;
+        public PEngine Engine;
         /// <summary>
         /// the view offset that corresponds to the view position
         /// </summary>
@@ -48,10 +48,10 @@ namespace PlatformerEngine
         /// <summary>
         /// creates an instance of a room
         /// </summary>
-        /// <param name="game">the parent game</param>
-        public Room(Game game)
+        /// <param name="engine">the parent engine</param>
+        public Room(PEngine engine)
         {
-            Game = game;
+            Engine = engine;
             Sounds = new SoundManager();
             Width = 512;
             Height = 512;
@@ -167,7 +167,7 @@ namespace PlatformerEngine
             for (int i = 0; i < GameObjectList.Count; i++)
             {
                 GameObject obj = GameObjectList[i];
-                if (obj.GetType() == GameObject.GetTypeFromName(name))
+                if (obj.GetType() == PEngine.GetTypeFromName(name))
                 {
                     return obj;
                 }
@@ -185,7 +185,7 @@ namespace PlatformerEngine
             for (int i = 0; i < GameObjectList.Count; i++)
             {
                 GameObject obj = GameObjectList[i];
-                if (obj.GetType() == GameObject.GetTypeFromName(name))
+                if (obj.GetType() == PEngine.GetTypeFromName(name))
                 {
                     if (PlatformerMath.RectangleInRectangle(collider, PlatformerMath.AddVectorToRect(new Rectangle((int)obj.Position.X, (int)obj.Position.Y, (int)obj.Sprite.Size.X, (int)obj.Sprite.Size.Y), obj.Position)))
                     {
@@ -220,7 +220,7 @@ namespace PlatformerEngine
                 {
                     JObject gameObjectData = (JObject)gameObjectToken.ToObject(typeof(JObject));
                     string internalName = (string)gameObjectData.GetValue("name").ToObject(typeof(string));
-                    Type type = GameObject.GetTypeFromName(internalName);
+                    Type type = PEngine.GetTypeFromName(internalName);
                     if (type == null)
                     {
                         ConsoleManager.WriteLine("could not find object name \"" + internalName + "\"", "err");
@@ -236,7 +236,7 @@ namespace PlatformerEngine
                 {
                     JObject tileData = (JObject)tileToken.ToObject(typeof(JObject));
                     string internalName = (string)tileData.GetValue("name").ToObject(typeof(string));
-                    Type type = GameTile.GetTypeFromName(internalName);
+                    Type type = PEngine.GetTypeFromName(internalName);
                     if (type == null)
                     {
                         ConsoleManager.WriteLine("could not find tile name \"" + internalName + "\"", "err");

@@ -1,0 +1,9 @@
+{
+  "assets": [
+    {
+      "name": "obj_block",
+      "type": "texture",
+      "path": "sprites\\blockplaceholder"
+    }
+  ]
+}
