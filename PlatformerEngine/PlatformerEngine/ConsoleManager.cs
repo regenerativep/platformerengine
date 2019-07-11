@@ -46,6 +46,7 @@ namespace PlatformerEngine
         /// <param name="flavor">type of message</param>
         public static void WriteLine(string text, string flavor = "info")
         {
+            if (!isRunning) return;
             CurrentWriteLine++;
             Console.SetCursorPosition(0, CurrentWriteLine);
             WriteClear();
@@ -66,6 +67,7 @@ namespace PlatformerEngine
         /// </summary>
         private static void WriteInput()
         {
+            if (!isRunning) return;
             Console.SetCursorPosition(0, CurrentWriteLine + 1);
             WriteClear();
             Console.SetCursorPosition(0, CurrentWriteLine + 1);
@@ -76,6 +78,7 @@ namespace PlatformerEngine
         /// </summary>
         private static void WriteClear()
         {
+            if (!isRunning) return;
             string clearStr = "";
             for(int i = 0; i < Console.BufferWidth; i++)
             {

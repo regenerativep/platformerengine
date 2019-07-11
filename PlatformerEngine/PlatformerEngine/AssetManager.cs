@@ -20,9 +20,11 @@ namespace PlatformerEngine
         private Dictionary<string, Texture2D> textureAssets = new Dictionary<string, Texture2D>();
         private Dictionary<string, Texture2D[]> framedTextureAssets = new Dictionary<string, Texture2D[]>();
         private Dictionary<string, SoundEffect> soundAssets = new Dictionary<string, SoundEffect>();
+        private Dictionary<string, SpriteFont> fontAssets = new Dictionary<string, SpriteFont>();
         private List<KeyValuePair<string, Action<Texture2D>>> textureAssetRequests = new List<KeyValuePair<string, Action<Texture2D>>>();
         private List<KeyValuePair<string, Action<Texture2D[]>>> framedTextureAssetRequests = new List<KeyValuePair<string, Action<Texture2D[]>>>();
         private List<KeyValuePair<string, Action<SoundEffect>>> soundAssetRequests = new List<KeyValuePair<string, Action<SoundEffect>>>();
+        private List<KeyValuePair<string, Action<SpriteFont>>> fontAssetRequests = new List<KeyValuePair<string, Action<SpriteFont>>>();
         /// <summary>
         /// The content manager to load data from.
         /// Set this before you load with the asset manager.
@@ -108,6 +110,28 @@ namespace PlatformerEngine
             return sound;
         }
         /// <summary>
+        /// loads a font
+        /// </summary>
+        /// <param name="internalName">the name to call the asset in this manager</param>
+        /// <param name="location">the location of the asset</param>
+        /// <returns>the loaded font</returns>
+        public SpriteFont LoadFont(string internalName, string location)
+        {
+            SpriteFont font = Content.Load<SpriteFont>(location);
+            for (int i = fontAssetRequests.Count - 1; i >= 0; i--)
+            {
+                var req = fontAssetRequests[i];
+                if (req.Key.Equals(internalName))
+                {
+                    req.Value.Invoke(font);
+                    fontAssetRequests.RemoveAt(i);
+                }
+            }
+            ConsoleManager.WriteLine("loaded font \"" + internalName + "\" from " + location, "load");
+            fontAssets[internalName] = font;
+            return font;
+        }
+        /// <summary>
         /// requests a framed texture
         /// </summary>
         /// <param name="assetName">the name of the asset</param>
@@ -153,6 +177,22 @@ namespace PlatformerEngine
             else
             {
                 soundAssetRequests.Add(new KeyValuePair<string, Action<SoundEffect>>(assetName, callback));
+            }
+        }
+        /// <summary>
+        /// requests a font
+        /// </summary>
+        /// <param name="assetName">the name of the asset</param>
+        /// <param name="callback">what to call back when we get the font</param>
+        public void RequestFont(string assetName, Action<SpriteFont> callback)
+        {
+            if (fontAssets.ContainsKey(assetName))
+            {
+                callback.Invoke(fontAssets[assetName]);
+            }
+            else
+            {
+                fontAssetRequests.Add(new KeyValuePair<string, Action<SpriteFont>>(assetName, callback));
             }
         }
         /// <summary>

@@ -47,6 +47,14 @@ namespace PlatformerEngine
             float angle = (float)Math.Atan2(dist.Y, dist.X);
             sb.Draw(singlePixel, a, null, color, angle, Vector2.Zero, new Vector2(dist.Length(), 1), SpriteEffects.None, layer.ActualLayer);
         }
+        /// <summary>
+        /// draws a rectangle
+        /// </summary>
+        /// <param name="sb">the spritebatch to draw to</param>
+        /// <param name="a">top left</param>
+        /// <param name="b">bottom right</param>
+        /// <param name="color">color of rectangle</param>
+        /// <param name="layer">layer to draw at</param>
         public static void DrawRectangle(this SpriteBatch sb, Vector2 a, Vector2 b, Color color, LayerData layer)
         {
             if (singlePixel == null)
