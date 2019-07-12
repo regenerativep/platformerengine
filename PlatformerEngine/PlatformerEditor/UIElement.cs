@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,10 +25,10 @@ namespace PlatformerEditor
             Name = name;
             Game.UIElements.Add(name, this);
         }
-        public virtual void MousePressed(Vector2 mousePosition) { }
-        public virtual void MouseReleased(Vector2 mousePosition) { }
+        public virtual void MousePressed(MouseState mouseState) { }
+        public virtual void MouseReleased(MouseState mouseState) { }
         public virtual void Update() { }
         public virtual void Draw(SpriteBatch spriteBatch, Vector2 offset) { }
-        public virtual void Scroll(float amount) { }
+        public virtual void Scroll(MouseState mouseState, float amount) { }
     }
 }

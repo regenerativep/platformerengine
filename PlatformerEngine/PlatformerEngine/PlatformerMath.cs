@@ -39,5 +39,15 @@ namespace PlatformerEngine
             }
             return newRect;
         }
+        /// <summary>
+        /// checks if a point is in a rectangle
+        /// </summary>
+        /// <param name="rect">the rectangle</param>
+        /// <param name="p">the point</param>
+        /// <returns></returns>
+        public static bool PointInRectangle(Rectangle rect, Vector2 p)
+        {
+            return p.X > rect.X && p.X <= rect.X + rect.Width && p.Y > rect.Y && p.Y < rect.Y + rect.Height;
+        }
     }
 }

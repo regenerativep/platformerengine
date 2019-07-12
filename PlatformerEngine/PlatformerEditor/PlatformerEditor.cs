@@ -17,6 +17,9 @@ namespace PlatformerEditor
         public Dictionary<string, UIElement> UIElements;
         public List<UIElement> DrawnUIElements;
         public bool ShowGrid;
+        public MouseState PreviousMouseState;
+        public MouseState MouseState;
+        public float ScrollMultiplier;
         public PlatformerEditor()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -35,12 +38,10 @@ namespace PlatformerEditor
         /// </summary>
         protected override void Initialize()
         {
+            ScrollMultiplier = -4;
             UIElements = new Dictionary<string, UIElement>();
             DrawnUIElements = new List<UIElement>();
-
-            DrawnUIElements.Add(new GroupElement(this, new Vector2(0, 0), new Vector2(64, 64), 1f, "group_test"));
-            GroupElement group = (GroupElement)GetUIElement("group_test");
-            group.Elements.Add(new TextElement(this, new Vector2(0, 0), new Vector2(0, 0), 1f, "text_test", 12, Color.Black, "hey"));
+            
 
             base.Initialize();
         }
@@ -80,13 +81,46 @@ namespace PlatformerEditor
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            MouseState = Mouse.GetState();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             foreach(UIElement elem in DrawnUIElements)
             {
                 elem.Update();
             }
-            GetUIElement("group_test").Position.X += 1;
+            Vector2 mousePos = new Vector2(MouseState.X, MouseState.Y);
+            if((MouseState.LeftPressed() && !PreviousMouseState.LeftPressed()) || (MouseState.RightPressed() && !PreviousMouseState.RightPressed()) || (MouseState.MiddlePressed() && !PreviousMouseState.MiddlePressed()))
+            {
+                foreach(UIElement elem in DrawnUIElements)
+                {
+                    if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
+                    {
+                        elem.MousePressed(MouseState);
+                    }
+                }
+            }
+            if((!MouseState.LeftPressed() && PreviousMouseState.LeftPressed()) || (!MouseState.RightPressed() && PreviousMouseState.RightPressed()) || (!MouseState.MiddlePressed() && PreviousMouseState.MiddlePressed()))
+            {
+                foreach (UIElement elem in DrawnUIElements)
+                {
+                    if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
+                    {
+                        elem.MouseReleased(MouseState);
+                    }
+                }
+            }
+            if(MouseState.ScrollWheelValue != 0)
+            {
+                float scrollValue = MouseState.ScrollWheelValue * ScrollMultiplier;
+                foreach (UIElement elem in DrawnUIElements)
+                {
+                    if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
+                    {
+                        elem.Scroll(MouseState, scrollValue);
+                    }
+                }
+            }
+            PreviousMouseState = MouseState;
             base.Update(gameTime);
         }
 

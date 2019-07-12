@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using PlatformerEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,27 +13,60 @@ namespace PlatformerEditor
     public class GroupElement : UIElement
     {
         public List<UIElement> Elements;
-        public RenderTarget2D Graphics;
+        public Vector2 SoftOffset;
         public GroupElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name)
         {
             Elements = new List<UIElement>();
-            Graphics = new RenderTarget2D(game.GraphicsDevice, (int)Size.X, (int)Size.Y);
+            SoftOffset = new Vector2(0, 0);
+        }
+        public override void Update()
+        {
+            for (int i = 0; i < Elements.Count; i++)
+            {
+                Elements[i].Update();
+            }
         }
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {
-            spriteBatch.GraphicsDevice.SetRenderTarget(Graphics);
             spriteBatch.Begin();
-            spriteBatch.GraphicsDevice.Clear(Color.Wheat);
             for(int i = 0; i < Elements.Count; i++)
             {
-                Elements[i].Draw(spriteBatch, new Vector2(0, 0));
+                Elements[i].Draw(spriteBatch, offset + SoftOffset);
             }
             spriteBatch.End();
-            spriteBatch.GraphicsDevice.SetRenderTarget(null);
-            spriteBatch.Begin();
-            spriteBatch.Draw(Graphics, Position + offset, Color.White);
-            spriteBatch.End();
-            base.Draw(spriteBatch, offset);
+        }
+        public override void MousePressed(MouseState mouseState)
+        {
+            Vector2 mousePos = new Vector2(mouseState.X, mouseState.Y) - Position;
+            foreach (UIElement elem in Elements)
+            {
+                if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
+                {
+                    elem.MousePressed(mouseState);
+                }
+            }
+        }
+        public override void MouseReleased(MouseState mouseState)
+        {
+            Vector2 mousePos = new Vector2(mouseState.X, mouseState.Y) - Position;
+            foreach (UIElement elem in Elements)
+            {
+                if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
+                {
+                    elem.MouseReleased(mouseState);
+                }
+            }
+        }
+        public override void Scroll(MouseState mouseState, float amount)
+        {
+            Vector2 mousePos = new Vector2(mouseState.X, mouseState.Y) - Position;
+            foreach (UIElement elem in Elements)
+            {
+                if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
+                {
+                    elem.Scroll(mouseState, amount);
+                }
+            }
         }
     }
 }

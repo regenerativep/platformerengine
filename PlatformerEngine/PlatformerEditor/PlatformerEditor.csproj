@@ -42,7 +42,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="HardGroupElement.cs" />
     <Compile Include="GroupElement.cs" />
+    <Compile Include="ListElement.cs" />
     <Compile Include="PlatformerEditor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace PlatformerEngine
     /// <summary>
     /// extensions for drawing from a spritebatch
     /// </summary>
-    public static class DrawExtensions
+    public static class PExtensions
     {
         /// <summary>
         /// draws a line to the spritebatch
@@ -76,6 +77,18 @@ namespace PlatformerEngine
             DrawLine(sb, pos - sizeVec, pos + sizeVec, Color.Black, layer);
             sizeVec.Y = -sizeVec.Y;
             DrawLine(sb, pos - sizeVec, pos + sizeVec, Color.Black, layer);
+        }
+        public static bool LeftPressed(this MouseState ms)
+        {
+            return ms.LeftButton == ButtonState.Pressed;
+        }
+        public static bool RightPressed(this MouseState ms)
+        {
+            return ms.RightButton == ButtonState.Pressed;
+        }
+        public static bool MiddlePressed(this MouseState ms)
+        {
+            return ms.MiddleButton == ButtonState.Pressed;
         }
     }
 }
