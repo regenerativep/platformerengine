@@ -38,10 +38,16 @@ namespace PlatformerEditor
         /// </summary>
         protected override void Initialize()
         {
+            IsMouseVisible = true;
             ScrollMultiplier = -4;
             UIElements = new Dictionary<string, UIElement>();
             DrawnUIElements = new List<UIElement>();
-            
+            ButtonElement buttonElem = new ButtonElement(this, new Vector2(32), new Vector2(128, 64), 0.5f, "button_test", "test");
+            buttonElem.Click = () =>
+            {
+                System.Diagnostics.Debug.WriteLine("hi");
+            };
+            DrawnUIElements.Add(buttonElem);
 
             base.Initialize();
         }
@@ -131,10 +137,12 @@ namespace PlatformerEditor
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            spriteBatch.Begin();
             foreach (UIElement elem in DrawnUIElements)
             {
                 elem.Draw(spriteBatch, new Vector2(0, 0));
             }
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }

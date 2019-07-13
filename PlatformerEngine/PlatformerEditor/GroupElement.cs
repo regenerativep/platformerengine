@@ -28,12 +28,10 @@ namespace PlatformerEditor
         }
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {
-            spriteBatch.Begin();
             for(int i = 0; i < Elements.Count; i++)
             {
                 Elements[i].Draw(spriteBatch, offset + SoftOffset);
             }
-            spriteBatch.End();
         }
         public override void MousePressed(MouseState mouseState)
         {

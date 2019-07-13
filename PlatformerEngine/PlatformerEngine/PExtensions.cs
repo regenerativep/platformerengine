@@ -58,12 +58,40 @@ namespace PlatformerEngine
         /// <param name="layer">layer to draw at</param>
         public static void DrawRectangle(this SpriteBatch sb, Vector2 a, Vector2 b, Color color, LayerData layer)
         {
+            DrawRectangle(sb, a, b, color, layer.ActualLayer);
+        }
+        /// <summary>
+        /// draws a rectangle
+        /// </summary>
+        /// <param name="sb">the spritebatch to draw to</param>
+        /// <param name="a">top left</param>
+        /// <param name="b">bottom right</param>
+        /// <param name="color">color of rectangle</param>
+        /// <param name="layer">layer to draw at</param>
+        public static void DrawRectangle(this SpriteBatch sb, Vector2 a, Vector2 b, Color color, float layer)
+        {
             if (singlePixel == null)
             {
                 singlePixel = new Texture2D(sb.GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
                 singlePixel.SetData(new Color[] { Color.White });
             }
-            sb.Draw(singlePixel, a, null, color, 0f, Vector2.Zero, b - a, SpriteEffects.None, layer.ActualLayer);
+            sb.Draw(singlePixel, a, null, color, 0f, Vector2.Zero, b - a, SpriteEffects.None, layer);
+        }
+        /// <summary>
+        /// draws a rectangle
+        /// </summary>
+        /// <param name="sb">the spritebatch to draw to</param>
+        /// <param name="a">top left</param>
+        /// <param name="b">bottom right</param>
+        /// <param name="color">color of rectangle</param>
+        /// <param name="outlineColor">outline color of rectangle</param>
+        /// <param name="layer">layer to draw at</param>
+        /// <param name="thickness">the thickness of the outline</param>
+        public static void DrawOutlinedRectangle(this SpriteBatch sb, Vector2 a, Vector2 b, Color color, Color outlineColor, float layer, int thickness = 1)
+        {
+            DrawRectangle(sb, a, b, outlineColor, layer);
+            Vector2 thicknessVector = new Vector2(thickness);
+            DrawRectangle(sb, a + thicknessVector, b - thicknessVector, color, layer);
         }
         /// <summary>
         /// draws an X

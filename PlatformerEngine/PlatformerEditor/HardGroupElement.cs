@@ -20,6 +20,7 @@ namespace PlatformerEditor
         }
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {
+            spriteBatch.End();
             spriteBatch.GraphicsDevice.SetRenderTarget(Graphics);
             spriteBatch.Begin();
             spriteBatch.GraphicsDevice.Clear(Color.Transparent);
@@ -31,7 +32,6 @@ namespace PlatformerEditor
             spriteBatch.GraphicsDevice.SetRenderTarget(null);
             spriteBatch.Begin();
             spriteBatch.Draw(Graphics, Position + offset, Color.White);
-            spriteBatch.End();
         }
     }
 }
