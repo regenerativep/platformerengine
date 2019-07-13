@@ -52,8 +52,8 @@ namespace PlatformerEditor
             {
                 UIElement item = Items[i];
                 item.Position.Y = nextY;
-                Elements.Add(item);
                 nextY += (int)Math.Ceiling(item.Size.Y);
+                Elements.Add(item);
             }
         }
         public override void Scroll(MouseState mouseState, float amount)

@@ -50,10 +50,13 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TextElement.cs" />
+    <Compile Include="IInputable.cs" />
+    <Compile Include="TextInputElement.cs" />
     <Compile Include="UIElement.cs" />
     <Compile Include="WorldItem.cs" />
     <Compile Include="WorldItemType.cs" />
     <Compile Include="WorldLayer.cs" />
+    <Compile Include="WorldLayerListElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

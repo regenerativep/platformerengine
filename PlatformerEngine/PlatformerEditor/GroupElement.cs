@@ -30,14 +30,15 @@ namespace PlatformerEditor
         {
             for(int i = 0; i < Elements.Count; i++)
             {
-                Elements[i].Draw(spriteBatch, offset + SoftOffset);
+                Elements[i].Draw(spriteBatch, Position + offset + SoftOffset);
             }
         }
         public override void MousePressed(MouseState mouseState)
         {
             Vector2 mousePos = new Vector2(mouseState.X, mouseState.Y) - Position;
-            foreach (UIElement elem in Elements)
+            for(int i = 0; i < Elements.Count; i++)
             {
+                UIElement elem = Elements[i];
                 if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
                 {
                     elem.MousePressed(mouseState);
@@ -47,8 +48,9 @@ namespace PlatformerEditor
         public override void MouseReleased(MouseState mouseState)
         {
             Vector2 mousePos = new Vector2(mouseState.X, mouseState.Y) - Position;
-            foreach (UIElement elem in Elements)
+            for (int i = 0; i < Elements.Count; i++)
             {
+                UIElement elem = Elements[i];
                 if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
                 {
                     elem.MouseReleased(mouseState);
@@ -58,8 +60,9 @@ namespace PlatformerEditor
         public override void Scroll(MouseState mouseState, float amount)
         {
             Vector2 mousePos = new Vector2(mouseState.X, mouseState.Y) - Position;
-            foreach (UIElement elem in Elements)
+            for (int i = 0; i < Elements.Count; i++)
             {
+                UIElement elem = Elements[i];
                 if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
                 {
                     elem.Scroll(mouseState, amount);

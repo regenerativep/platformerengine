@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PlatformerEngine;
+using System;
 using System.Collections.Generic;
 
 namespace PlatformerEditor
@@ -16,10 +17,17 @@ namespace PlatformerEditor
         public AssetManager Assets = new AssetManager(null);
         public Dictionary<string, UIElement> UIElements;
         public List<UIElement> DrawnUIElements;
+        public Dictionary<int, WorldLayer> WorldLayers;
         public bool ShowGrid;
         public MouseState PreviousMouseState;
         public MouseState MouseState;
         public float ScrollMultiplier;
+        public WorldLayerListElement WorldLayerListElement;
+        public IInputable CurrentInput;
+        public KeyboardState KeyboardState;
+        public KeyboardState PreviousKeyboardState;
+        private Keys[] lastPressedKeys;
+        private int lastScrollAmount;
         public PlatformerEditor()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -38,18 +46,44 @@ namespace PlatformerEditor
         /// </summary>
         protected override void Initialize()
         {
+            lastPressedKeys = new Keys[0];
             IsMouseVisible = true;
-            ScrollMultiplier = -4;
+            lastScrollAmount = 0;
+            graphics.PreferredBackBufferWidth = 1024;
+            graphics.PreferredBackBufferHeight = 768;
+            graphics.ApplyChanges();
+            ScrollMultiplier = -16;
+            CurrentInput = null;
             UIElements = new Dictionary<string, UIElement>();
             DrawnUIElements = new List<UIElement>();
-            ButtonElement buttonElem = new ButtonElement(this, new Vector2(32), new Vector2(128, 64), 0.5f, "button_test", "test");
-            buttonElem.Click = () =>
-            {
-                System.Diagnostics.Debug.WriteLine("hi");
-            };
-            DrawnUIElements.Add(buttonElem);
+            WorldLayers = new Dictionary<int, WorldLayer>();
+
+            WorldLayerListElement = new WorldLayerListElement(this, new Vector2(0, 0), new Vector2(128, 256), 0.4f, "list_layers");
+            DrawnUIElements.Add(WorldLayerListElement);
 
             base.Initialize();
+        }
+        public void AddWorldLayer(int layer)
+        {
+            AddWorldLayer(new WorldLayer(layer));
+        }
+        public void AddWorldLayer(WorldLayer worldLayer)
+        {
+            if(WorldLayers.ContainsKey(worldLayer.Layer))
+            {
+                System.Diagnostics.Debug.WriteLine("tried to add a layer that already exists");
+                return;
+            }
+            WorldLayerListElement.AddLayer(worldLayer.Layer);
+            WorldLayers.Add(worldLayer.Layer, worldLayer);
+        }
+        public WorldLayer GetWorldLayer(int layer)
+        {
+            if(WorldLayers.ContainsKey(layer))
+            {
+                return WorldLayers[layer];
+            }
+            return null;
         }
         public UIElement GetUIElement(string name)
         {
@@ -88,12 +122,15 @@ namespace PlatformerEditor
         protected override void Update(GameTime gameTime)
         {
             MouseState = Mouse.GetState();
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            KeyboardState = Keyboard.GetState();
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || KeyboardState.IsKeyDown(Keys.Escape))
                 Exit();
+            //uielement updates
             foreach(UIElement elem in DrawnUIElements)
             {
                 elem.Update();
             }
+            //mouse clicks
             Vector2 mousePos = new Vector2(MouseState.X, MouseState.Y);
             if((MouseState.LeftPressed() && !PreviousMouseState.LeftPressed()) || (MouseState.RightPressed() && !PreviousMouseState.RightPressed()) || (MouseState.MiddlePressed() && !PreviousMouseState.MiddlePressed()))
             {
@@ -101,6 +138,7 @@ namespace PlatformerEditor
                 {
                     if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
                     {
+                        CurrentInput = null;
                         elem.MousePressed(MouseState);
                     }
                 }
@@ -115,9 +153,11 @@ namespace PlatformerEditor
                     }
                 }
             }
-            if(MouseState.ScrollWheelValue != 0)
+            //scrolling
+            int scrollAmount = MouseState.ScrollWheelValue;
+            float scrollValue = Math.Sign(lastScrollAmount - scrollAmount) * ScrollMultiplier;
+            if (scrollValue != 0)
             {
-                float scrollValue = MouseState.ScrollWheelValue * ScrollMultiplier;
                 foreach (UIElement elem in DrawnUIElements)
                 {
                     if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
@@ -126,8 +166,93 @@ namespace PlatformerEditor
                     }
                 }
             }
+            //text input
+            if(CurrentInput != null)
+            {
+                List<Keys> newKeys = new List<Keys>();
+                Keys[] pressedKeys = KeyboardState.GetPressedKeys();
+                for(int i = 0; i < pressedKeys.Length; i++)
+                {
+                    Keys currentKey = pressedKeys[i];
+                    bool foundKey = false;
+                    for(int j = 0; j < lastPressedKeys.Length; j++)
+                    {
+                        Keys lastKey = pressedKeys[j];
+                        if(lastKey.Equals(currentKey))
+                        {
+                            foundKey = true;
+                            break;
+                        }
+                    }
+                    if(!foundKey)
+                    {
+                        newKeys.Add(currentKey);
+                    }
+                }
+                lastPressedKeys = pressedKeys;
+                for(int i = 0; i < newKeys.Count; i++)
+                {
+                    Keys key = newKeys[i];
+                    char keyChar = KeyToChar(key);
+                    char[] validKeys = CurrentInput.ValidKeys;
+                    bool isValid = false;
+                    for(int j = 0; j < validKeys.Length; j++)
+                    {
+                        if(validKeys[j].Equals(keyChar))
+                        {
+                            isValid = true;
+                            break;
+                        }
+                    }
+                    if(isValid)
+                    {
+                        CurrentInput.Text = CurrentInput.Text + keyChar;
+                    }
+                    else
+                    {
+                        if(key.Equals(Keys.Back))
+                        {
+                            if(CurrentInput.Text.Length > 0)
+                            {
+                                CurrentInput.Text = CurrentInput.Text.Substring(0, CurrentInput.Text.Length - 1);
+                            }
+                        }
+                    }
+                }
+            }
+            
             PreviousMouseState = MouseState;
+            PreviousKeyboardState = KeyboardState;
+            lastScrollAmount = scrollAmount;
             base.Update(gameTime);
+        }
+        public char KeyToChar(Keys key) //there oughta be a better way to do this
+        {
+            //TODO: add more keys
+            switch(key)
+            {
+                case Keys.D0:
+                    return '0';
+                case Keys.D1:
+                    return '1';
+                case Keys.D2:
+                    return '2';
+                case Keys.D3:
+                    return '3';
+                case Keys.D4:
+                    return '4';
+                case Keys.D5:
+                    return '5';
+                case Keys.D6:
+                    return '6';
+                case Keys.D7:
+                    return '7';
+                case Keys.D8:
+                    return '8';
+                case Keys.D9:
+                    return '9';
+            }
+            return ' ';
         }
 
         /// <summary>
