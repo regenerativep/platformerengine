@@ -1,9 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json.Linq;
 using PlatformerEngine;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace PlatformerEditor
 {
@@ -72,6 +75,8 @@ namespace PlatformerEditor
             worldItemTabs.AddTab("objects", ObjectListElement, 64);
             worldItemTabs.AddTab("tiles", TileListElement, 64);
             DrawnUIElements.Add(worldItemTabs);
+
+            LoadWorldItemTypes("types.json");
 
             base.Initialize();
         }
@@ -271,6 +276,36 @@ namespace PlatformerEditor
                     return '9';
             }
             return ' ';
+        }
+        public void LoadWorldItemTypes(string filename)
+        {
+            string[] lines = File.ReadAllLines(filename, Encoding.UTF8);
+            string json = "";
+            for (int i = 0; i < lines.Length; i++)
+            {
+                json += lines[i] + "\n";
+            }
+            JObject obj = JObject.Parse(json);
+            JArray objectTypeArray = (JArray)obj.GetValue("objectTypes").ToObject(typeof(JArray));
+            foreach(JToken assetToken in objectTypeArray)
+            {
+                JObject assetObject = (JObject)assetToken.ToObject(typeof(JObject));
+                string name = (string)assetObject.GetValue("name").ToObject(typeof(string));
+                string internalName = (string)assetObject.GetValue("internalName").ToObject(typeof(string));
+                int width = (int)assetObject.GetValue("width").ToObject(typeof(int));
+                int height = (int)assetObject.GetValue("height").ToObject(typeof(int));
+                ObjectListElement.AddWorldItem(new WorldItemType(name, internalName, new Vector2(width, height), false));
+            }
+            JArray tileTypeArray = (JArray)obj.GetValue("tileTypes").ToObject(typeof(JArray));
+            foreach (JToken assetToken in tileTypeArray)
+            {
+                JObject assetObject = (JObject)assetToken.ToObject(typeof(JObject));
+                string name = (string)assetObject.GetValue("name").ToObject(typeof(string));
+                string internalName = (string)assetObject.GetValue("internalName").ToObject(typeof(string));
+                int width = (int)assetObject.GetValue("width").ToObject(typeof(int));
+                int height = (int)assetObject.GetValue("height").ToObject(typeof(int));
+                TileListElement.AddWorldItem(new WorldItemType(name, internalName, new Vector2(width, height), true));
+            }
         }
 
         /// <summary>

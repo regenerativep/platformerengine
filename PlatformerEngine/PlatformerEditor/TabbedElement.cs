@@ -27,7 +27,6 @@ namespace PlatformerEditor
             ButtonElement tabButton = new ButtonElement(Game, new Vector2(0, 0), new Vector2(buttonWidth, TabButtonList.Size.Y), Layer + 0.01f, Name + "_" + name + "_button", name);
             tabButton.Click = () =>
             {
-                System.Diagnostics.Debug.WriteLine("test : " + name);
                 SetTab(name);
             };
             Tabs.Add(name, new KeyValuePair<ButtonElement, UIElement>(tabButton, tabContent));
