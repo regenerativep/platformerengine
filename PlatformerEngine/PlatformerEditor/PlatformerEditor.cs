@@ -22,6 +22,8 @@ namespace PlatformerEditor
         public MouseState MouseState;
         public float ScrollMultiplier;
         public WorldLayerListElement WorldLayerListElement;
+        public WorldItemListElement ObjectListElement;
+        public WorldItemListElement TileListElement;
         public WorldItemType CurrentWorldItemType;
         public WorldLayer CurrentWorldLayer;
         public IInputable CurrentInput;
@@ -60,10 +62,16 @@ namespace PlatformerEditor
             UIElements = new Dictionary<string, UIElement>();
             DrawnUIElements = new List<UIElement>();
             WorldLayers = new Dictionary<int, WorldLayer>();
-
+            
             DrawnUIElements.Add(new LevelElement(this, new Vector2(0, 0), new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), 0.3f, "level"));
             WorldLayerListElement = new WorldLayerListElement(this, new Vector2(0, 0), new Vector2(128, 256), 0.4f, "list_layers");
             DrawnUIElements.Add(WorldLayerListElement);
+            ObjectListElement = new WorldItemListElement(this, new Vector2(0, 0), new Vector2(128, 240), 0.4f, "list_objects");
+            TileListElement = new WorldItemListElement(this, new Vector2(0, 0), new Vector2(128, 240), 0.4f, "list_tiles");
+            TabbedElement worldItemTabs = new TabbedElement(this, new Vector2(0, 256), new Vector2(128, 256), 0.4f, "tabs_worlditems", 16);
+            worldItemTabs.AddTab("objects", ObjectListElement, 64);
+            worldItemTabs.AddTab("tiles", TileListElement, 64);
+            DrawnUIElements.Add(worldItemTabs);
 
             base.Initialize();
         }
@@ -139,21 +147,25 @@ namespace PlatformerEditor
             if((MouseState.LeftPressed() && !PreviousMouseState.LeftPressed()) || (MouseState.RightPressed() && !PreviousMouseState.RightPressed()) || (MouseState.MiddlePressed() && !PreviousMouseState.MiddlePressed()))
             {
                 CurrentInput = null;
-                foreach (UIElement elem in DrawnUIElements)
+                for (int i = DrawnUIElements.Count - 1; i >= 0; i--)
                 {
+                    UIElement elem = DrawnUIElements[i];
                     if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
                     {
-                        elem.MousePressed(MouseState);
+                        elem.MousePressed(MouseState, new Vector2(0, 0));
+                        break;
                     }
                 }
             }
             if((!MouseState.LeftPressed() && PreviousMouseState.LeftPressed()) || (!MouseState.RightPressed() && PreviousMouseState.RightPressed()) || (!MouseState.MiddlePressed() && PreviousMouseState.MiddlePressed()))
             {
-                foreach (UIElement elem in DrawnUIElements)
+                for (int i = DrawnUIElements.Count - 1; i >= 0; i--)
                 {
+                    UIElement elem = DrawnUIElements[i];
                     if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
                     {
                         elem.MouseReleased(MouseState);
+                        break;
                     }
                 }
             }
@@ -162,11 +174,13 @@ namespace PlatformerEditor
             float scrollValue = Math.Sign(lastScrollAmount - scrollAmount) * ScrollMultiplier;
             if (scrollValue != 0)
             {
-                foreach (UIElement elem in DrawnUIElements)
+                for(int i = DrawnUIElements.Count - 1; i >= 0; i--)
                 {
+                    UIElement elem = DrawnUIElements[i];
                     if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
                     {
                         elem.Scroll(MouseState, scrollValue);
+                        break;
                     }
                 }
             }

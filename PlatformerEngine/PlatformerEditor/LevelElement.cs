@@ -55,13 +55,13 @@ namespace PlatformerEditor
             }
             base.Update();
         }
-        public override void MousePressed(MouseState mouseState)
+        public override void MousePressed(MouseState mouseState, Vector2 offset)
         {
             if(mouseState.MiddlePressed())
             {
                 PanIsPressed = true;
             }
-            base.MousePressed(mouseState);
+            base.MousePressed(mouseState, offset);
         }
         public override void MouseReleased(MouseState mouseState)
         {
@@ -69,7 +69,7 @@ namespace PlatformerEditor
             {
                 PanIsPressed = false;
             }
-            base.MousePressed(mouseState);
+            base.MouseReleased(mouseState);
         }
     }
 }

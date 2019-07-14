@@ -24,12 +24,14 @@ namespace PlatformerEditor
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {
             spriteBatch.DrawOutlinedRectangle(Position + offset, Position + Size + offset, Color.White, Color.Black, Layer);
+            TextElement.Position = Position + TextPadding;
             TextElement.Draw(spriteBatch, offset);
+            base.Draw(spriteBatch, offset);
         }
-        public override void MousePressed(MouseState mouseState)
+        public override void MousePressed(MouseState mouseState, Vector2 offset)
         {
             Click?.Invoke();
-            base.MousePressed(mouseState);
+            base.MousePressed(mouseState, offset);
         }
     }
 }

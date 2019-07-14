@@ -10,10 +10,10 @@ using PlatformerEngine;
 
 namespace PlatformerEditor
 {
-    public class ListElement : HardGroupElement
+    public class HorizontalListElement : HardGroupElement
     {
         public List<UIElement> Items;
-        public ListElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name)
+        public HorizontalListElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name)
         {
             Items = new List<UIElement>();
         }
@@ -49,12 +49,12 @@ namespace PlatformerEditor
         public void UpdateList()
         {
             Elements.Clear();
-            int nextY = 0;
+            int nextX = 0;
             for(int i = 0; i < Items.Count; i++)
             {
                 UIElement item = Items[i];
-                item.Position.Y = nextY;
-                nextY += (int)Math.Ceiling(item.Size.Y);
+                item.Position.X = nextX;
+                nextX += (int)Math.Ceiling(item.Size.X);
                 Elements.Add(item);
             }
         }
@@ -62,11 +62,6 @@ namespace PlatformerEditor
         {
             spriteBatch.DrawOutlinedRectangle(Position + offset, Position + Size + offset, Color.White, Color.Black, Layer - 0.01f);
             base.Draw(spriteBatch, offset);
-        }
-        public override void Scroll(MouseState mouseState, float amount)
-        {
-            SoftOffset.Y += amount;
-            base.Scroll(mouseState, amount);
         }
     }
 }

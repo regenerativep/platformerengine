@@ -29,6 +29,7 @@ namespace PlatformerEditor
             {
                 spriteBatch.DrawString(Font, Text, Position + offset, TextColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, Layer);
             }
+            base.Draw(spriteBatch, offset);
         }
     }
 }

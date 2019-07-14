@@ -25,6 +25,7 @@ namespace PlatformerEditor
             {
                 Elements[i].Update();
             }
+            base.Update();
         }
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {
@@ -32,18 +33,21 @@ namespace PlatformerEditor
             {
                 Elements[i].Draw(spriteBatch, Position + offset + SoftOffset);
             }
+            base.Draw(spriteBatch, offset);
         }
-        public override void MousePressed(MouseState mouseState)
+        public override void MousePressed(MouseState mouseState, Vector2 offset)
         {
-            Vector2 mousePos = new Vector2(mouseState.X, mouseState.Y) - Position - SoftOffset;
+            Vector2 newOffset = Position + SoftOffset + offset;
+            Vector2 mousePos = new Vector2(mouseState.X, mouseState.Y) - newOffset;
             for(int i = 0; i < Elements.Count; i++)
             {
                 UIElement elem = Elements[i];
                 if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
                 {
-                    elem.MousePressed(mouseState);
+                    elem.MousePressed(mouseState, newOffset);
                 }
             }
+            base.MousePressed(mouseState, offset);
         }
         public override void MouseReleased(MouseState mouseState)
         {
@@ -56,6 +60,7 @@ namespace PlatformerEditor
                     elem.MouseReleased(mouseState);
                 }
             }
+            base.MouseReleased(mouseState);
         }
         public override void Scroll(MouseState mouseState, float amount)
         {
@@ -68,6 +73,7 @@ namespace PlatformerEditor
                     elem.Scroll(mouseState, amount);
                 }
             }
+            base.Scroll(mouseState, amount);
         }
     }
 }
