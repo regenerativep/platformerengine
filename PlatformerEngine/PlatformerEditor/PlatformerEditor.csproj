@@ -45,6 +45,7 @@
     <Compile Include="ButtonElement.cs" />
     <Compile Include="HardGroupElement.cs" />
     <Compile Include="GroupElement.cs" />
+    <Compile Include="LevelElement.cs" />
     <Compile Include="ListElement.cs" />
     <Compile Include="PlatformerEditor.cs" />
     <Compile Include="Program.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="WorldItem.cs" />
     <Compile Include="WorldItemType.cs" />
     <Compile Include="WorldLayer.cs" />
+    <Compile Include="ObjectListElement.cs" />
     <Compile Include="WorldLayerListElement.cs" />
   </ItemGroup>
   <ItemGroup>

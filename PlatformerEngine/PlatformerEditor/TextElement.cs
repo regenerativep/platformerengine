@@ -13,11 +13,9 @@ namespace PlatformerEditor
         public Color TextColor;
         public string Text;
         public bool ShowRectangle;
-        public int TextSize;
         public SpriteFont Font;
-        public TextElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name, int textSize, Color color, string text = "") : base(game, position, size, layer, name)
+        public TextElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name, Color color, string text = "") : base(game, position, size, layer, name)
         {
-            TextSize = textSize;
             TextColor = color;
             Text = text;
             Game.Assets.RequestFont("main", (font) =>
@@ -29,7 +27,7 @@ namespace PlatformerEditor
         {
             if (Font != null)
             {
-                spriteBatch.DrawString(Font, Text, Position + offset, TextColor);
+                spriteBatch.DrawString(Font, Text, Position + offset, TextColor, 0f, Vector2.Zero, 1f, SpriteEffects.None, Layer);
             }
         }
     }

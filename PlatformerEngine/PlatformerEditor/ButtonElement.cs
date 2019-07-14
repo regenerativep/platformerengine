@@ -18,7 +18,7 @@ namespace PlatformerEditor
         public ButtonElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name, string text) : base(game, position, size, layer, name)
         {
             TextPadding = new Vector2(2, 2);
-            TextElement = new TextElement(game, position + TextPadding, size - TextPadding, layer, name + "_text", 12, Color.Black, text);
+            TextElement = new TextElement(game, position + TextPadding, size - TextPadding, Layer + 0.01f, name + "_text", Color.Black, text);
             Click = null;
         }
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)

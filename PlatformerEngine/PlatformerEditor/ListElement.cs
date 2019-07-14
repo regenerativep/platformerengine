@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Graphics;
+using PlatformerEngine;
 
 namespace PlatformerEditor
 {
@@ -55,6 +57,11 @@ namespace PlatformerEditor
                 nextY += (int)Math.Ceiling(item.Size.Y);
                 Elements.Add(item);
             }
+        }
+        public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
+        {
+            spriteBatch.DrawOutlinedRectangle(Position + offset, Position + Size + offset, Color.White, Color.Black, Layer - 0.31f);
+            base.Draw(spriteBatch, offset);
         }
         public override void Scroll(MouseState mouseState, float amount)
         {

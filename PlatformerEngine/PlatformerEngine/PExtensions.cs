@@ -91,7 +91,7 @@ namespace PlatformerEngine
         {
             DrawRectangle(sb, a, b, outlineColor, layer);
             Vector2 thicknessVector = new Vector2(thickness);
-            DrawRectangle(sb, a + thicknessVector, b - thicknessVector, color, layer);
+            DrawRectangle(sb, a + thicknessVector, b - thicknessVector, color, layer + 0.001f);
         }
         /// <summary>
         /// draws an X

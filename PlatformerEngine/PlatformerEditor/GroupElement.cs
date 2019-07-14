@@ -35,7 +35,7 @@ namespace PlatformerEditor
         }
         public override void MousePressed(MouseState mouseState)
         {
-            Vector2 mousePos = new Vector2(mouseState.X, mouseState.Y) - Position;
+            Vector2 mousePos = new Vector2(mouseState.X, mouseState.Y) - Position - SoftOffset;
             for(int i = 0; i < Elements.Count; i++)
             {
                 UIElement elem = Elements[i];
@@ -47,7 +47,7 @@ namespace PlatformerEditor
         }
         public override void MouseReleased(MouseState mouseState)
         {
-            Vector2 mousePos = new Vector2(mouseState.X, mouseState.Y) - Position;
+            Vector2 mousePos = new Vector2(mouseState.X, mouseState.Y) - Position - SoftOffset;
             for (int i = 0; i < Elements.Count; i++)
             {
                 UIElement elem = Elements[i];

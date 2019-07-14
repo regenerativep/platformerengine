@@ -18,11 +18,12 @@ namespace PlatformerEditor
         public Dictionary<string, UIElement> UIElements;
         public List<UIElement> DrawnUIElements;
         public Dictionary<int, WorldLayer> WorldLayers;
-        public bool ShowGrid;
         public MouseState PreviousMouseState;
         public MouseState MouseState;
         public float ScrollMultiplier;
         public WorldLayerListElement WorldLayerListElement;
+        public WorldItemType CurrentWorldItemType;
+        public WorldLayer CurrentWorldLayer;
         public IInputable CurrentInput;
         public KeyboardState KeyboardState;
         public KeyboardState PreviousKeyboardState;
@@ -54,10 +55,13 @@ namespace PlatformerEditor
             graphics.ApplyChanges();
             ScrollMultiplier = -16;
             CurrentInput = null;
+            CurrentWorldItemType = null;
+            CurrentWorldLayer = null;
             UIElements = new Dictionary<string, UIElement>();
             DrawnUIElements = new List<UIElement>();
             WorldLayers = new Dictionary<int, WorldLayer>();
 
+            DrawnUIElements.Add(new LevelElement(this, new Vector2(0, 0), new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), 0.3f, "level"));
             WorldLayerListElement = new WorldLayerListElement(this, new Vector2(0, 0), new Vector2(128, 256), 0.4f, "list_layers");
             DrawnUIElements.Add(WorldLayerListElement);
 
@@ -134,11 +138,11 @@ namespace PlatformerEditor
             Vector2 mousePos = new Vector2(MouseState.X, MouseState.Y);
             if((MouseState.LeftPressed() && !PreviousMouseState.LeftPressed()) || (MouseState.RightPressed() && !PreviousMouseState.RightPressed()) || (MouseState.MiddlePressed() && !PreviousMouseState.MiddlePressed()))
             {
-                foreach(UIElement elem in DrawnUIElements)
+                CurrentInput = null;
+                foreach (UIElement elem in DrawnUIElements)
                 {
                     if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
                     {
-                        CurrentInput = null;
                         elem.MousePressed(MouseState);
                     }
                 }
@@ -262,7 +266,7 @@ namespace PlatformerEditor
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);
             foreach (UIElement elem in DrawnUIElements)
             {
                 elem.Draw(spriteBatch, new Vector2(0, 0));

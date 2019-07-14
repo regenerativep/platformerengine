@@ -15,14 +15,13 @@ namespace PlatformerEditor
         public RenderTarget2D Graphics;
         public HardGroupElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name)
         {
-            Elements = new List<UIElement>();
             Graphics = new RenderTarget2D(game.GraphicsDevice, (int)Size.X, (int)Size.Y);
         }
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {
             spriteBatch.End();
             spriteBatch.GraphicsDevice.SetRenderTarget(Graphics);
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);
             spriteBatch.GraphicsDevice.Clear(Color.Transparent);
             for(int i = 0; i < Elements.Count; i++)
             {
@@ -30,7 +29,7 @@ namespace PlatformerEditor
             }
             spriteBatch.End();
             spriteBatch.GraphicsDevice.SetRenderTarget(null);
-            spriteBatch.Begin();
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);
             spriteBatch.Draw(Graphics, Position + offset, Color.White);
         }
     }
