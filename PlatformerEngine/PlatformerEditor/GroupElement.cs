@@ -75,5 +75,34 @@ namespace PlatformerEditor
             }
             base.Scroll(mouseState, amount);
         }
+        public void RemoveAllChildren(bool andTheirChildren = false, bool hardDestroy = false)
+        {
+            for(int i = Elements.Count - 1; i >= 0; i--)
+            {
+                UIElement elem = Elements[i];
+                if (andTheirChildren)
+                {
+                    try
+                    {
+                        GroupElement group = (GroupElement)elem;
+                        group.RemoveAllChildren(true, hardDestroy);
+                    }
+                    catch (InvalidCastException)
+                    {
+                        //
+                    }
+                }
+                elem.Destroy(hardDestroy);
+                Elements.RemoveAt(i);
+            }
+        }
+        public override void Destroy(bool hardDestroy = false)
+        {
+            if(hardDestroy)
+            {
+                RemoveAllChildren(true, true);
+            }
+            base.Destroy(hardDestroy);
+        }
     }
 }

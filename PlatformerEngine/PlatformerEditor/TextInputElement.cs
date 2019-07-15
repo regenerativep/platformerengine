@@ -30,15 +30,10 @@ namespace PlatformerEditor
                 }
             }
         }
-        public char[] ValidKeys
-        {
-            get
-            {
-                return "0123456789".ToCharArray();
-            }
-        }
+        public char[] ValidKeys { get; set; }
         public TextInputElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name, "")
         {
+            ValidKeys = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./\\-_".ToCharArray();
             Click = () =>
             {
                 Game.CurrentInput = this;

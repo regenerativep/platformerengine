@@ -33,5 +33,10 @@ namespace PlatformerEditor
             Click?.Invoke();
             base.MousePressed(mouseState, offset);
         }
+        public override void Destroy(bool hardDestroy = false)
+        {
+            TextElement.Destroy(hardDestroy);
+            base.Destroy();
+        }
     }
 }

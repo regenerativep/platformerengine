@@ -17,7 +17,7 @@ namespace PlatformerEditor
             Layer = layer;
             IsVisible = true;
             WorldItems = new List<WorldItem>();
-            DrawLayer = layer / 100f;
+            DrawLayer = layer / 1000f; //warning: any layer above 1000 is probably going to cause problems
         }
     }
 }

@@ -30,5 +30,9 @@ namespace PlatformerEditor
         public virtual void Update() { }
         public virtual void Draw(SpriteBatch spriteBatch, Vector2 offset) { }
         public virtual void Scroll(MouseState mouseState, float amount) { }
+        public virtual void Destroy(bool hardDestroy = false)
+        {
+            Game.RemoveUIElement(this);
+        }
     }
 }

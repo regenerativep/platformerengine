@@ -49,5 +49,14 @@ namespace PlatformerEditor
             }
             return null;
         }
+        public override void Destroy(bool hardDestroy = false)
+        {
+            if (CurrentTabContainer != null)
+            {
+                CurrentTabContainer.Destroy(hardDestroy);
+            }
+            TabButtonList.Destroy(hardDestroy);
+            base.Destroy();
+        }
     }
 }
