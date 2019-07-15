@@ -92,7 +92,7 @@ namespace PlatformerEditor
                 return;
             }
             WorldLayerListElement.AddLayer(worldLayer.Layer);
-            WorldLayers.Add(worldLayer.Layer, worldLayer);
+            WorldLayers[worldLayer.Layer] = worldLayer;
         }
         public WorldLayer GetWorldLayer(int layer)
         {
@@ -169,7 +169,7 @@ namespace PlatformerEditor
                     UIElement elem = DrawnUIElements[i];
                     if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
                     {
-                        elem.MouseReleased(MouseState);
+                        elem.MouseReleased(MouseState, new Vector2(0, 0));
                         break;
                     }
                 }

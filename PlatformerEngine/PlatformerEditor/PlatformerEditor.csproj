@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ButtonElement.cs" />
+    <Compile Include="CheckboxElement.cs" />
     <Compile Include="HardGroupElement.cs" />
     <Compile Include="GroupElement.cs" />
     <Compile Include="LevelElement.cs" />

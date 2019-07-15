@@ -13,9 +13,11 @@ namespace PlatformerEditor
     public class ListElement : HardGroupElement
     {
         public List<UIElement> Items;
+        public float MaxScroll;
         public ListElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name)
         {
             Items = new List<UIElement>();
+            MaxScroll = 0;
         }
         public void AddItem(UIElement item, int ind = -1)
         {
@@ -57,6 +59,7 @@ namespace PlatformerEditor
                 nextY += (int)Math.Ceiling(item.Size.Y);
                 Elements.Add(item);
             }
+            MaxScroll = Math.Max(nextY - Size.Y, 0);
         }
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {
@@ -66,6 +69,8 @@ namespace PlatformerEditor
         public override void Scroll(MouseState mouseState, float amount)
         {
             SoftOffset.Y += amount;
+            if (SoftOffset.Y < -MaxScroll) SoftOffset.Y = -MaxScroll;
+            if (SoftOffset.Y > 0) SoftOffset.Y = 0;
             base.Scroll(mouseState, amount);
         }
     }

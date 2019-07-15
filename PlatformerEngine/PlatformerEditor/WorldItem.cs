@@ -18,12 +18,12 @@ namespace PlatformerEditor
         {
             Position = position;
             ItemType = type;
-            Title = new TextElement(game, position, ItemType.Size, 0.5f, Name + "_text", Color.Black, type.Name);
+            Title = new TextElement(game, new Vector2(0, 0), ItemType.Size, Layer + 0.01f, Name + "_text", Color.Black, type.Name);
         }
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {
-            spriteBatch.DrawOutlinedRectangle(Position + offset, Position + ItemType.Size + offset, Color.White, Color.Black, 0.5f, 1);
-            Title.Draw(spriteBatch, offset);
+            spriteBatch.DrawOutlinedRectangle(Position + offset, Position + ItemType.Size + offset, Color.White, Color.Black, Layer, 1);
+            Title.Draw(spriteBatch, offset + Position);
         }
     }
 }

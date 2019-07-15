@@ -18,7 +18,7 @@ namespace PlatformerEditor
             {
                 if (addLayerInput.Text.Length > 0)
                 {
-                    AddLayer(int.Parse(addLayerInput.Text));
+                    Game.AddWorldLayer(int.Parse(addLayerInput.Text));
                     addLayerInput.Text = "";
                 }
             };
@@ -30,12 +30,23 @@ namespace PlatformerEditor
         {
             if (Game.GetWorldLayer(layer) != null) return;
             GroupElement group = new GroupElement(Game, new Vector2(0, 0), new Vector2(128, 32), Layer + 0.01f, Name + "_" + layer.ToString());
-            ButtonElement layerButton = new ButtonElement(Game, new Vector2(0, 0), new Vector2(96, 32), Layer + 0.01f, group.Name + "_button", "layer " + layer.ToString());
+            ButtonElement layerButton = new ButtonElement(Game, new Vector2(0, 0), new Vector2(96, 32), group.Layer + 0.01f, group.Name + "_button", "layer " + layer.ToString());
             layerButton.Click = () =>
             {
-                Game.CurrentWorldLayer = Game.GetWorldLayer(layer);
+                WorldLayer worldLayer = Game.GetWorldLayer(layer);
+                Game.CurrentWorldLayer = worldLayer;
+            };
+            CheckboxElement layerDisplayCheckbox = new CheckboxElement(Game, new Vector2(layerButton.Size.X, 0), new Vector2(32, 32), group.Layer + 0.01f, group.Name + "_checkbox", true);
+            layerDisplayCheckbox.Tick = (ticked) =>
+            {
+                WorldLayer worldLayer = Game.GetWorldLayer(layer);
+                if (worldLayer != null)
+                {
+                    worldLayer.IsVisible = ticked;
+                }
             };
             group.Elements.Add(layerButton);
+            group.Elements.Add(layerDisplayCheckbox);
             AddItem(group);
         } //TODO: be able to remove layers
     }

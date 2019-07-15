@@ -26,7 +26,7 @@ namespace PlatformerEditor
             Game.UIElements.Add(name, this);
         }
         public virtual void MousePressed(MouseState mouseState, Vector2 offset) { }
-        public virtual void MouseReleased(MouseState mouseState) { }
+        public virtual void MouseReleased(MouseState mouseState, Vector2 offset) { }
         public virtual void Update() { }
         public virtual void Draw(SpriteBatch spriteBatch, Vector2 offset) { }
         public virtual void Scroll(MouseState mouseState, float amount) { }
