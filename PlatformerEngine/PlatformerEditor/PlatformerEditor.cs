@@ -274,59 +274,16 @@ namespace PlatformerEditor
                 }
             }
             //text input
-            List<Keys> newKeys = new List<Keys>();
             Keys[] pressedKeys = KeyboardState.GetPressedKeys();
-            for(int i = 0; i < pressedKeys.Length; i++)
+            List<Keys> newKeys = FindChanges(pressedKeys, lastPressedKeys);
+            List<Keys> releasedKeys = FindChanges(lastPressedKeys, pressedKeys);
+            if (newKeys.Contains(Keys.LeftShift) || newKeys.Contains(Keys.RightShift))
             {
-                Keys currentKey = pressedKeys[i];
-                bool foundKey = false;
-                for(int j = 0; j < lastPressedKeys.Length; j++)
-                {
-                    Keys lastKey = pressedKeys[j];
-                    if(lastKey.Equals(currentKey))
-                    {
-                        foundKey = true;
-                        break;
-                    }
-                }
-                if(!foundKey)
-                {
-                    //System.Diagnostics.Debug.WriteLine(currentKey);
-                    if (currentKey == Keys.LeftShift || currentKey == Keys.RightShift)
-                    {
-                        InputShifted = true;
-                    }
-                    else
-                    {
-                        newKeys.Add(currentKey);
-                    }
-                }
+                InputShifted = true;
             }
-            //List<Keys> unpressedKeys = new List<Keys>();
-            for(int i = 0; i < lastPressedKeys.Length; i++)
+            else if (!releasedKeys.Contains(Keys.LeftShift) && !releasedKeys.Contains(Keys.RightShift))
             {
-                Keys currentLastPressedKey = lastPressedKeys[i];
-                bool foundKey = false;
-                for (int j = 0; j < pressedKeys.Length; j++)
-                {
-                    Keys pressedKey = pressedKeys[j];
-                    if(currentLastPressedKey.Equals(pressedKey))
-                    {
-                        foundKey = true;
-                        break;
-                    }
-                }
-                if(!foundKey)
-                {
-                    if(currentLastPressedKey == Keys.LeftShift || currentLastPressedKey == Keys.RightShift)
-                    {
-                        InputShifted = false;
-                    }/*
-                    else
-                    {
-                        unpressedKeys.Add(currentLastPressedKey);
-                    }*/
-                }
+                InputShifted = false;
             }
             lastPressedKeys = pressedKeys;
             if (CurrentInput != null)
@@ -389,6 +346,29 @@ namespace PlatformerEditor
                 }
             }
             return ' ';
+        }
+        public List<T> FindChanges<T>(T[] a, T[] b)
+        {
+            List<T> changes = new List<T>();
+            for(int i = 0; i < a.Length; i++)
+            {
+                T itemA = a[i];
+                bool foundItem = false;
+                for(int j = 0; j < b.Length; j++)
+                {
+                    T itemB = b[j];
+                    if(itemA.Equals(itemB))
+                    {
+                        foundItem = true;
+                        break;
+                    }
+                }
+                if(!foundItem)
+                {
+                    changes.Add(itemA);
+                }
+            }
+            return changes;
         }
         public void LoadWorldItemTypes(string filename)
         {
