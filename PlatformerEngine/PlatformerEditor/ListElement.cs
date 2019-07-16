@@ -63,7 +63,7 @@ namespace PlatformerEditor
         }
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {
-            spriteBatch.DrawOutlinedRectangle(Position + offset, Position + Size + offset, Color.White, Color.Black, Layer - 0.01f);
+            spriteBatch.DrawOutlinedRectangle(Position + offset, Position + Size + offset, Color.White, Color.Black, Layer);
             base.Draw(spriteBatch, offset);
         }
         public override void Scroll(MouseState mouseState, float amount)

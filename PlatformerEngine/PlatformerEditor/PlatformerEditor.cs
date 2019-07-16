@@ -144,6 +144,17 @@ namespace PlatformerEditor
             TopUINode.Elements.Add(filenameInputElement);
             TopUINode.Elements.Add(loadButton);
             TopUINode.Elements.Add(saveButton);
+            TextInputElement snapXInput = new TextInputElement(this, new Vector2(0, 560), new Vector2(56, 24), 0.4f, "input_snap_x");
+            TextInputElement snapYInput = new TextInputElement(this, new Vector2(56, 560), new Vector2(56, 24), 0.4f, "input_snap_y");
+            ButtonElement setSnapButton = new ButtonElement(this, new Vector2(0, 584), new Vector2(56, 20), 0.4f, "button_snap_set", "set snap");
+            setSnapButton.Click = () =>
+            {
+                LevelElement levelElement = (LevelElement)GetUIElement("level");
+                levelElement.Snap = new Vector2(int.Parse(snapXInput.Text), int.Parse(snapYInput.Text));
+            };
+            TopUINode.Elements.Add(snapXInput);
+            TopUINode.Elements.Add(snapYInput);
+            TopUINode.Elements.Add(setSnapButton);
 
             LoadWorldItemTypes("types.json");
 
