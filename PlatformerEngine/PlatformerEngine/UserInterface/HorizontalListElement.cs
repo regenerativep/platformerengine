@@ -8,16 +8,14 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using PlatformerEngine;
 
-namespace PlatformerEditor
+namespace PlatformerEngine.UserInterface
 {
-    public class ListElement : HardGroupElement
+    public class HorizontalListElement : HardGroupElement
     {
         public List<UIElement> Items;
-        public float MaxScroll;
-        public ListElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name)
+        public HorizontalListElement(Game game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name)
         {
             Items = new List<UIElement>();
-            MaxScroll = 0;
         }
         public void AddItem(UIElement item, int ind = -1)
         {
@@ -51,27 +49,19 @@ namespace PlatformerEditor
         public void UpdateList()
         {
             Elements.Clear();
-            int nextY = 0;
+            int nextX = 0;
             for(int i = 0; i < Items.Count; i++)
             {
                 UIElement item = Items[i];
-                item.Position.Y = nextY;
-                nextY += (int)Math.Ceiling(item.Size.Y);
+                item.Position.X = nextX;
+                nextX += (int)Math.Ceiling(item.Size.X);
                 Elements.Add(item);
             }
-            MaxScroll = Math.Max(nextY - Size.Y, 0);
         }
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {
-            spriteBatch.DrawOutlinedRectangle(Position + offset, Position + Size + offset, Color.White, Color.Black, Layer);
+            spriteBatch.DrawOutlinedRectangle(Position + offset, Position + Size + offset, Color.White, Color.Black, Layer - 0.01f);
             base.Draw(spriteBatch, offset);
-        }
-        public override void Scroll(MouseState mouseState, float amount)
-        {
-            SoftOffset.Y += amount;
-            if (SoftOffset.Y < -MaxScroll) SoftOffset.Y = -MaxScroll;
-            if (SoftOffset.Y > 0) SoftOffset.Y = 0;
-            base.Scroll(mouseState, amount);
         }
     }
 }

@@ -8,13 +8,13 @@ using PlatformerEngine;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace PlatformerEditor
+namespace PlatformerEngine.UserInterface
 {
     public class CheckboxElement : UIElement
     {
         public bool Ticked;
         public Action<bool> Tick;
-        public CheckboxElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name, bool ticked) : base(game, position, size, layer, name)
+        public CheckboxElement(Game game, Vector2 position, Vector2 size, float layer, string name, bool ticked) : base(game, position, size, layer, name)
         {
             Ticked = ticked;
         }

@@ -7,23 +7,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlatformerEditor
+namespace PlatformerEngine.UserInterface
 {
     public abstract class UIElement
     {
         public Vector2 Position;
         public Vector2 Size;
         public float Layer;
-        public PlatformerEditor Game;
+        public Game Game;
         public string Name;
-        public UIElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name)
+        public UIElement(Game game, Vector2 position, Vector2 size, float layer, string name)
         {
             Game = game;
             Position = position;
             Size = size;
             Layer = layer;
             Name = name;
-            Game.UIElements.Add(name, this);
+            try
+            {
+                IElementable elementsGame = (IElementable)Game;
+                elementsGame.UIElements.Add(name, this);
+            }
+            catch (InvalidCastException)
+            {
+                //
+            }
         }
         public virtual void MousePressed(MouseState mouseState, Vector2 offset) { }
         public virtual void MouseReleased(MouseState mouseState, Vector2 offset) { }
@@ -32,7 +40,16 @@ namespace PlatformerEditor
         public virtual void Scroll(MouseState mouseState, float amount) { }
         public virtual void Destroy(bool hardDestroy = false)
         {
-            Game.DestroyUIElement(this);
+            try
+            {
+                IElementable elementsGame = (IElementable)Game;
+                elementsGame.DestroyUIElement(this);
+            }
+            catch (InvalidCastException)
+            {
+                //
+            }
+            //
         }
     }
 }

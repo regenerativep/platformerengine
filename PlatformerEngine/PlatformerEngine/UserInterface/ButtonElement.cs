@@ -8,14 +8,14 @@ using Microsoft.Xna.Framework.Graphics;
 using PlatformerEngine;
 using Microsoft.Xna.Framework.Input;
 
-namespace PlatformerEditor
+namespace PlatformerEngine.UserInterface
 {
     public class ButtonElement : UIElement
     {
         public TextElement TextElement;
         public Vector2 TextPadding;
         public Action Click;
-        public ButtonElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name, string text) : base(game, position, size, layer, name)
+        public ButtonElement(Game game, Vector2 position, Vector2 size, float layer, string name, string text) : base(game, position, size, layer, name)
         {
             TextPadding = new Vector2(2, 2);
             TextElement = new TextElement(game, position + TextPadding, size - TextPadding, Layer + 0.01f, name + "_text", Color.Black, text);

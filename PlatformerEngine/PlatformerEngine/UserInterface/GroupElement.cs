@@ -8,13 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlatformerEditor
+namespace PlatformerEngine.UserInterface
 {
     public class GroupElement : UIElement
     {
         public List<UIElement> Elements;
         public Vector2 SoftOffset;
-        public GroupElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name)
+        public GroupElement(Game game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name)
         {
             Elements = new List<UIElement>();
             SoftOffset = new Vector2(0, 0);

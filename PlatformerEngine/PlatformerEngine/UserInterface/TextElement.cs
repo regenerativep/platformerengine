@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace PlatformerEditor
+namespace PlatformerEngine.UserInterface
 {
     public class TextElement : UIElement
     {
@@ -14,14 +14,22 @@ namespace PlatformerEditor
         public string Text;
         public bool ShowRectangle;
         public SpriteFont Font;
-        public TextElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name, Color color, string text = "") : base(game, position, size, layer, name)
+        public TextElement(Game game, Vector2 position, Vector2 size, float layer, string name, Color color, string text = "") : base(game, position, size, layer, name)
         {
             TextColor = color;
             Text = text;
-            Game.Assets.RequestFont("main", (font) =>
+            try
             {
-                Font = font;
-            });
+                IAssettable assetsGame = (IAssettable)game;
+                assetsGame.Assets.RequestFont("main", (font) =>
+                {
+                    Font = font;
+                });
+            }
+            catch(InvalidCastException)
+            {
+                //
+            }
         }
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {

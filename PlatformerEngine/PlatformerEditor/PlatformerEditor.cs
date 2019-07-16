@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json.Linq;
 using PlatformerEngine;
+using PlatformerEngine.UserInterface;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,12 +14,12 @@ namespace PlatformerEditor
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class PlatformerEditor : Game
+    public class PlatformerEditor : Game, IAssettable, IElementable, IInputSettable
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        public AssetManager Assets = new AssetManager(null);
-        public Dictionary<string, UIElement> UIElements;
+        public AssetManager Assets { get; set; }
+        public Dictionary<string, UIElement> UIElements { get; set; }
         public GroupElement TopUINode;
         public Dictionary<Keys, char> KeyToCharMap;
         public Dictionary<Keys, char> KeyToShiftedCharMap;
@@ -31,7 +32,7 @@ namespace PlatformerEditor
         public WorldItemListElement TileListElement;
         public WorldItemType CurrentWorldItemType;
         public WorldLayer CurrentWorldLayer;
-        public IInputable CurrentInput;
+        public IInputable CurrentInput { get; set; }
         public KeyboardState KeyboardState;
         public KeyboardState PreviousKeyboardState;
         private Keys[] lastPressedKeys;
@@ -45,6 +46,7 @@ namespace PlatformerEditor
                 args.GraphicsDeviceInformation.PresentationParameters.RenderTargetUsage = RenderTargetUsage.PreserveContents;
             };
             Content.RootDirectory = "Content";
+            Assets = new AssetManager(null);
         }
 
         /// <summary>

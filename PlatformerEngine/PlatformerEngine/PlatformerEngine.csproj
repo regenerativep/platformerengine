@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="AssetManager.cs" />
     <Compile Include="ConsoleManager.cs" />
+    <Compile Include="IAssettable.cs" />
     <Compile Include="PExtensions.cs" />
     <Compile Include="GameTile.cs" />
     <Compile Include="LayerData.cs" />
@@ -75,6 +76,19 @@
     <Compile Include="SoundManager.cs" />
     <Compile Include="SpriteData.cs" />
     <Compile Include="ITransition.cs" />
+    <Compile Include="UserInterface\ButtonElement.cs" />
+    <Compile Include="UserInterface\CheckboxElement.cs" />
+    <Compile Include="UserInterface\GroupElement.cs" />
+    <Compile Include="UserInterface\HardGroupElement.cs" />
+    <Compile Include="UserInterface\HorizontalListElement.cs" />
+    <Compile Include="UserInterface\IElementable.cs" />
+    <Compile Include="UserInterface\IInputable.cs" />
+    <Compile Include="UserInterface\IInputSettable.cs" />
+    <Compile Include="UserInterface\ListElement.cs" />
+    <Compile Include="UserInterface\TabbedElement.cs" />
+    <Compile Include="UserInterface\TextElement.cs" />
+    <Compile Include="UserInterface\TextInputElement.cs" />
+    <Compile Include="UserInterface\UIElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace PlatformerEditor
+namespace PlatformerEngine.UserInterface
 {
     public class TabbedElement : GroupElement
     {
         public HorizontalListElement TabButtonList;
         public Dictionary<string, KeyValuePair<ButtonElement, UIElement>> Tabs;
         public GroupElement CurrentTabContainer;
-        public TabbedElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name, int buttonSectionHeight) : base(game, position, size, layer, name)
+        public TabbedElement(Game game, Vector2 position, Vector2 size, float layer, string name, int buttonSectionHeight) : base(game, position, size, layer, name)
         {
             TabButtonList = new HorizontalListElement(Game, new Vector2(0, 0), new Vector2(Size.X, buttonSectionHeight), layer, Name + "_buttonlist");
             Tabs = new Dictionary<string, KeyValuePair<ButtonElement, UIElement>>();

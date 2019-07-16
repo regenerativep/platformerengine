@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlatformerEditor
+namespace PlatformerEngine
 {
-    public interface IInputable
+    public interface IAssettable
     {
-        string Text { get; set; }
-        char[] ValidKeys { get; }
+        AssetManager Assets { get; set; }
     }
 }

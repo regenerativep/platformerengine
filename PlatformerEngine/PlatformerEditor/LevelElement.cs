@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PlatformerEngine;
+using PlatformerEngine.UserInterface;
 
 namespace PlatformerEditor
 {
@@ -17,8 +18,10 @@ namespace PlatformerEditor
         public Vector2 LevelSize;
         public bool PanIsPressed;
         public WorldItem CurrentWorldItem;
-        public LevelElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name)
+        public PlatformerEditor ActualGame;
+        public LevelElement(Game game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name)
         {
+            ActualGame = (PlatformerEditor)game;
             SoftOffset = new Vector2(0, 0);
             Snap = new Vector2(32, 32);
             LevelSize = new Vector2(512, 512);
@@ -38,7 +41,7 @@ namespace PlatformerEditor
                 spriteBatch.DrawLine(new Vector2(actualOffset.X, i), new Vector2(actualOffset.X + LevelSize.X, i), Color.Black);
             }
             //draw layers
-            foreach(KeyValuePair<int, WorldLayer> pair in Game.WorldLayers)
+            foreach(KeyValuePair<int, WorldLayer> pair in ActualGame.WorldLayers)
             {
                 //WorldLayer worldLayer = Game.WorldLayers[Game.WorldLayers.Keys.];
                 WorldLayer worldLayer = pair.Value;
@@ -50,13 +53,13 @@ namespace PlatformerEditor
                 }
             }
             //draw mouse item
-            if (Game.CurrentWorldItemType == null && CurrentWorldItem != null)
+            if (ActualGame.CurrentWorldItemType == null && CurrentWorldItem != null)
             {
                 CurrentWorldItem = null;
             }
-            else if ((Game.CurrentWorldItemType != null && CurrentWorldItem == null) || (Game.CurrentWorldItemType != null && CurrentWorldItem.ItemType != Game.CurrentWorldItemType))
+            else if ((ActualGame.CurrentWorldItemType != null && CurrentWorldItem == null) || (ActualGame.CurrentWorldItemType != null && CurrentWorldItem.ItemType != ActualGame.CurrentWorldItemType))
             {
-                CurrentWorldItem = new WorldItem(Game, Game.CurrentWorldItemType, SnapPosition(GetMousePosition(offset)), 0.6f);
+                CurrentWorldItem = new WorldItem(ActualGame, ActualGame.CurrentWorldItemType, SnapPosition(GetMousePosition(offset)), 0.6f);
             }
             else if (CurrentWorldItem != null)
             {
@@ -68,7 +71,7 @@ namespace PlatformerEditor
         {
             if(PanIsPressed)
             {
-                Vector2 mouseDifference = (Game.MouseState.Position - Game.PreviousMouseState.Position).ToVector2();
+                Vector2 mouseDifference = (ActualGame.MouseState.Position - ActualGame.PreviousMouseState.Position).ToVector2();
                 SoftOffset += mouseDifference;
             }
             base.Update();
@@ -82,23 +85,23 @@ namespace PlatformerEditor
             else if(mouseState.LeftPressed())
             {
                 Vector2 mousePos = new Vector2(mouseState.X, mouseState.Y) - offset - Position - SoftOffset;
-                if (Game.CurrentWorldLayer != null)
+                if (ActualGame.CurrentWorldLayer != null)
                 {
-                    WorldItem item = new WorldItem(Game, Game.CurrentWorldItemType, SnapPosition(mousePos), Game.CurrentWorldLayer.DrawLayer);
-                    Game.CurrentWorldLayer.WorldItems.Add(item);
+                    WorldItem item = new WorldItem(ActualGame, ActualGame.CurrentWorldItemType, SnapPosition(mousePos), ActualGame.CurrentWorldLayer.DrawLayer);
+                    ActualGame.CurrentWorldLayer.WorldItems.Add(item);
                 }
             }
             else if(mouseState.RightPressed())
             {
-                if(Game.CurrentWorldLayer != null)
+                if(ActualGame.CurrentWorldLayer != null)
                 {
                     Vector2 mousePos = GetMousePosition(offset);
-                    for (int i = 0; i < Game.CurrentWorldLayer.WorldItems.Count; i++)
+                    for (int i = 0; i < ActualGame.CurrentWorldLayer.WorldItems.Count; i++)
                     {
-                        WorldItem item = Game.CurrentWorldLayer.WorldItems[i];
+                        WorldItem item = ActualGame.CurrentWorldLayer.WorldItems[i];
                         if (PlatformerMath.PointInRectangle(new Rectangle(item.Position.ToPoint(), item.Size.ToPoint()), mousePos))
                         {
-                            Game.CurrentWorldLayer.WorldItems.RemoveAt(i);
+                            ActualGame.CurrentWorldLayer.WorldItems.RemoveAt(i);
                             break;
                         }
                     }
@@ -108,7 +111,7 @@ namespace PlatformerEditor
         }
         public Vector2 GetMousePosition(Vector2? offset = null)
         {
-            return new Vector2(Game.MouseState.X, Game.MouseState.Y) - (offset ?? Vector2.Zero) - Position - SoftOffset;
+            return new Vector2(ActualGame.MouseState.X, ActualGame.MouseState.Y) - (offset ?? Vector2.Zero) - Position - SoftOffset;
         }
         public Vector2 SnapPosition(Vector2 position)
         {

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlatformerEditor
+namespace PlatformerEngine.UserInterface
 {
-    class TextInputElement : ButtonElement, IInputable
+    public class TextInputElement : ButtonElement, IInputable
     {
         public string Text
         {
@@ -31,12 +31,20 @@ namespace PlatformerEditor
             }
         }
         public char[] ValidKeys { get; set; }
-        public TextInputElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name, "")
+        public TextInputElement(Game game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name, "")
         {
             ValidKeys = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./\\-_".ToCharArray();
             Click = () =>
             {
-                Game.CurrentInput = this;
+                try
+                {
+                    IInputSettable isetGame = (IInputSettable)Game;
+                    isetGame.CurrentInput = this;
+                }
+                catch(InvalidCastException)
+                {
+                    //
+                }
             };
         }
     }
