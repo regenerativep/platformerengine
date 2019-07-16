@@ -38,7 +38,6 @@ namespace PlatformerEditor
                 spriteBatch.DrawLine(new Vector2(actualOffset.X, i), new Vector2(actualOffset.X + LevelSize.X, i), Color.Black);
             }
             //draw layers
-            //for(int i = 0; i < Game.WorldLayers.Keys.Count; i++)
             foreach(KeyValuePair<int, WorldLayer> pair in Game.WorldLayers)
             {
                 //WorldLayer worldLayer = Game.WorldLayers[Game.WorldLayers.Keys.];

@@ -19,7 +19,7 @@ namespace PlatformerEditor
         SpriteBatch spriteBatch;
         public AssetManager Assets = new AssetManager(null);
         public Dictionary<string, UIElement> UIElements;
-        public List<UIElement> DrawnUIElements;
+        public GroupElement TopUINode;
         public Dictionary<Keys, char> KeyToCharMap;
         public Dictionary<Keys, char> KeyToShiftedCharMap;
         public Dictionary<int, WorldLayer> WorldLayers;
@@ -116,18 +116,18 @@ namespace PlatformerEditor
             AddKeyToChar(Keys.Y, 'y', 'Y');
             AddKeyToChar(Keys.Z, 'z', 'Z');
             UIElements = new Dictionary<string, UIElement>();
-            DrawnUIElements = new List<UIElement>();
+            TopUINode = new GroupElement(this, new Vector2(0, 0), new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), 0f, "top");
             WorldLayers = new Dictionary<int, WorldLayer>();
             
-            DrawnUIElements.Add(new LevelElement(this, new Vector2(0, 0), new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), 0.3f, "level"));
+            TopUINode.Elements.Add(new LevelElement(this, new Vector2(0, 0), new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), 0.3f, "level"));
             WorldLayerListElement = new WorldLayerListElement(this, new Vector2(0, 0), new Vector2(128, 256), 0.4f, "list_layers");
-            DrawnUIElements.Add(WorldLayerListElement);
+            TopUINode.Elements.Add(WorldLayerListElement);
             ObjectListElement = new WorldItemListElement(this, new Vector2(0, 0), new Vector2(128, 240), 0.4f, "list_objects");
             TileListElement = new WorldItemListElement(this, new Vector2(0, 0), new Vector2(128, 240), 0.4f, "list_tiles");
             TabbedElement worldItemTabs = new TabbedElement(this, new Vector2(0, 256), new Vector2(128, 256), 0.4f, "tabs_worlditems", 16);
             worldItemTabs.AddTab("objects", ObjectListElement, 64);
             worldItemTabs.AddTab("tiles", TileListElement, 64);
-            DrawnUIElements.Add(worldItemTabs);
+            TopUINode.Elements.Add(worldItemTabs);
             TextInputElement filenameInputElement = new TextInputElement(this, new Vector2(0, 512), new Vector2(128, 24), 0.4f, "input_filename");
             ButtonElement loadButton = new ButtonElement(this, new Vector2(0, 536), new Vector2(48, 24), 0.4f, "button_load", "load");
             loadButton.Click = () =>
@@ -141,9 +141,9 @@ namespace PlatformerEditor
                 string filename = filenameInputElement.Text;
                 SaveLevel(filename);
             };
-            DrawnUIElements.Add(filenameInputElement);
-            DrawnUIElements.Add(loadButton);
-            DrawnUIElements.Add(saveButton);
+            TopUINode.Elements.Add(filenameInputElement);
+            TopUINode.Elements.Add(loadButton);
+            TopUINode.Elements.Add(saveButton);
 
             LoadWorldItemTypes("types.json");
 
@@ -227,51 +227,24 @@ namespace PlatformerEditor
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || KeyboardState.IsKeyDown(Keys.Escape))
                 Exit();
             //uielement updates
-            foreach(UIElement elem in DrawnUIElements)
-            {
-                elem.Update();
-            }
+            TopUINode.Update();
             //mouse clicks
             Vector2 mousePos = new Vector2(MouseState.X, MouseState.Y);
             if((MouseState.LeftPressed() && !PreviousMouseState.LeftPressed()) || (MouseState.RightPressed() && !PreviousMouseState.RightPressed()) || (MouseState.MiddlePressed() && !PreviousMouseState.MiddlePressed()))
             {
                 CurrentInput = null;
-                for (int i = DrawnUIElements.Count - 1; i >= 0; i--)
-                {
-                    UIElement elem = DrawnUIElements[i];
-                    if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
-                    {
-                        elem.MousePressed(MouseState, new Vector2(0, 0));
-                        break;
-                    }
-                }
+                TopUINode.MousePressed(MouseState, new Vector2(0, 0));
             }
             if((!MouseState.LeftPressed() && PreviousMouseState.LeftPressed()) || (!MouseState.RightPressed() && PreviousMouseState.RightPressed()) || (!MouseState.MiddlePressed() && PreviousMouseState.MiddlePressed()))
             {
-                for (int i = DrawnUIElements.Count - 1; i >= 0; i--)
-                {
-                    UIElement elem = DrawnUIElements[i];
-                    if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
-                    {
-                        elem.MouseReleased(MouseState, new Vector2(0, 0));
-                        break;
-                    }
-                }
+                TopUINode.MouseReleased(MouseState, new Vector2(0, 0));
             }
             //scrolling
             int scrollAmount = MouseState.ScrollWheelValue;
             float scrollValue = Math.Sign(lastScrollAmount - scrollAmount) * ScrollMultiplier;
             if (scrollValue != 0)
             {
-                for(int i = DrawnUIElements.Count - 1; i >= 0; i--)
-                {
-                    UIElement elem = DrawnUIElements[i];
-                    if (PlatformerMath.PointInRectangle(new Rectangle(elem.Position.ToPoint(), elem.Size.ToPoint()), mousePos))
-                    {
-                        elem.Scroll(MouseState, scrollValue);
-                        break;
-                    }
-                }
+                TopUINode.Scroll(MouseState, scrollValue);
             }
             //text input
             Keys[] pressedKeys = KeyboardState.GetPressedKeys();
@@ -492,10 +465,7 @@ namespace PlatformerEditor
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin(SpriteSortMode.FrontToBack);
-            foreach (UIElement elem in DrawnUIElements)
-            {
-                elem.Draw(spriteBatch, new Vector2(0, 0));
-            }
+            TopUINode.Draw(spriteBatch, new Vector2(0, 0));
             spriteBatch.End();
             base.Draw(gameTime);
         }
