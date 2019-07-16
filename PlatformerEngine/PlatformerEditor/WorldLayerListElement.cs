@@ -59,7 +59,7 @@ namespace PlatformerEditor
             {
                 GroupElement element = layerButtonGroups[i];
                 RemoveItem(element);
-                Game.RemoveUIElement(element);
+                Game.DestroyUIElement(element);
                 element.RemoveAllChildren(true);
                 layerButtonGroups.RemoveAt(i);
             }

@@ -179,7 +179,7 @@ namespace PlatformerEditor
             }
             return null;
         }
-        public void RemoveUIElement(UIElement element)
+        public void DestroyUIElement(UIElement element)
         {
             string victim = null;
             foreach(KeyValuePair<string, UIElement> pair in UIElements)

@@ -32,7 +32,7 @@ namespace PlatformerEditor
         public virtual void Scroll(MouseState mouseState, float amount) { }
         public virtual void Destroy(bool hardDestroy = false)
         {
-            Game.RemoveUIElement(this);
+            Game.DestroyUIElement(this);
         }
     }
 }
