@@ -116,11 +116,11 @@ namespace PlatformerEditor
         public Vector2 SnapPosition(Vector2 position)
         {
             Vector2 newVec = (position / Snap).ToPoint().ToVector2() * Snap;
-            if (Position.X < 0)
+            if (position.X < 0)
             {
                 newVec.X -= Snap.X;
             }
-            if (Position.Y < 0)
+            if (position.Y < 0)
             {
                 newVec.Y -= Snap.Y;
             }
