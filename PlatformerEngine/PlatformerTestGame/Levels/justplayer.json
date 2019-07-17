@@ -1,0 +1,17 @@
+{
+  "width": 512,
+  "height": 512,
+  "layers": [
+    {
+      "layer": 0,
+      "objects": [
+        {
+          "name": "obj_player",
+          "x": 128,
+          "y": 320
+        }
+      ],
+      "tiles": []
+    }
+  ]
+}

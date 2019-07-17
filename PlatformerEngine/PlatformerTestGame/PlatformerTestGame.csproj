@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="FadeTransition.cs" />
     <Compile Include="GameObjects\BlockObject.cs" />
+    <Compile Include="GameObjects\PlayerObject.cs" />
     <Compile Include="PlatformerGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -112,10 +113,7 @@
     <None Include="Data\assets.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Levels\test2.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Levels\test3.json">
+    <None Include="Levels\justplayer.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

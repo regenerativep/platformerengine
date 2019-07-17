@@ -1,12 +1,18 @@
 {
-	"objectTypes": [
-		{
-			"name": "Block",
-			"internalName": "obj_block",
-			"width": "64",
-			"height": "64"
-		}
-	],
+  "objectTypes": [
+    {
+      "name": "Block",
+      "internalName": "obj_block",
+      "width": "64",
+      "height": "64"
+    },
+    {
+      "name": "Player",
+      "internalName": "obj_player",
+      "width": "64",
+      "height": "64"
+    }
+  ],
 	"tileTypes": [
 		{
 			"name": "Grass",
