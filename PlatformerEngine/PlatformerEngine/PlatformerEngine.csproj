@@ -81,14 +81,13 @@
     <Compile Include="UserInterface\GroupElement.cs" />
     <Compile Include="UserInterface\HardGroupElement.cs" />
     <Compile Include="UserInterface\HorizontalListElement.cs" />
-    <Compile Include="UserInterface\IElementable.cs" />
     <Compile Include="UserInterface\IInputable.cs" />
-    <Compile Include="UserInterface\IInputSettable.cs" />
     <Compile Include="UserInterface\ListElement.cs" />
     <Compile Include="UserInterface\TabbedElement.cs" />
     <Compile Include="UserInterface\TextElement.cs" />
     <Compile Include="UserInterface\TextInputElement.cs" />
     <Compile Include="UserInterface\UIElement.cs" />
+    <Compile Include="UserInterface\UIManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

@@ -14,7 +14,7 @@ namespace PlatformerEngine.UserInterface
     {
         public List<UIElement> Items;
         public float MaxScroll;
-        public ListElement(Game game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name)
+        public ListElement(UIManager uiManager, Vector2 position, Vector2 size, float layer, string name) : base(uiManager, position, size, layer, name)
         {
             Items = new List<UIElement>();
             MaxScroll = 0;

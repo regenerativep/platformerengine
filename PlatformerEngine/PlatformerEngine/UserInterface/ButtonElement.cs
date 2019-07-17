@@ -15,17 +15,17 @@ namespace PlatformerEngine.UserInterface
         public TextElement TextElement;
         public Vector2 TextPadding;
         public Action Click;
-        public ButtonElement(Game game, Vector2 position, Vector2 size, float layer, string name, string text) : base(game, position, size, layer, name)
+        // it should be noted that the textelement requires a font
+        public ButtonElement(UIManager uiManager, Vector2 position, Vector2 size, float layer, string name, string text) : base(uiManager, position, size, layer, name)
         {
             TextPadding = new Vector2(2, 2);
-            TextElement = new TextElement(game, position + TextPadding, size - TextPadding, Layer + 0.01f, name + "_text", Color.Black, text);
+            TextElement = new TextElement(UIManager, TextPadding, Size - TextPadding, Layer + 0.01f, name + "_text", Color.Black, text);
             Click = null;
         }
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {
             spriteBatch.DrawOutlinedRectangle(Position + offset, Position + Size + offset, Color.White, Color.Black, Layer);
-            TextElement.Position = Position + TextPadding;
-            TextElement.Draw(spriteBatch, offset);
+            TextElement.Draw(spriteBatch, Position + offset);
             base.Draw(spriteBatch, offset);
         }
         public override void MousePressed(MouseState mouseState, Vector2 offset)

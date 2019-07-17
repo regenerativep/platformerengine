@@ -15,11 +15,15 @@ namespace PlatformerEditor
         private static int worldItemCounter = 0;
         public TextElement Title;
         public WorldItemType ItemType;
-        public WorldItem(PlatformerEditor game, WorldItemType type, Vector2 position, float layer) : base(game, position, type.Size, layer, "worlditem_" + (worldItemCounter++).ToString())
+        public WorldItem(UIManager uiManager, WorldItemType type, Vector2 position, float layer) : base(uiManager, position, type.Size, layer, "worlditem_" + (worldItemCounter++).ToString())
         {
             Position = position;
             ItemType = type;
-            Title = new TextElement(game, new Vector2(0, 0), ItemType.Size, Layer + 0.01f, Name + "_text", Color.Black, type.Name);
+            Title = new TextElement(UIManager, new Vector2(0, 0), ItemType.Size, Layer + 0.01f, Name + "_text", Color.Black, type.Name);
+            UIManager.Assets.RequestFont("main", (font) =>
+            {
+                Title.Font = font;
+            });
         }
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {

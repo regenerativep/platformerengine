@@ -14,22 +14,14 @@ namespace PlatformerEngine.UserInterface
         public string Text;
         public bool ShowRectangle;
         public SpriteFont Font;
-        public TextElement(Game game, Vector2 position, Vector2 size, float layer, string name, Color color, string text = "") : base(game, position, size, layer, name)
+        public TextElement(UIManager uiManager, Vector2 position, Vector2 size, float layer, string name, Color color, string text = "", string fontName = "main") : base(uiManager, position, size, layer, name)
         {
             TextColor = color;
             Text = text;
-            try
+            UIManager.Assets.RequestFont(fontName, (font) =>
             {
-                IAssettable assetsGame = (IAssettable)game;
-                assetsGame.Assets.RequestFont("main", (font) =>
-                {
-                    Font = font;
-                });
-            }
-            catch(InvalidCastException)
-            {
-                //
-            }
+                Font = font;
+            });
         }
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {

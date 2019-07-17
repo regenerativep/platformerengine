@@ -11,19 +11,18 @@ namespace PlatformerEditor
     public class WorldLayerListElement : ListElement
     {
         private List<GroupElement> layerButtonGroups;
-        public PlatformerEditor ActualGame;
-        public WorldLayerListElement(PlatformerEditor game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name)
+        public WorldLayerListElement(UIManager uiManager, Vector2 position, Vector2 size, float layer, string name) : base(uiManager, position, size, layer, name)
         {
-            ActualGame = game;
-            GroupElement group = new GroupElement(Game, new Vector2(0, 0), new Vector2(128, 32), Layer, Name + "_add");
-            ButtonElement addLayerButton = new ButtonElement(Game, new Vector2(0, 0), new Vector2(64, 32), Layer + 0.01f, group.Name + "_button", "add layer");
-            TextInputElement addLayerInput = new TextInputElement(Game, new Vector2(64, 0), new Vector2(64, 32), Layer + 0.01f, group.Name + "_input");
+            PlatformerEditor actualGame = (PlatformerEditor)UIManager.Game;
+            GroupElement group = new GroupElement(UIManager, new Vector2(0, 0), new Vector2(128, 32), Layer, Name + "_add");
+            ButtonElement addLayerButton = new ButtonElement(UIManager, new Vector2(0, 0), new Vector2(64, 32), Layer + 0.01f, group.Name + "_button", "add layer");
+            TextInputElement addLayerInput = new TextInputElement(UIManager, new Vector2(64, 0), new Vector2(64, 32), Layer + 0.01f, group.Name + "_input");
             addLayerInput.ValidKeys = "0123456789".ToCharArray();
             addLayerButton.Click = () =>
             {
                 if (addLayerInput.Text.Length > 0)
                 {
-                    ActualGame.AddWorldLayer(int.Parse(addLayerInput.Text));
+                    actualGame.AddWorldLayer(int.Parse(addLayerInput.Text));
                     addLayerInput.Text = "";
                 }
             };
@@ -34,18 +33,19 @@ namespace PlatformerEditor
         }
         public void AddLayer(int layer)
         {
-            if (ActualGame.GetWorldLayer(layer) != null) return;
-            GroupElement group = new GroupElement(Game, new Vector2(0, 0), new Vector2(128, 32), Layer + 0.01f, Name + "_" + layer.ToString());
-            ButtonElement layerButton = new ButtonElement(Game, new Vector2(0, 0), new Vector2(96, 32), group.Layer + 0.01f, group.Name + "_button", "layer " + layer.ToString());
+            PlatformerEditor actualGame = (PlatformerEditor)UIManager.Game;
+            if (actualGame.GetWorldLayer(layer) != null) return;
+            GroupElement group = new GroupElement(UIManager, new Vector2(0, 0), new Vector2(128, 32), Layer + 0.01f, Name + "_" + layer.ToString());
+            ButtonElement layerButton = new ButtonElement(UIManager, new Vector2(0, 0), new Vector2(96, 32), group.Layer + 0.01f, group.Name + "_button", "layer " + layer.ToString());
             layerButton.Click = () =>
             {
-                WorldLayer worldLayer = ActualGame.GetWorldLayer(layer);
-                ActualGame.CurrentWorldLayer = worldLayer;
+                WorldLayer worldLayer = actualGame.GetWorldLayer(layer);
+                actualGame.CurrentWorldLayer = worldLayer;
             };
-            CheckboxElement layerDisplayCheckbox = new CheckboxElement(Game, new Vector2(layerButton.Size.X, 0), new Vector2(32, 32), group.Layer + 0.01f, group.Name + "_checkbox", true);
+            CheckboxElement layerDisplayCheckbox = new CheckboxElement(UIManager, new Vector2(layerButton.Size.X, 0), new Vector2(32, 32), group.Layer + 0.01f, group.Name + "_checkbox", true);
             layerDisplayCheckbox.Tick = (ticked) =>
             {
-                WorldLayer worldLayer = ActualGame.GetWorldLayer(layer);
+                WorldLayer worldLayer = actualGame.GetWorldLayer(layer);
                 if (worldLayer != null)
                 {
                     worldLayer.IsVisible = ticked;
@@ -62,7 +62,7 @@ namespace PlatformerEditor
             {
                 GroupElement element = layerButtonGroups[i];
                 RemoveItem(element);
-                ActualGame.DestroyUIElement(element);
+                UIManager.DestroyUIElement(element);
                 element.RemoveAllChildren(true);
                 layerButtonGroups.RemoveAt(i);
             }

@@ -13,9 +13,9 @@ namespace PlatformerEngine.UserInterface
     public class HardGroupElement : GroupElement
     {
         public RenderTarget2D Graphics;
-        public HardGroupElement(Game game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name)
+        public HardGroupElement(UIManager uiManager, Vector2 position, Vector2 size, float layer, string name) : base(uiManager, position, size, layer, name)
         {
-            Graphics = new RenderTarget2D(game.GraphicsDevice, (int)Size.X, (int)Size.Y);
+            Graphics = new RenderTarget2D(UIManager.Game.GraphicsDevice, (int)Size.X, (int)Size.Y);
         }
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {

@@ -31,20 +31,12 @@ namespace PlatformerEngine.UserInterface
             }
         }
         public char[] ValidKeys { get; set; }
-        public TextInputElement(Game game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name, "")
+        public TextInputElement(UIManager uiManager, Vector2 position, Vector2 size, float layer, string name) : base(uiManager, position, size, layer, name, "")
         {
             ValidKeys = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ./\\-_".ToCharArray();
             Click = () =>
             {
-                try
-                {
-                    IInputSettable isetGame = (IInputSettable)Game;
-                    isetGame.CurrentInput = this;
-                }
-                catch(InvalidCastException)
-                {
-                    //
-                }
+                UIManager.CurrentInput = this;
             };
         }
     }

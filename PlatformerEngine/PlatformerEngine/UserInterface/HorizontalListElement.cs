@@ -13,7 +13,7 @@ namespace PlatformerEngine.UserInterface
     public class HorizontalListElement : HardGroupElement
     {
         public List<UIElement> Items;
-        public HorizontalListElement(Game game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name)
+        public HorizontalListElement(UIManager uiManager, Vector2 position, Vector2 size, float layer, string name) : base(uiManager, position, size, layer, name)
         {
             Items = new List<UIElement>();
         }

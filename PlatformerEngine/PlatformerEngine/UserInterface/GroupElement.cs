@@ -14,7 +14,7 @@ namespace PlatformerEngine.UserInterface
     {
         public List<UIElement> Elements;
         public Vector2 SoftOffset;
-        public GroupElement(Game game, Vector2 position, Vector2 size, float layer, string name) : base(game, position, size, layer, name)
+        public GroupElement(UIManager uiManager, Vector2 position, Vector2 size, float layer, string name) : base(uiManager, position, size, layer, name)
         {
             Elements = new List<UIElement>();
             SoftOffset = new Vector2(0, 0);

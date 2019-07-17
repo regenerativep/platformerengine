@@ -14,24 +14,16 @@ namespace PlatformerEngine.UserInterface
         public Vector2 Position;
         public Vector2 Size;
         public float Layer;
-        public Game Game;
+        public UIManager UIManager;
         public string Name;
-        public UIElement(Game game, Vector2 position, Vector2 size, float layer, string name)
+        public UIElement(UIManager uiManager, Vector2 position, Vector2 size, float layer, string name)
         {
-            Game = game;
+            UIManager = uiManager;
             Position = position;
             Size = size;
             Layer = layer;
             Name = name;
-            try
-            {
-                IElementable elementsGame = (IElementable)Game;
-                elementsGame.UIElements.Add(name, this);
-            }
-            catch (InvalidCastException)
-            {
-                //
-            }
+            UIManager.Elements.Add(name, this);
         }
         public virtual void MousePressed(MouseState mouseState, Vector2 offset) { }
         public virtual void MouseReleased(MouseState mouseState, Vector2 offset) { }
@@ -40,16 +32,7 @@ namespace PlatformerEngine.UserInterface
         public virtual void Scroll(MouseState mouseState, float amount) { }
         public virtual void Destroy(bool hardDestroy = false)
         {
-            try
-            {
-                IElementable elementsGame = (IElementable)Game;
-                elementsGame.DestroyUIElement(this);
-            }
-            catch (InvalidCastException)
-            {
-                //
-            }
-            //
+            UIManager.DestroyUIElement(this);
         }
     }
 }
