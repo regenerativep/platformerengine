@@ -9,23 +9,70 @@ using System.Threading.Tasks;
 
 namespace PlatformerEngine.UserInterface
 {
+    /// <summary>
+    /// manages ui updates and drawing
+    /// </summary>
     public class UIManager
     {
+        /// <summary>
+        /// asset manager for ui elements to refer to
+        /// </summary>
         public AssetManager Assets;
+        /// <summary>
+        /// dictionary to find elements based on their name
+        /// </summary>
         public Dictionary<string, UIElement> Elements;
+        /// <summary>
+        /// the current input we are typing to
+        /// </summary>
         public IInputable CurrentInput;
+        /// <summary>
+        /// multiplier for scrolling
+        /// </summary>
         public float ScrollMultiplier;
+        /// <summary>
+        /// the previous mouse state
+        /// </summary>
         public MouseState PreviousMouseState;
+        /// <summary>
+        /// the current mouse state
+        /// </summary>
         public MouseState MouseState;
+        /// <summary>
+        /// the top ui group element that we draw and update to
+        /// </summary>
         public GroupElement TopUINode;
+        /// <summary>
+        /// the current keyboard state
+        /// </summary>
         public KeyboardState KeyboardState;
+        /// <summary>
+        /// the previous keyboard state
+        /// </summary>
         public KeyboardState PreviousKeyboardState;
-        private Keys[] lastPressedKeys;
+        /// <summary>
+        /// if the shift key is being pressed down and we need to move to the other set of key input characters
+        /// </summary>
         public bool InputShifted;
-        private int lastScrollAmount;
+        /// <summary>
+        /// dictionary of keys to chars
+        /// </summary>
         public Dictionary<Keys, char> KeyToCharMap;
+        /// <summary>
+        /// dictionary of keyst to chars but the shifted version of them
+        /// </summary>
         public Dictionary<Keys, char> KeyToShiftedCharMap;
+        /// <summary>
+        /// a reference to the parent game
+        /// </summary>
         public Game Game;
+        private Keys[] lastPressedKeys;
+        private int lastScrollAmount;
+        /// <summary>
+        /// creates a new ui manager
+        /// </summary>
+        /// <param name="game">the parent game to reference to</param>
+        /// <param name="assetManager">the asset manager for the ui elements to reference to</param>
         public UIManager(Game game, AssetManager assetManager)
         {
             Game = game;
@@ -39,7 +86,7 @@ namespace PlatformerEngine.UserInterface
             KeyToShiftedCharMap = new Dictionary<Keys, char>();
             InputShifted = false;
             TopUINode = new GroupElement(this, new Vector2(0, 0), new Vector2(Game.GraphicsDevice.Viewport.Width, Game.GraphicsDevice.Viewport.Height), 0f, "top");
-            AddKeyToChar(Keys.D0, '0', ')');
+            AddKeyToChar(Keys.D0, '0', ')'); //lmk if there is a better way to go about adding these characters
             AddKeyToChar(Keys.D1, '1', '!');
             AddKeyToChar(Keys.D2, '2', '@');
             AddKeyToChar(Keys.D3, '3', '#');
@@ -87,6 +134,11 @@ namespace PlatformerEngine.UserInterface
             AddKeyToChar(Keys.Y, 'y', 'Y');
             AddKeyToChar(Keys.Z, 'z', 'Z');
         }
+        /// <summary>
+        /// gets a ui element given its name
+        /// </summary>
+        /// <param name="name">the name to look for</param>
+        /// <returns>the ui element with the given name, if we found it</returns>
         public UIElement GetUIElement(string name)
         {
             if (Elements.ContainsKey(name))
@@ -95,6 +147,10 @@ namespace PlatformerEngine.UserInterface
             }
             return null;
         }
+        /// <summary>
+        /// destroys the given ui element
+        /// </summary>
+        /// <param name="element">the element to remove</param>
         public void DestroyUIElement(UIElement element)
         {
             string victim = null;
@@ -111,11 +167,23 @@ namespace PlatformerEngine.UserInterface
                 Elements.Remove(victim);
             }
         }
+        /// <summary>
+        /// defines a key's corresponding text input characters
+        /// </summary>
+        /// <param name="key">the key</param>
+        /// <param name="normal">normal character</param>
+        /// <param name="shift">shifted character</param>
         public void AddKeyToChar(Keys key, char normal, char shift)
         {
             KeyToCharMap[key] = normal;
             KeyToShiftedCharMap[key] = shift;
         }
+        /// <summary>
+        /// converts a key to a char given if we're pressing shift and the key to char dictionaries
+        /// </summary>
+        /// <param name="key">the key to convert</param>
+        /// <param name="shifted">if we're shifting it</param>
+        /// <returns>the corresponding key if found, ' ' char if no</returns>
         public char KeyToChar(Keys key, bool shifted) //there oughta be a better way to do this
         {
             if (shifted)
@@ -134,6 +202,14 @@ namespace PlatformerEngine.UserInterface
             }
             return ' ';
         }
+        /// <summary>
+        /// finds the differences that array A has that array B does not have
+        /// (general function, may want to move)
+        /// </summary>
+        /// <typeparam name="T">type of object for the array</typeparam>
+        /// <param name="a">first array</param>
+        /// <param name="b">second array</param>
+        /// <returns>differences that A has that B doesn't</returns>
         public List<T> FindChanges<T>(T[] a, T[] b)
         {
             List<T> changes = new List<T>();
@@ -157,6 +233,9 @@ namespace PlatformerEngine.UserInterface
             }
             return changes;
         }
+        /// <summary>
+        /// updates the for input and updates the ui elements
+        /// </summary>
         public void Update()
         {
             MouseState = Mouse.GetState();
@@ -232,6 +311,10 @@ namespace PlatformerEngine.UserInterface
             PreviousKeyboardState = KeyboardState;
             lastScrollAmount = scrollAmount;
         }
+        /// <summary>
+        /// draws the top group element
+        /// </summary>
+        /// <param name="spriteBatch">the sprite batch to draw to</param>
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Begin(SpriteSortMode.FrontToBack);

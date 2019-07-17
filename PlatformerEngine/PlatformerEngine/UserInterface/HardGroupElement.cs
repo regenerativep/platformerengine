@@ -10,9 +10,23 @@ using System.Threading.Tasks;
 
 namespace PlatformerEngine.UserInterface
 {
+    /// <summary>
+    /// a hard version of the group element, with its own texture that it draws to
+    /// </summary>
     public class HardGroupElement : GroupElement
     {
+        /// <summary>
+        /// the separate graphics to draw to
+        /// </summary>
         public RenderTarget2D Graphics;
+        /// <summary>
+        /// creates a new hard group element
+        /// </summary>
+        /// <param name="uiManager">the ui manager</param>
+        /// <param name="position">the position</param>
+        /// <param name="size">the size</param>
+        /// <param name="layer">the draw layer</param>
+        /// <param name="name">the element name</param>
         public HardGroupElement(UIManager uiManager, Vector2 position, Vector2 size, float layer, string name) : base(uiManager, position, size, layer, name)
         {
             Graphics = new RenderTarget2D(UIManager.Game.GraphicsDevice, (int)Size.X, (int)Size.Y);

@@ -59,7 +59,6 @@
   <ItemGroup>
     <Compile Include="AssetManager.cs" />
     <Compile Include="ConsoleManager.cs" />
-    <Compile Include="IAssettable.cs" />
     <Compile Include="PExtensions.cs" />
     <Compile Include="GameTile.cs" />
     <Compile Include="LayerData.cs" />

@@ -10,13 +10,32 @@ using PlatformerEngine;
 
 namespace PlatformerEngine.UserInterface
 {
+    /// <summary>
+    /// a list element with the items going horizontally
+    /// </summary>
     public class HorizontalListElement : HardGroupElement
     {
+        /// <summary>
+        /// the list of items
+        /// </summary>
         public List<UIElement> Items;
+        /// <summary>
+        /// creates a new horizontal list element
+        /// </summary>
+        /// <param name="uiManager">the ui manager</param>
+        /// <param name="position">the position</param>
+        /// <param name="size">the size</param>
+        /// <param name="layer">the draw layer</param>
+        /// <param name="name">the element name</param>
         public HorizontalListElement(UIManager uiManager, Vector2 position, Vector2 size, float layer, string name) : base(uiManager, position, size, layer, name)
         {
             Items = new List<UIElement>();
         }
+        /// <summary>
+        /// adds an item to the list
+        /// </summary>
+        /// <param name="item">the ui element</param>
+        /// <param name="ind">an index if we are inserting somewhere within the list</param>
         public void AddItem(UIElement item, int ind = -1)
         {
             if(ind < 0)
@@ -29,6 +48,10 @@ namespace PlatformerEngine.UserInterface
             }
             UpdateList();
         }
+        /// <summary>
+        /// removes an item from the list
+        /// </summary>
+        /// <param name="item">the item to remove</param>
         public void RemoveItem(UIElement item)
         {
             for(int i = Items.Count - 1; i >= 0; i--)
@@ -41,11 +64,18 @@ namespace PlatformerEngine.UserInterface
             }
             UpdateList();
         }
+        /// <summary>
+        /// removes an item from the list at the given index
+        /// </summary>
+        /// <param name="ind">the index to remove from</param>
         public void RemoveItem(int ind)
         {
             Items.RemoveAt(ind);
             UpdateList();
         }
+        /// <summary>
+        /// updates the list on GroupElement if any changes were made
+        /// </summary>
         public void UpdateList()
         {
             Elements.Clear();

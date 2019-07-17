@@ -10,10 +10,27 @@ using System.Threading.Tasks;
 
 namespace PlatformerEngine.UserInterface
 {
+    /// <summary>
+    /// an element that can group multiple elements together
+    /// </summary>
     public class GroupElement : UIElement
     {
+        /// <summary>
+        /// the list of grouped elements
+        /// </summary>
         public List<UIElement> Elements;
+        /// <summary>
+        /// offsets drawing and mouse input
+        /// </summary>
         public Vector2 SoftOffset;
+        /// <summary>
+        /// creates a new group element
+        /// </summary>
+        /// <param name="uiManager">the ui manager</param>
+        /// <param name="position">the position</param>
+        /// <param name="size">the size</param>
+        /// <param name="layer">the draw layer</param>
+        /// <param name="name">the element name</param>
         public GroupElement(UIManager uiManager, Vector2 position, Vector2 size, float layer, string name) : base(uiManager, position, size, layer, name)
         {
             Elements = new List<UIElement>();
@@ -77,6 +94,11 @@ namespace PlatformerEngine.UserInterface
             }
             base.Scroll(mouseState, amount);
         }
+        /// <summary>
+        /// destroys all children from this group
+        /// </summary>
+        /// <param name="andTheirChildren">includes the children of the children</param>
+        /// <param name="hardDestroy">destroy the children but with more force</param>
         public void RemoveAllChildren(bool andTheirChildren = false, bool hardDestroy = false)
         {
             for(int i = Elements.Count - 1; i >= 0; i--)
