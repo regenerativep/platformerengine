@@ -19,13 +19,13 @@ namespace PlatformerEngine
         /// <summary>
         /// list of input triggers
         /// </summary>
-        public List<InputTrigger> KeyTriggerList;
+        public List<IInputTrigger> KeyTriggerList;
         /// <summary>
         /// creates a new instance of the input manager
         /// </summary>
         public InputManager()
         {
-            KeyTriggerList = new List<InputTrigger>();
+            KeyTriggerList = new List<IInputTrigger>();
         }
         /// <summary>
         /// checks for changes in input
@@ -35,7 +35,7 @@ namespace PlatformerEngine
             KeyboardState = Keyboard.GetState();
             for(int i = 0; i < KeyTriggerList.Count; i++)
             {
-                InputTrigger trig = KeyTriggerList[i];
+                IInputTrigger trig = KeyTriggerList[i];
                 trig.Update(KeyboardState);
             }
         }

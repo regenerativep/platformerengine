@@ -10,27 +10,27 @@ namespace PlatformerEngine
     /// <summary>
     /// keeps track of the state of one key
     /// </summary>
-    public class InputTrigger //TODO: change to an interface or something to allow for more input methods
+    public class KeyInputTrigger : IInputTrigger
     {
         /// <summary>
         /// the key
         /// </summary>
-        public Keys Key;
+        public Keys Key { get; set; }
         /// <summary>
         /// if the key is pressed
         /// </summary>
-        public bool Pressed;
+        public bool Pressed { get; set; }
         private bool previousPressed;
         /// <summary>
         /// what to call when key is pressed
         /// </summary>
-        public Action<bool> Callback;
+        public Action<bool> Callback { get; set; }
         /// <summary>
         /// creates a new input trigger
         /// </summary>
         /// <param name="key">the key to check</param>
         /// <param name="callback">called when key state changes</param>
-        public InputTrigger(Keys key, Action<bool> callback = null)
+        public KeyInputTrigger(Keys key, Action<bool> callback = null)
         {
             Pressed = false;
             previousPressed = false;

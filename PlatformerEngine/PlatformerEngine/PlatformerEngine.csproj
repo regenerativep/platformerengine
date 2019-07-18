@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="AssetManager.cs" />
     <Compile Include="ConsoleManager.cs" />
+    <Compile Include="IInputTrigger.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="InputTrigger.cs" />
     <Compile Include="PExtensions.cs" />

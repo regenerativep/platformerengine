@@ -18,19 +18,19 @@ namespace PlatformerTestGame.GameObjects
             Velocity = new Vector2(0, 0);
             Input = new InputManager();
             float speed = 4;
-            Input.KeyTriggerList.Add(new InputTrigger(Keys.A, (pressed) =>
+            Input.KeyTriggerList.Add(new KeyInputTrigger(Keys.A, (pressed) =>
             {
                 Velocity.X -= pressed ? speed : -speed;
             }));
-            Input.KeyTriggerList.Add(new InputTrigger(Keys.D, (pressed) =>
+            Input.KeyTriggerList.Add(new KeyInputTrigger(Keys.D, (pressed) =>
             {
                 Velocity.X += pressed ? speed : -speed;
             }));
-            Input.KeyTriggerList.Add(new InputTrigger(Keys.W, (pressed) =>
+            Input.KeyTriggerList.Add(new KeyInputTrigger(Keys.W, (pressed) =>
             {
                 Velocity.Y -= pressed ? speed : -speed;
             }));
-            Input.KeyTriggerList.Add(new InputTrigger(Keys.S, (pressed) =>
+            Input.KeyTriggerList.Add(new KeyInputTrigger(Keys.S, (pressed) =>
             {
                 Velocity.Y += pressed ? speed : -speed;
             }));
