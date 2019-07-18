@@ -18,6 +18,7 @@ namespace PlatformerEditor
         public Vector2 LevelSize;
         public bool PanIsPressed;
         public WorldItem CurrentWorldItem;
+        public RenderTarget2D Graphics;
         public LevelElement(UIManager uiManager, Vector2 position, Vector2 size, float layer, string name) : base(uiManager, position, size, layer, name)
         {
             SoftOffset = new Vector2(0, 0);
@@ -25,12 +26,18 @@ namespace PlatformerEditor
             LevelSize = new Vector2(512, 512);
             PanIsPressed = false;
             CurrentWorldItem = null;
+            Graphics = new RenderTarget2D(UIManager.Game.GraphicsDevice, (int)Size.X, (int)Size.Y);
         }
         public override void Draw(SpriteBatch spriteBatch, Vector2 offset)
         {
             PlatformerEditor actualGame = (PlatformerEditor)UIManager.Game;
+            spriteBatch.End();
+            spriteBatch.GraphicsDevice.SetRenderTarget(Graphics);
             //draw grid
-            Vector2 actualOffset = offset + SoftOffset + Position;
+            spriteBatch.Begin(SpriteSortMode.FrontToBack); //TODO: set sort mode somewhere else
+            spriteBatch.GraphicsDevice.Clear(Color.Transparent);
+            //Vector2 actualOffset = offset + SoftOffset;// + Position;
+            Vector2 actualOffset = SoftOffset;
             for (int i = (int)actualOffset.X; i <= actualOffset.X + LevelSize.X; i += (int)Snap.X)
             {
                 spriteBatch.DrawLine(new Vector2(i, actualOffset.Y), new Vector2(i, actualOffset.Y + LevelSize.Y), Color.Black);
@@ -39,17 +46,24 @@ namespace PlatformerEditor
             {
                 spriteBatch.DrawLine(new Vector2(actualOffset.X, i), new Vector2(actualOffset.X + LevelSize.X, i), Color.Black);
             }
+            spriteBatch.End();
             //draw layers
-            foreach(KeyValuePair<int, WorldLayer> pair in actualGame.WorldLayers)
+            List<int> layerKeys = new List<int>(actualGame.WorldLayers.Keys); //TODO: this is probably slow. make it not
+            layerKeys.Sort((a, b) =>
             {
-                //WorldLayer worldLayer = Game.WorldLayers[Game.WorldLayers.Keys.];
-                WorldLayer worldLayer = pair.Value;
+                return Math.Sign(b - a);
+            });
+            for(int i = 0; i < layerKeys.Count; i++)
+            {
+                WorldLayer worldLayer = actualGame.WorldLayers[layerKeys[i]];
                 if (!worldLayer.IsVisible) continue;
+                spriteBatch.Begin(SpriteSortMode.FrontToBack);
                 for(int j = 0; j < worldLayer.WorldItems.Count; j++)
                 {
                     WorldItem item = worldLayer.WorldItems[j];
                     item.Draw(spriteBatch, actualOffset);
                 }
+                spriteBatch.End();
             }
             //draw mouse item
             if (actualGame.CurrentWorldItemType == null && CurrentWorldItem != null)
@@ -64,7 +78,12 @@ namespace PlatformerEditor
             {
                 CurrentWorldItem.Position = SnapPosition(GetMousePosition(offset));
             }
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);
             CurrentWorldItem?.Draw(spriteBatch, actualOffset);
+            spriteBatch.End();
+            spriteBatch.GraphicsDevice.SetRenderTarget(null);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);
+            spriteBatch.Draw(Graphics, Position + offset, Color.White);
         }
         public override void Update()
         {

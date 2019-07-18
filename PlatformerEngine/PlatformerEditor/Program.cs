@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PlatformerEngine;
+using System;
 
 namespace PlatformerEditor
 {
@@ -14,7 +15,11 @@ namespace PlatformerEditor
         static void Main()
         {
             using (var game = new PlatformerEditor())
+            {
+                Action endCb = ConsoleManager.Start();
                 game.Run();
+                endCb();
+            }
         }
     }
 }

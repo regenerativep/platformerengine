@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using PlatformerEngine.Physics;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -44,6 +45,10 @@ namespace PlatformerEngine
         /// sound manager
         /// </summary>
         public SoundManager Sounds;
+        /// <summary>
+        /// the physics simulation
+        /// </summary>
+        public PhysicsSim Physics;
         private ITransition currentTransition;
         /// <summary>
         /// creates an instance of a room
@@ -58,6 +63,7 @@ namespace PlatformerEngine
             ViewPosition = new Vector2(0, 0);
             GameObjectList = new List<GameObject>();
             GameTileList = new List<GameTile>();
+            Physics = null;
         }
         /// <summary>
         /// updates the room and everything inside it
@@ -69,6 +75,7 @@ namespace PlatformerEngine
                 currentTransition.Update();
                 return;
             }
+            Physics?.Update();
             foreach(GameObject obj in GameObjectList)
             {
                 obj.Update();
@@ -201,15 +208,24 @@ namespace PlatformerEngine
         /// <param name="filename">the filename with the room data</param>
         public Room Load(string filename)
         {
-            string[] lines = File.ReadAllLines(filename, Encoding.UTF8);
-            string json = "";
-            for (int i = 0; i < lines.Length; i++)
-            {
-                json += lines[i] + "\n";
-            }
+            //get the json
+            string json = File.ReadAllText(filename, Encoding.UTF8);
+            //turn it into an internal json object
             JObject obj = JObject.Parse(json);
+            //width
             int width = (int)obj.GetValue("width").ToObject(typeof(int));
+            //height
             int height = (int)obj.GetValue("height").ToObject(typeof(int));
+            //physics
+            if(obj.ContainsKey("physics"))
+            {
+                JObject physicsObj = (JObject)obj.GetValue("physics").ToObject(typeof(JObject));
+                float gravityX = (float)physicsObj.GetValue("gravityx").ToObject(typeof(float));
+                float gravityY = (float)physicsObj.GetValue("gravityy").ToObject(typeof(float));
+                Physics = new PhysicsSim();
+                Physics.Gravity = new Vector2(gravityX, gravityY);
+            }
+            //world layers
             JArray layerArray = (JArray)obj.GetValue("layers").ToObject(typeof(JArray));
             foreach(JToken item in layerArray)
             {

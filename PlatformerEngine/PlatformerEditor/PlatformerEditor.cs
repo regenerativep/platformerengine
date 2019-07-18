@@ -53,42 +53,10 @@ namespace PlatformerEditor
             CurrentWorldLayer = null;
             WorldLayers = new Dictionary<int, WorldLayer>();
             UIManager = new UIManager(this, Assets);
-            UIManager.TopUINode.Elements.Add(new LevelElement(UIManager, new Vector2(0, 0), new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), 0.3f, "level"));
-            WorldLayerListElement = new WorldLayerListElement(UIManager, new Vector2(0, 0), new Vector2(128, 256), 0.4f, "list_layers");
-            UIManager.TopUINode.Elements.Add(WorldLayerListElement);
-            ObjectListElement = new WorldItemListElement(UIManager, new Vector2(0, 0), new Vector2(128, 240), 0.4f, "list_objects");
-            TileListElement = new WorldItemListElement(UIManager, new Vector2(0, 0), new Vector2(128, 240), 0.4f, "list_tiles");
-            TabbedElement worldItemTabs = new TabbedElement(UIManager, new Vector2(0, 256), new Vector2(128, 256), 0.4f, "tabs_worlditems", 16);
-            worldItemTabs.AddTab("objects", ObjectListElement, 64);
-            worldItemTabs.AddTab("tiles", TileListElement, 64);
-            UIManager.TopUINode.Elements.Add(worldItemTabs);
-            TextInputElement filenameInputElement = new TextInputElement(UIManager, new Vector2(0, 512), new Vector2(128, 24), 0.4f, "input_filename");
-            ButtonElement loadButton = new ButtonElement(UIManager, new Vector2(0, 536), new Vector2(48, 24), 0.4f, "button_load", "load");
-            loadButton.Click = () =>
-            {
-                string filename = filenameInputElement.Text;
-                LoadLevel(filename);
-            };
-            ButtonElement saveButton = new ButtonElement(UIManager, new Vector2(48, 536), new Vector2(48, 24), 0.4f, "button_save", "save");
-            saveButton.Click = () =>
-            {
-                string filename = filenameInputElement.Text;
-                SaveLevel(filename);
-            };
-            UIManager.TopUINode.Elements.Add(filenameInputElement);
-            UIManager.TopUINode.Elements.Add(loadButton);
-            UIManager.TopUINode.Elements.Add(saveButton);
-            TextInputElement snapXInput = new TextInputElement(UIManager, new Vector2(0, 560), new Vector2(56, 24), 0.4f, "input_snap_x");
-            TextInputElement snapYInput = new TextInputElement(UIManager, new Vector2(56, 560), new Vector2(56, 24), 0.4f, "input_snap_y");
-            ButtonElement setSnapButton = new ButtonElement(UIManager, new Vector2(0, 584), new Vector2(56, 20), 0.4f, "button_snap_set", "set snap");
-            setSnapButton.Click = () =>
-            {
-                LevelElement levelElement = (LevelElement)UIManager.GetUIElement("level");
-                levelElement.Snap = new Vector2(int.Parse(snapXInput.Text), int.Parse(snapYInput.Text));
-            };
-            UIManager.TopUINode.Elements.Add(snapXInput);
-            UIManager.TopUINode.Elements.Add(snapYInput);
-            UIManager.TopUINode.Elements.Add(setSnapButton);
+            //TabbedElement mainTabs = new TabbedElement(UIManager, new Vector2(0, 0), new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), 0.4f, "tabs_main", 24);
+            //mainTabs.AddTab("level", new LevelTab(UIManager, new Vector2(0, 0), new Vector2(mainTabs.CurrentTabContainer.Size.X, mainTabs.CurrentTabContainer.Size.Y), 0.4f, "tab_level"));
+            UIManager.TopUINode.Elements.Add(new LevelTab(UIManager, new Vector2(0, 0), new Vector2(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), 0.4f, "tab_level"));
+            //TODO: finish adding the other tab
 
             LoadWorldItemTypes("types.json");
 
@@ -173,7 +141,15 @@ namespace PlatformerEditor
         }
         public void LoadLevel(string filename)
         {
-            string json = File.ReadAllText(filename, Encoding.UTF8);
+            string json;
+            try
+            {
+                json = File.ReadAllText(filename, Encoding.UTF8);
+            }
+            catch
+            {
+                return;
+            }
             JObject levelObject = JObject.Parse(json);
             WorldLayers.Clear();
             WorldLayerListElement.ClearLayers();

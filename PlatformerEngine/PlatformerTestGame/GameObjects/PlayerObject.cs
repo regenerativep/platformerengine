@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using PlatformerEngine.Physics;
 
 namespace PlatformerTestGame.GameObjects
 {
@@ -13,8 +14,10 @@ namespace PlatformerTestGame.GameObjects
     {
         public InputManager Input;
         public Vector2 Velocity;
+        public MovingObject PhysicsObject;
         public PlayerObject(Room room, Vector2 position) : base(room, position)
         {
+            PhysicsObject = new MovingObject(PhysicsSim.GenerateRectangleVertices(64, 64), Position);
             Velocity = new Vector2(0, 0);
             Input = new InputManager();
             float speed = 4;

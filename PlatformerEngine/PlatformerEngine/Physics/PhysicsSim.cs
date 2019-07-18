@@ -11,18 +11,20 @@ namespace PlatformerEngine.Physics
     {
         public List<ImmobileObject> ImmobileObjects;
         public List<MovingObject> MovingObjects;
-        public float Gravity;
+        public List<GameObjectLink> GameObjectLinks;
+        public Vector2 Gravity;
         public PhysicsSim()
         {
             ImmobileObjects = new List<ImmobileObject>();
             MovingObjects = new List<MovingObject>();
-            Gravity = 0.2f;
+            GameObjectLinks = new List<GameObjectLink>();
+            Gravity = new Vector2(0, 0.2f);
         }
         public void Update()
         {
             foreach (MovingObject obj in MovingObjects)
             {
-                obj.Velocity.Y += Gravity;
+                obj.Velocity += Gravity;
                 obj.Update();
             }
             for (int i = 0; i < MovingObjects.Count; i++)
@@ -37,6 +39,11 @@ namespace PlatformerEngine.Physics
                         Collide(obj, targetObj, linePoints);
                     }
                 }
+            }
+            for(int i = 0; i < GameObjectLinks.Count; i++)
+            {
+                GameObjectLink link = GameObjectLinks[i];
+                link.Update();
             }
         }
         public void Collide(MovingObject a, ImmobileObject b, Vector2[] linePoints)
@@ -183,6 +190,18 @@ namespace PlatformerEngine.Physics
             float x = a1.X + (a * (a2.X - a1.X));
             float y = a1.Y + (a * (a2.Y - a1.Y));*/
             return a > 0 && a < 1 && b > 0 && b < 1;
+        }
+        public static Vector2[] GenerateRectangleVertices(float width, float height)
+        {
+            width /= 2;
+            height /= 2;
+            return new Vector2[]
+            {
+                new Vector2(-width, -height),
+                new Vector2(width, -height),
+                new Vector2(width, height),
+                new Vector2(-width, height)
+            };
         }
     }
 }

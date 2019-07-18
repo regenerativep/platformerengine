@@ -50,6 +50,7 @@ namespace PlatformerEngine.UserInterface
             Layer = layer;
             Name = name;
             UIManager.Elements.Add(name, this);
+            ConsoleManager.WriteLine("loaded ui element " + Name);
         }
         /// <summary>
         /// call when this ui element has been clicked on
