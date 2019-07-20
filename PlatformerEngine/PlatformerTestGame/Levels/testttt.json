@@ -1,0 +1,52 @@
+{
+  "width": 512,
+  "height": 512,
+  "physics": {
+    "gravityx": 0,
+    "gravityy": 1
+  },
+  "layers": [
+    {
+      "layer": 1,
+      "objects": [
+        {
+          "name": "obj_block",
+          "x": 160,
+          "y": 288
+        },
+        {
+          "name": "obj_block",
+          "x": 224,
+          "y": 288
+        },
+        {
+          "name": "obj_block",
+          "x": 288,
+          "y": 288
+        },
+        {
+          "name": "obj_block",
+          "x": 352,
+          "y": 288
+        },
+        {
+          "name": "obj_block",
+          "x": 416,
+          "y": 288
+        },
+        {
+          "name": "obj_player",
+          "x": 180,
+          "y": 200
+        }
+      ],
+      "tiles": [
+        {
+          "name": "tle_grass",
+          "x": 416,
+          "y": 384
+        }
+      ]
+    }
+  ]
+}

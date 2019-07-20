@@ -25,24 +25,25 @@ namespace PlatformerTestGame.GameObjects
             float speed = 4;
             Input.KeyTriggerList.Add(new KeyInputTrigger(Keys.A, (pressed) =>
             {
-                Velocity.X -= pressed ? speed : -speed;
+                PhysicsObject.Velocity.X -= pressed ? speed : -speed;
             }));
             Input.KeyTriggerList.Add(new KeyInputTrigger(Keys.D, (pressed) =>
             {
-                Velocity.X += pressed ? speed : -speed;
+                PhysicsObject.Velocity.X += pressed ? speed : -speed;
             }));
             Input.KeyTriggerList.Add(new KeyInputTrigger(Keys.W, (pressed) =>
             {
-                Velocity.Y -= pressed ? speed : -speed;
+                PhysicsObject.Velocity.Y -= pressed ? speed : -speed;
             }));
             Input.KeyTriggerList.Add(new KeyInputTrigger(Keys.S, (pressed) =>
             {
-                Velocity.Y += pressed ? speed : -speed;
+                PhysicsObject.Velocity.Y += pressed ? speed : -speed;
             }));
             room.Engine.Assets.RequestTexture("obj_block", (tex) =>
             {
                 Sprite.Change(tex);
                 Sprite.Size = new Vector2(64, 64);
+                Sprite.Offset = Sprite.Size / 2;
             });
         }
         public override void Update()
