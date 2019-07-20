@@ -18,6 +18,8 @@ namespace PlatformerTestGame.GameObjects
         public PlayerObject(Room room, Vector2 position) : base(room, position)
         {
             PhysicsObject = new MovingObject(PhysicsSim.GenerateRectangleVertices(64, 64), Position);
+            room.Physics.MovingObjects.Add(PhysicsObject);
+            room.Physics.GameObjectLinks.Add(new GameObjectLink(this, PhysicsObject));
             Velocity = new Vector2(0, 0);
             Input = new InputManager();
             float speed = 4;

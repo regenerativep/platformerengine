@@ -1,6 +1,10 @@
 {
   "width": 512,
   "height": 512,
+  "physics": {
+    "gravityx": 0,
+    "gravityy": 1
+  },
   "layers": [
     {
       "layer": 0,
