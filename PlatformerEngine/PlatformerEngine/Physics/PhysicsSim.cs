@@ -34,9 +34,20 @@ namespace PlatformerEngine.Physics
                 {
                     ImmobileObject targetObj = ImmobileObjects[j];
                     Vector2[][] allLinePoints = GetCollision(obj, targetObj);
+                    Vector2[] closest = null;
+                    float? closestDist = null;
                     foreach (Vector2[] linePoints in allLinePoints)
                     {
-                        Collide(obj, targetObj, linePoints);
+                        float dist = (ClosestPointToLine(obj.Center + obj.Position, linePoints[2], linePoints[3]) - obj.Center + obj.Position).LengthSquared();
+                        if (closest == null || dist < closestDist)
+                        {
+                            closest = linePoints;
+                            closestDist = dist;
+                        }
+                    }
+                    if (closest != null)
+                    {
+                        Collide(obj, targetObj, closest);
                     }
                 }
             }
@@ -61,7 +72,7 @@ namespace PlatformerEngine.Physics
             a.Velocity = ClosestPointToLine(a.Velocity, -bVector, bVector);
             Vector2 normalizedVelocity = new Vector2(a.Velocity.X, a.Velocity.Y);
             normalizedVelocity.Normalize();
-            if(a.Velocity.LengthSquared() > b.Friction * b.Friction)
+            if (a.Velocity.LengthSquared() > b.Friction * b.Friction)
             {
                 a.Velocity -= normalizedVelocity * b.Friction;
             }

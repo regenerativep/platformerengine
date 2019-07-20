@@ -32,9 +32,20 @@ namespace PhysicsTest
                 {
                     ImmobileObject targetObj = ImmobileObjects[j];
                     Vector2[][] allLinePoints = GetCollision(obj, targetObj);
+                    Vector2[] closest = null;
+                    float? closestDist = null;
                     foreach (Vector2[] linePoints in allLinePoints)
                     {
-                        Collide(obj, targetObj, linePoints);
+                        float dist = (ClosestPointToLine(obj.Center + obj.Position, linePoints[2], linePoints[3]) - obj.Center + obj.Position).LengthSquared();
+                        if(closest == null || dist < closestDist)
+                        {
+                            closest = linePoints;
+                            closestDist = dist;
+                        }
+                    }
+                    if (closest != null)
+                    {
+                        Collide(obj, targetObj, closest);
                     }
                 }
             }
@@ -185,6 +196,18 @@ namespace PhysicsTest
             float x = a1.X + (a * (a2.X - a1.X));
             float y = a1.Y + (a * (a2.Y - a1.Y));*/
             return a > 0 && a < 1 && b > 0 && b < 1;
+        }
+        public static Vector2[] GenerateRectangleVertices(float width, float height)
+        {
+            width /= 2;
+            height /= 2;
+            return new Vector2[]
+            {
+                new Vector2(-width, -height),
+                new Vector2(width, -height),
+                new Vector2(width, height),
+                new Vector2(-width, height)
+            };
         }
     }
 }

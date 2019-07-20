@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using PlatformerEngine;
+using PlatformerEngine.Physics;
 using PlatformerTestGame.GameObjects;
 
 namespace PlatformerTestGame
@@ -101,6 +102,14 @@ namespace PlatformerTestGame
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin(SpriteSortMode.FrontToBack);
             engine.Draw(spriteBatch);
+            foreach (PhysicsBasedObject obj in engine.CurrentRoom.Physics.MovingObjects)
+            {
+                obj.Draw(spriteBatch);
+            }
+            foreach (PhysicsBasedObject obj in engine.CurrentRoom.Physics.ImmobileObjects)
+            {
+                obj.Draw(spriteBatch);
+            }
             spriteBatch.End();
             base.Draw(gameTime);
         }

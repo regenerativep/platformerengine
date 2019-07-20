@@ -48,6 +48,7 @@
     <Compile Include="FadeTransition.cs" />
     <Compile Include="GameObjects\BlockObject.cs" />
     <Compile Include="GameObjects\PlayerObject.cs" />
+    <Compile Include="PhysicsObject.cs" />
     <Compile Include="PlatformerGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
