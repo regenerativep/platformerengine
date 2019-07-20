@@ -38,7 +38,7 @@ namespace PlatformerEngine.Physics
                     float? closestDist = null;
                     foreach (Vector2[] linePoints in allLinePoints)
                     {
-                        float dist = (ClosestPointToLine(obj.Center + obj.Position, linePoints[2], linePoints[3]) - obj.Center + obj.Position).LengthSquared();
+                        float dist = (ClosestPointToLine(obj.Center + obj.Position, linePoints[2], linePoints[3]) - (obj.Center + obj.Position)).LengthSquared();
                         if (closest == null || dist < closestDist)
                         {
                             closest = linePoints;
