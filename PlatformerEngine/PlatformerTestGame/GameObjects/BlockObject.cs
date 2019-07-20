@@ -18,7 +18,7 @@ namespace PlatformerTestGame.GameObjects
             {
                 Sprite.Change(tex);
                 Sprite.Size = new Vector2(64, 64);
-                Sprite.Offset = Sprite.Size / 2;
+                Sprite.Offset = -Sprite.Size / 2;
             });
         }
     }

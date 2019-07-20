@@ -7,34 +7,38 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using PlatformerEngine.Physics;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PlatformerTestGame.GameObjects
 {
     public class PlayerObject : GameObject
     {
         public InputManager Input;
-        public Vector2 Velocity;
         public MovingObject PhysicsObject;
-        public KeyInputTrigger Left, Right, Up, Down;
+        public KeyInputTrigger Left, Right, Jump;
         public float Speed;
         public PlayerObject(Room room, Vector2 position) : base(room, position)
         {
-            PhysicsObject = new MovingObject(PhysicsSim.GenerateRectangleVertices(32, 32), Position);
+            PhysicsObject = new MovingObject(PhysicsSim.GenerateRectangleVertices(64, 64), Position);
             room.Physics.MovingObjects.Add(PhysicsObject);
             room.Physics.GameObjectLinks.Add(new GameObjectLink(this, PhysicsObject));
-            Velocity = new Vector2(0, 0);
             Input = new InputManager();
-            Speed = 1f;
+            Speed = 0.2f;
             Left = new KeyInputTrigger(Keys.A);
             Right = new KeyInputTrigger(Keys.D);
-            Up = new KeyInputTrigger(Keys.W);
-            Down = new KeyInputTrigger(Keys.S);
-            Input.KeyTriggerList.AddRange(new KeyInputTrigger[] { Left, Right, Up, Down });
+            Jump = new KeyInputTrigger(Keys.Space, (pressed) =>
+            {
+                if (pressed)
+                {
+                    PhysicsObject.Velocity.Y = -10f;
+                }
+            });
+            Input.KeyTriggerList.AddRange(new KeyInputTrigger[] { Left, Right, Jump });
             room.Engine.Assets.RequestTexture("obj_block", (tex) =>
             {
                 Sprite.Change(tex);
-                Sprite.Size = new Vector2(32, 32);
-                Sprite.Offset = Sprite.Size / 2;
+                Sprite.Size = new Vector2(64, 64);
+                Sprite.Offset = -Sprite.Size / 2;
             });
         }
         public override void Update()
@@ -48,16 +52,11 @@ namespace PlatformerTestGame.GameObjects
             {
                 PhysicsObject.Velocity.X += Speed;
             }
-            if (Up.Pressed)
-            {
-                PhysicsObject.Velocity.Y -= Speed;
-            }
-            if (Down.Pressed)
-            {
-                PhysicsObject.Velocity.Y += Speed;
-            }
-            Position += Velocity;
             base.Update();
+        }
+        public override void Draw(SpriteBatch spriteBatch, Vector2 viewPosition)
+        {
+            base.Draw(spriteBatch, viewPosition - Sprite.Offset);
         }
     }
 }

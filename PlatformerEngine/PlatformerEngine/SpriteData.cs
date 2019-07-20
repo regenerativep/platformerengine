@@ -37,9 +37,13 @@ namespace PlatformerEngine
         /// </summary>
         public float Angle;
         /// <summary>
-        /// offset/origin of the sprite
+        /// offset of the sprite
         /// </summary>
         public Vector2 Offset;
+        /// <summary>
+        /// origin of the sprite
+        /// </summary>
+        public Vector2 Origin;
         /// <summary>
         /// size of the sprite
         /// </summary>
@@ -69,6 +73,7 @@ namespace PlatformerEngine
             Speed = 1;
             LayerData = new LayerData(0);
             Offset = new Vector2(0, 0);
+            Origin = new Vector2(0, 0);
             Size = new Vector2(0, 0);
             SpriteEffect = SpriteEffects.None;
             Source = null;
@@ -98,7 +103,7 @@ namespace PlatformerEngine
         /// <param name="position">the position to draw at</param>
         public void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
-            Draw(spriteBatch, position, Color.White);
+            Draw(spriteBatch, position + Offset, Color.White);
         }
         /// <summary>
         /// draws the sprite with the sprite data
@@ -111,7 +116,7 @@ namespace PlatformerEngine
             if (Frames != null)
             {
                 Rectangle drawRect = new Rectangle((int)position.X, (int)position.Y, (int)Size.X, (int)Size.Y);
-                spriteBatch.Draw(Frames[FrameIndex], drawRect, Source, color, Angle, Offset, SpriteEffect, LayerData.ActualLayer);
+                spriteBatch.Draw(Frames[FrameIndex], drawRect, Source, color, Angle, Origin, SpriteEffect, LayerData.ActualLayer);
             }
         }
         /// <summary>
