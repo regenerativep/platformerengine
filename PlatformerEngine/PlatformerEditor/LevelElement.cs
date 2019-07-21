@@ -16,6 +16,7 @@ namespace PlatformerEditor
         public Vector2 SoftOffset;
         public Vector2 Snap;
         public Vector2 LevelSize;
+        public Vector2 Gravity;
         public bool PanIsPressed;
         public WorldItem CurrentWorldItem;
         public RenderTarget2D Graphics;
@@ -24,6 +25,7 @@ namespace PlatformerEditor
             SoftOffset = new Vector2(0, 0);
             Snap = new Vector2(32, 32);
             LevelSize = new Vector2(512, 512);
+            Gravity = new Vector2(0, 0);
             PanIsPressed = false;
             CurrentWorldItem = null;
             Graphics = new RenderTarget2D(UIManager.Game.GraphicsDevice, (int)Size.X, (int)Size.Y);

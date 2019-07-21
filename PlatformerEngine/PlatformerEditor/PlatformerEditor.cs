@@ -158,6 +158,13 @@ namespace PlatformerEditor
             int levelWidth = (int)levelObject.GetValue("width").ToObject(typeof(int));
             int levelHeight = (int)levelObject.GetValue("height").ToObject(typeof(int));
             levelElement.LevelSize = new Vector2(levelWidth, levelHeight);
+            if (levelObject.ContainsKey("physics"))
+            {
+                JObject physicsObject = (JObject)levelObject.GetValue("physics").ToObject(typeof(JObject));
+                float gravityX = (float)physicsObject.GetValue("gravityx").ToObject(typeof(float));
+                float gravityY = (float)physicsObject.GetValue("gravityy").ToObject(typeof(float));
+                levelElement.Gravity = new Vector2(gravityX, gravityY);
+            }
             JArray layerArray = (JArray)levelObject.GetValue("layers").ToObject(typeof(JArray));
             foreach(JToken token in layerArray)
             {
@@ -203,6 +210,13 @@ namespace PlatformerEditor
             JObject levelObject = new JObject();
             levelObject.Add("width", JToken.FromObject((int)levelElement.LevelSize.X));
             levelObject.Add("height", JToken.FromObject((int)levelElement.LevelSize.Y));
+            if(levelElement.Gravity.X != 0 || levelElement.Gravity.Y != 0)
+            {
+                JObject physicsObject = new JObject();
+                physicsObject.Add("gravityx", JToken.FromObject(levelElement.Gravity.X));
+                physicsObject.Add("gravityy", JToken.FromObject(levelElement.Gravity.Y));
+                levelObject.Add("physics", JToken.FromObject(physicsObject));
+            }
             JArray layerArray = new JArray();
             foreach(KeyValuePair<int, WorldLayer> pair in WorldLayers)
             {

@@ -27,12 +27,20 @@ namespace PlatformerEditor
             loadButton.Click = () =>
             {
                 string filename = filenameInputElement.Text;
+                if(filename.Length == 0)
+                {
+                    return;
+                }
                 actualGame.LoadLevel(filename);
             };
             ButtonElement saveButton = new ButtonElement(UIManager, new Vector2(48, 536), new Vector2(48, 24), 0.4f, "button_save", "save");
             saveButton.Click = () =>
             {
                 string filename = filenameInputElement.Text;
+                if(filename.Length == 0)
+                {
+                    return;
+                }
                 actualGame.SaveLevel(filename);
             };
             Elements.Add(filenameInputElement);
@@ -40,7 +48,7 @@ namespace PlatformerEditor
             Elements.Add(saveButton);
             TextInputElement snapXInput = new TextInputElement(UIManager, new Vector2(0, 560), new Vector2(56, 24), 0.4f, "input_snap_x");
             TextInputElement snapYInput = new TextInputElement(UIManager, new Vector2(56, 560), new Vector2(56, 24), 0.4f, "input_snap_y");
-            ButtonElement setSnapButton = new ButtonElement(UIManager, new Vector2(0, 584), new Vector2(56, 20), 0.4f, "button_snap_set", "set snap");
+            ButtonElement setSnapButton = new ButtonElement(UIManager, new Vector2(0, 584), new Vector2(64, 20), 0.4f, "button_snap_set", "set snap");
             setSnapButton.Click = () =>
             {
                 LevelElement levelElement = (LevelElement)UIManager.GetUIElement("level");
@@ -49,6 +57,22 @@ namespace PlatformerEditor
             Elements.Add(snapXInput);
             Elements.Add(snapYInput);
             Elements.Add(setSnapButton);
+            
+            TextInputElement gravityXInput = new TextInputElement(UIManager, new Vector2(0, 604), new Vector2(56, 24), 0.4f, "input_gravity_x");
+            TextInputElement gravityYInput = new TextInputElement(UIManager, new Vector2(56, 604), new Vector2(56, 24), 0.4f, "input_gravity_y");
+            ButtonElement setGravityButton = new ButtonElement(UIManager, new Vector2(0, 628), new Vector2(64, 20), 0.4f, "button_gravity_set", "set gravity");
+            setGravityButton.Click = () =>
+            {
+                LevelElement levelElement = (LevelElement)UIManager.GetUIElement("level");
+                string xText = gravityXInput.Text;
+                if (xText.Length == 0) xText = "0";
+                string yText = gravityYInput.Text;
+                if (yText.Length == 0) yText = "0";
+                levelElement.Gravity = new Vector2(int.Parse(xText), int.Parse(yText));
+            };
+            Elements.Add(gravityXInput);
+            Elements.Add(gravityYInput);
+            Elements.Add(setGravityButton);
         }
     }
 }

@@ -1,0 +1,61 @@
+{
+  "width": 512,
+  "height": 512,
+  "physics": {
+    "gravityx": 0.0,
+    "gravityy": 1.0
+  },
+  "layers": [
+    {
+      "layer": 1,
+      "objects": [
+        {
+          "name": "obj_block",
+          "x": 0,
+          "y": 448
+        },
+        {
+          "name": "obj_block",
+          "x": 64,
+          "y": 448
+        },
+        {
+          "name": "obj_block",
+          "x": 128,
+          "y": 448
+        },
+        {
+          "name": "obj_block",
+          "x": 192,
+          "y": 448
+        },
+        {
+          "name": "obj_block",
+          "x": 256,
+          "y": 448
+        },
+        {
+          "name": "obj_block",
+          "x": 320,
+          "y": 448
+        },
+        {
+          "name": "obj_block",
+          "x": 384,
+          "y": 448
+        },
+        {
+          "name": "obj_block",
+          "x": 448,
+          "y": 448
+        },
+        {
+          "name": "obj_player",
+          "x": 160,
+          "y": 384
+        }
+      ],
+      "tiles": []
+    }
+  ]
+}

@@ -117,6 +117,9 @@
     <None Include="Levels\justplayer.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Levels\test.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Levels\testttt.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

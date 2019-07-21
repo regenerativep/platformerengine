@@ -11,6 +11,7 @@ namespace PlatformerEngine.Physics
     {
         public Vector2 Velocity;
         public float AngularVelocity;
+        public Vector2 SpeedLimit;
         public float Angle
         {
             get
@@ -34,6 +35,7 @@ namespace PlatformerEngine.Physics
             AngularVelocity = 0;
             angleMatrix = new Vector2(0, 0);
             angle = 0;
+            SpeedLimit = new Vector2(-1);
         }
         public override Vector2 GetVertex(int num)
         {
@@ -42,6 +44,23 @@ namespace PlatformerEngine.Physics
         }
         public override void Update()
         {
+            int velSign;
+            if (SpeedLimit.X >= 0)
+            {
+                velSign = Math.Sign(Velocity.X);
+                if (Velocity.X * velSign > SpeedLimit.X)
+                {
+                    Velocity.X = SpeedLimit.X * velSign;
+                }
+            }
+            if (SpeedLimit.Y >= 0)
+            {
+                velSign = Math.Sign(Velocity.Y);
+                if (Velocity.Y * velSign > SpeedLimit.Y)
+                {
+                    Velocity.Y = SpeedLimit.Y * velSign;
+                }
+            }
             Position += Velocity;
             Angle += AngularVelocity;
         }

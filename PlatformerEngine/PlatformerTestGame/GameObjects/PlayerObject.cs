@@ -19,7 +19,8 @@ namespace PlatformerTestGame.GameObjects
         public float Speed;
         public PlayerObject(Room room, Vector2 position) : base(room, position)
         {
-            PhysicsObject = new MovingObject(PhysicsSim.GenerateRectangleVertices(64, 64), Position);
+            PhysicsObject = new MovingObject(PhysicsSim.GenerateRectangleVertices(32, 32), Position);
+            PhysicsObject.SpeedLimit = new Vector2(16);
             room.Physics.MovingObjects.Add(PhysicsObject);
             room.Physics.GameObjectLinks.Add(new GameObjectLink(this, PhysicsObject));
             Input = new InputManager();
@@ -37,7 +38,7 @@ namespace PlatformerTestGame.GameObjects
             room.Engine.Assets.RequestTexture("obj_block", (tex) =>
             {
                 Sprite.Change(tex);
-                Sprite.Size = new Vector2(64, 64);
+                Sprite.Size = new Vector2(32, 32);
                 Sprite.Offset = -Sprite.Size / 2;
             });
         }

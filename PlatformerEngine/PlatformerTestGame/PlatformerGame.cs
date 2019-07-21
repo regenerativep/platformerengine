@@ -37,7 +37,7 @@ namespace PlatformerTestGame
             PEngine.NameToType["obj_block"] = typeof(BlockObject); //if there is a better way to go about doing this please tell
             PEngine.NameToType["obj_player"] = typeof(PlayerObject);
             
-            engine.LoadRoom("Levels\\testttt.json");
+            engine.LoadRoom("Levels\\test.json");
 
             base.Initialize();
         }
