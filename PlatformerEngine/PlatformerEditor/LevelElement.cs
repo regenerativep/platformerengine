@@ -36,7 +36,7 @@ namespace PlatformerEditor
             spriteBatch.End();
             spriteBatch.GraphicsDevice.SetRenderTarget(Graphics);
             //draw grid
-            spriteBatch.Begin(SpriteSortMode.FrontToBack); //TODO: set sort mode somewhere else
+            spriteBatch.Begin(UIManager.SortMode);
             spriteBatch.GraphicsDevice.Clear(Color.Transparent);
             //Vector2 actualOffset = offset + SoftOffset;// + Position;
             Vector2 actualOffset = SoftOffset;
@@ -59,7 +59,7 @@ namespace PlatformerEditor
             {
                 WorldLayer worldLayer = actualGame.WorldLayers[layerKeys[i]];
                 if (!worldLayer.IsVisible) continue;
-                spriteBatch.Begin(SpriteSortMode.FrontToBack);
+                spriteBatch.Begin(UIManager.SortMode);
                 for(int j = 0; j < worldLayer.WorldItems.Count; j++)
                 {
                     WorldItem item = worldLayer.WorldItems[j];
@@ -80,11 +80,11 @@ namespace PlatformerEditor
             {
                 CurrentWorldItem.Position = SnapPosition(GetMousePosition(offset));
             }
-            spriteBatch.Begin(SpriteSortMode.FrontToBack);
+            spriteBatch.Begin(UIManager.SortMode);
             CurrentWorldItem?.Draw(spriteBatch, actualOffset);
             spriteBatch.End();
             spriteBatch.GraphicsDevice.SetRenderTarget(null);
-            spriteBatch.Begin(SpriteSortMode.FrontToBack);
+            spriteBatch.Begin(UIManager.SortMode);
             spriteBatch.Draw(Graphics, Position + offset, Color.White);
         }
         public override void Update()

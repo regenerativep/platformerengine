@@ -66,6 +66,10 @@ namespace PlatformerEngine.UserInterface
         /// a reference to the parent game
         /// </summary>
         public Game Game;
+        /// <summary>
+        /// sort mode for drawing the ui
+        /// </summary>
+        public SpriteSortMode SortMode;
         private Keys[] lastPressedKeys;
         private int lastScrollAmount;
         /// <summary>
@@ -76,6 +80,7 @@ namespace PlatformerEngine.UserInterface
         public UIManager(Game game, AssetManager assetManager)
         {
             Game = game;
+            SortMode = SpriteSortMode.FrontToBack;
             Assets = assetManager;
             Elements = new Dictionary<string, UIElement>();
             CurrentInput = null;
@@ -317,7 +322,7 @@ namespace PlatformerEngine.UserInterface
         /// <param name="spriteBatch">the sprite batch to draw to</param>
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.FrontToBack);
+            spriteBatch.Begin(SortMode);
             TopUINode.Draw(spriteBatch, new Vector2(0, 0));
             spriteBatch.End();
         }

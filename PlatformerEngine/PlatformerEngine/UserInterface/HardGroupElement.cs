@@ -35,7 +35,7 @@ namespace PlatformerEngine.UserInterface
         {
             spriteBatch.End();
             spriteBatch.GraphicsDevice.SetRenderTarget(Graphics);
-            spriteBatch.Begin(SpriteSortMode.FrontToBack);
+            spriteBatch.Begin(UIManager.SortMode);
             spriteBatch.GraphicsDevice.Clear(Color.Transparent);
             for(int i = 0; i < Elements.Count; i++)
             {
@@ -43,7 +43,7 @@ namespace PlatformerEngine.UserInterface
             }
             spriteBatch.End();
             spriteBatch.GraphicsDevice.SetRenderTarget(null);
-            spriteBatch.Begin(SpriteSortMode.FrontToBack);
+            spriteBatch.Begin(UIManager.SortMode);
             spriteBatch.Draw(Graphics, Position + offset, Color.White);
         }
     }
