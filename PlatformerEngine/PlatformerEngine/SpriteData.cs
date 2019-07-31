@@ -103,7 +103,7 @@ namespace PlatformerEngine
         /// <param name="position">the position to draw at</param>
         public void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
-            Draw(spriteBatch, position + Offset, Color.White);
+            Draw(spriteBatch, position, Color.White);
         }
         /// <summary>
         /// draws the sprite with the sprite data
@@ -115,7 +115,7 @@ namespace PlatformerEngine
         {
             if (Frames != null)
             {
-                Rectangle drawRect = new Rectangle((int)position.X, (int)position.Y, (int)Size.X, (int)Size.Y);
+                Rectangle drawRect = new Rectangle((position + Offset).ToPoint(), Size.ToPoint());
                 spriteBatch.Draw(Frames[FrameIndex], drawRect, Source, color, Angle, Origin, SpriteEffect, LayerData.ActualLayer);
             }
         }

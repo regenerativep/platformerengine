@@ -34,7 +34,7 @@ namespace PlatformerEngine
         {
             Room = room;
             Position = position;
-            Sprite = null;
+            Sprite = new SpriteData();
         }
         /// <summary>
         /// updates the tile
@@ -51,6 +51,14 @@ namespace PlatformerEngine
         public virtual void Draw(SpriteBatch spriteBatch, Vector2 viewPosition)
         {
             Sprite?.Draw(spriteBatch, Position - viewPosition);
+        }
+        /// <summary>
+        /// loads required assets for this tile
+        /// </summary>
+        /// <param name="assets">the asset manager to load assets from</param>
+        public virtual void Load(AssetManager assets)
+        {
+
         }
     }
 }

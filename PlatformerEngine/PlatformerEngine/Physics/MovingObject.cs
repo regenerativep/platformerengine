@@ -12,6 +12,7 @@ namespace PlatformerEngine.Physics
         public Vector2 Velocity;
         public float AngularVelocity;
         public Vector2 SpeedLimit;
+        public bool TouchingSurface;
         public float Angle
         {
             get
@@ -36,6 +37,7 @@ namespace PlatformerEngine.Physics
             angleMatrix = new Vector2(0, 0);
             angle = 0;
             SpeedLimit = new Vector2(-1);
+            TouchingSurface = false;
         }
         public override Vector2 GetVertex(int num)
         {

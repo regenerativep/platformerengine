@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -218,6 +219,10 @@ namespace PlatformerEngine
                 if(typeName.Equals("texture"))
                 {
                     LoadTexture(internalName, path);
+                }
+                else if(typeName.Equals("font"))
+                {
+                    LoadFont(internalName, path);
                 }
                 else if(typeName.Equals("framedTexture"))
                 {

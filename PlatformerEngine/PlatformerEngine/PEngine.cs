@@ -49,7 +49,8 @@ namespace PlatformerEngine
             {
                 Action roomComplete = () =>
                 {
-                    CurrentRoom = newRoom;
+                    //CurrentRoom = newRoom;
+                    ChangeRoom(newRoom);
                     CurrentRoom.ApplyTransition(trans.Perform(true));
                 };
                 if (CurrentRoom != null)
@@ -63,7 +64,34 @@ namespace PlatformerEngine
             }
             else
             {
-                CurrentRoom = newRoom;
+                if (CurrentRoom == null)
+                {
+                    CurrentRoom = newRoom;
+                }
+                else
+                {
+                    for (int i = CurrentRoom.GameObjectList.Count - 1; i >= 0; i--)
+                    {
+                        GameObject obj = CurrentRoom.GameObjectList[i];
+                        if (!obj.Persistent)
+                        {
+                            CurrentRoom.GameObjectList.RemoveAt(i);
+                        }
+                    }
+                    CurrentRoom.GameObjectList.AddRange(newRoom.GameObjectList);
+                    for(int i = 0; i < newRoom.GameObjectList.Count; i++)
+                    {
+                        GameObject obj = newRoom.GameObjectList[i];
+                        obj.Room = CurrentRoom;
+                        CurrentRoom.GameObjectList.Add(obj);
+                    }
+                    CurrentRoom.GameTileList.Clear();
+                    CurrentRoom.GameTileList.AddRange(newRoom.GameTileList);
+                    CurrentRoom.Width = newRoom.Width;
+                    CurrentRoom.Height = newRoom.Height;
+                    CurrentRoom.ViewPosition = newRoom.ViewPosition;
+                    CurrentRoom.Physics = newRoom.Physics;
+                }
             }
         }
         /// <summary>

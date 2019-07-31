@@ -12,6 +12,12 @@ namespace PlatformerEngine
     /// </summary>
     public static class PlatformerMath
     {
+        public static Random RandNumGen = new Random();
+        public static T Choose<T>(params T[] arr)
+        {
+            int ind = RandNumGen.Next(arr.Length);
+            return arr[ind];
+        }
         /// <summary>
         /// checks if the given rectangles intersect
         /// got from https://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other
@@ -48,6 +54,15 @@ namespace PlatformerEngine
         public static bool PointInRectangle(Rectangle rect, Vector2 p)
         {
             return p.X > rect.X && p.X <= rect.X + rect.Width && p.Y > rect.Y && p.Y < rect.Y + rect.Height;
+        }
+        /// <summary>
+        /// ceils a vector
+        /// </summary>
+        /// <param name="val">the vector</param>
+        /// <returns>a ceiled version of the given vector</returns>
+        public static Vector2 VectorCeil(Vector2 val)
+        {
+            return new Vector2((float)Math.Ceiling(Math.Abs(val.X)) * Math.Sign(val.X), (float)Math.Ceiling(Math.Abs(val.Y)) * Math.Sign(val.Y));
         }
     }
 }

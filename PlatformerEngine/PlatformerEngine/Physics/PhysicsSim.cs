@@ -13,12 +13,14 @@ namespace PlatformerEngine.Physics
         public List<MovingObject> MovingObjects;
         public List<GameObjectLink> GameObjectLinks;
         public Vector2 Gravity;
+        public Vector2 AirFriction;
         public PhysicsSim()
         {
             ImmobileObjects = new List<ImmobileObject>();
             MovingObjects = new List<MovingObject>();
             GameObjectLinks = new List<GameObjectLink>();
             Gravity = new Vector2(0, 0.2f);
+            AirFriction = new Vector2(0.4f, 0);
         }
         public void Update()
         {
@@ -30,6 +32,7 @@ namespace PlatformerEngine.Physics
             for (int i = 0; i < MovingObjects.Count; i++)
             {
                 MovingObject obj = MovingObjects[i];
+                obj.TouchingSurface = false;
                 for (int j = 0; j < ImmobileObjects.Count; j++)
                 {
                     ImmobileObject targetObj = ImmobileObjects[j];
@@ -48,6 +51,21 @@ namespace PlatformerEngine.Physics
                     if (closest != null)
                     {
                         Collide(obj, targetObj, closest);
+                        obj.TouchingSurface = true;
+                    } 
+                }
+                if (!obj.TouchingSurface)
+                {
+                    Vector2 normalizedVelocity = new Vector2(obj.Velocity.X, obj.Velocity.Y);
+                    normalizedVelocity.Normalize();
+                    if (obj.Velocity.LengthSquared() > AirFriction.LengthSquared())
+                    {
+                        obj.Velocity -= normalizedVelocity * AirFriction;
+                    }
+                    else
+                    {
+                        obj.Velocity.X = 0;
+                        obj.Velocity.Y = 0;
                     }
                 }
             }
@@ -56,6 +74,18 @@ namespace PlatformerEngine.Physics
                 GameObjectLink link = GameObjectLinks[i];
                 link.Update();
             }
+        }
+        public bool CheckCollision(MovingObject a)
+        {
+            for(int i = 0; i < ImmobileObjects.Count; i++)
+            {
+                ImmobileObject obj = ImmobileObjects[i];
+                if(GetCollision(a, obj).Length > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         public void Collide(MovingObject a, ImmobileObject b, Vector2[] linePoints)
         {
@@ -201,6 +231,10 @@ namespace PlatformerEngine.Physics
             float x = a1.X + (a * (a2.X - a1.X));
             float y = a1.Y + (a * (a2.Y - a1.Y));*/
             return a > 0 && a < 1 && b > 0 && b < 1;
+        }
+        public static Vector2[] GenerateRectangleVertices(Vector2 size)
+        {
+            return GenerateRectangleVertices(size.X, size.Y);
         }
         public static Vector2[] GenerateRectangleVertices(float width, float height)
         {

@@ -49,6 +49,26 @@ namespace PlatformerEngine
         /// the physics simulation
         /// </summary>
         public PhysicsSim Physics;
+        /// <summary>
+        /// main render target for drawing things
+        /// </summary>
+        public RenderTarget2D MainTarget;
+        /// <summary>
+        /// light render target for drawing lighting
+        /// </summary>
+        public RenderTarget2D LightTarget;
+        /// <summary>
+        /// effect for making light affect the light target
+        /// </summary>
+        public Effect LightEffect;
+        /// <summary>
+        /// list of lights in the room
+        /// </summary>
+        public List<Light> LightList;
+        /// <summary>
+        /// background for the room
+        /// </summary>
+        public SpriteData Background;
         private ITransition currentTransition;
         /// <summary>
         /// creates an instance of a room
@@ -58,12 +78,18 @@ namespace PlatformerEngine
         {
             Engine = engine;
             Sounds = new SoundManager();
+            Background = new SpriteData();
+            Background.LayerData = new LayerData(0);
             Width = 512;
             Height = 512;
             ViewPosition = new Vector2(0, 0);
             GameObjectList = new List<GameObject>();
             GameTileList = new List<GameTile>();
+            LightList = new List<Light>();
             Physics = null;
+            var pp = Engine.Game.GraphicsDevice.PresentationParameters;
+            MainTarget = new RenderTarget2D(Engine.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
+            LightTarget = new RenderTarget2D(Engine.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight);
         }
         /// <summary>
         /// updates the room and everything inside it
@@ -76,13 +102,13 @@ namespace PlatformerEngine
                 return;
             }
             Physics?.Update();
-            foreach(GameObject obj in GameObjectList)
+            for (int i = 0; i < GameObjectList.Count; i++)
             {
-                obj.Update();
+                GameObjectList[i].Update();
             }
-            foreach(GameTile tle in GameTileList)
+            for (int i = 0; i < GameTileList.Count; i++)
             {
-                tle.Update();
+                GameTileList[i].Update();
             }
         }
         /// <summary>
@@ -91,18 +117,53 @@ namespace PlatformerEngine
         /// <param name="spriteBatch">the sprite batch to draw to</param>
         public void Draw(SpriteBatch spriteBatch)
         {
+            Vector2 ceiledOffset = new Vector2((float)(Math.Ceiling(Math.Abs(ViewPosition.X) * Math.Sign(ViewPosition.X))), (float)(Math.Ceiling(Math.Abs(ViewPosition.Y) * Math.Sign(ViewPosition.Y))));
+            spriteBatch.GraphicsDevice.SetRenderTarget(LightTarget);
+            spriteBatch.GraphicsDevice.Clear(Color.Black);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Additive);
+            for (int i = 0; i < LightList.Count; i++)
+            {
+                Light light = LightList[i];
+                light.Draw(spriteBatch, ceiledOffset);
+            }
+            spriteBatch.End();
+            spriteBatch.GraphicsDevice.SetRenderTarget(MainTarget);
+            spriteBatch.GraphicsDevice.Clear(Color.LightGray);
+            spriteBatch.Begin(SpriteSortMode.FrontToBack);
             if (currentTransition != null && currentTransition.IsActive)
             {
                 currentTransition.Draw(spriteBatch);
             }
-            Vector2 ceiledOffset = new Vector2((float)(Math.Ceiling(Math.Abs(ViewPosition.X) * Math.Sign(ViewPosition.X))), (float)(Math.Ceiling(Math.Abs(ViewPosition.Y) * Math.Sign(ViewPosition.Y))));
-            foreach (GameObject obj in GameObjectList)
+            Background.Draw(spriteBatch, new Vector2(0, 0));
+            for (int i = 0; i < GameObjectList.Count; i++)
             {
-                obj.Draw(spriteBatch, ceiledOffset);
+                GameObjectList[i].Draw(spriteBatch, ceiledOffset);
             }
-            foreach (GameTile tle in GameTileList)
+            for (int i = 0; i < GameTileList.Count; i++)
             {
-                tle.Draw(spriteBatch, ceiledOffset);
+                GameTileList[i].Draw(spriteBatch, ceiledOffset);
+            }
+            spriteBatch.End();
+            spriteBatch.GraphicsDevice.SetRenderTarget(null);
+            spriteBatch.GraphicsDevice.Clear(Color.Black);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            if (LightEffect != null)
+            {
+                LightEffect.Parameters["lightMask"].SetValue(LightTarget);
+                LightEffect.CurrentTechnique.Passes[0].Apply();
+            }
+            spriteBatch.Draw(MainTarget, new Vector2(0, 0), Color.White);
+            spriteBatch.End();
+        }
+        public void LoadAssets(AssetManager assets)
+        {
+            for(int i = 0; i < GameObjectList.Count; i++)
+            {
+                GameObjectList[i].Load(assets);
+            }
+            for(int i = 0; i < GameTileList.Count; i++)
+            {
+                GameTileList[i].Load(assets);
             }
         }
         /// <summary>
@@ -174,7 +235,7 @@ namespace PlatformerEngine
             for (int i = 0; i < GameObjectList.Count; i++)
             {
                 GameObject obj = GameObjectList[i];
-                if (obj.GetType() == PEngine.GetTypeFromName(name))
+                if (obj.GetType().IsEquivalentTo(PEngine.GetTypeFromName(name)))
                 {
                     return obj;
                 }
@@ -192,9 +253,10 @@ namespace PlatformerEngine
             for (int i = 0; i < GameObjectList.Count; i++)
             {
                 GameObject obj = GameObjectList[i];
-                if (obj.GetType() == PEngine.GetTypeFromName(name))
+                if (obj.GetType().IsEquivalentTo(PEngine.GetTypeFromName(name)))
                 {
-                    if (PlatformerMath.RectangleInRectangle(collider, PlatformerMath.AddVectorToRect(new Rectangle((int)obj.Position.X, (int)obj.Position.Y, (int)obj.Sprite.Size.X, (int)obj.Sprite.Size.Y), obj.Position)))
+                    Rectangle objRect = new Rectangle((obj.Position + obj.Sprite.Offset).ToPoint(), obj.Sprite.Size.ToPoint());//new Rectangle((int)obj.Position.X, (int)obj.Position.Y, (int)(obj.Sprite.Size.X, (int)obj.Sprite.Size.Y);
+                    if (PlatformerMath.RectangleInRectangle(collider, objRect))
                     {
                         return obj;
                     }
@@ -213,9 +275,9 @@ namespace PlatformerEngine
             //turn it into an internal json object
             JObject obj = JObject.Parse(json);
             //width
-            int width = (int)obj.GetValue("width").ToObject(typeof(int));
+            Width = (int)obj.GetValue("width").ToObject(typeof(int));
             //height
-            int height = (int)obj.GetValue("height").ToObject(typeof(int));
+            Height = (int)obj.GetValue("height").ToObject(typeof(int));
             //physics
             if(obj.ContainsKey("physics"))
             {
@@ -264,6 +326,7 @@ namespace PlatformerEngine
                     GameTileList.Add(tile);
                 }
             }
+            LoadAssets(Engine.Assets);
             return this;
         }
     }

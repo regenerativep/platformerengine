@@ -61,7 +61,8 @@
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="IInputTrigger.cs" />
     <Compile Include="InputManager.cs" />
-    <Compile Include="InputTrigger.cs" />
+    <Compile Include="KeyInputTrigger.cs" />
+    <Compile Include="Light.cs" />
     <Compile Include="PExtensions.cs" />
     <Compile Include="GameTile.cs" />
     <Compile Include="LayerData.cs" />

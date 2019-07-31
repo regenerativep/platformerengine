@@ -18,9 +18,9 @@ namespace PlatformerTestGame
         {
             using (Game = new PlatformerGame())
             {
-                Action endCb = ConsoleManager.Start();
+                //Action endCb = ConsoleManager.Start();
                 Game.Run();
-                endCb();
+                //endCb();
             }
         }
     }

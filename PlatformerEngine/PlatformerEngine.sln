@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26228.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlatformerEngine", "PlatformerEngine\PlatformerEngine.csproj", "{BBC01141-AF3C-4CA0-98A4-AF547EFA584D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlatformerTestGame", "PlatformerTestGame\PlatformerTestGame.csproj", "{12BC9F85-4D69-432C-8BFA-9ED4458A2534}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreperationGame", "PlatformerTestGame\PreperationGame.csproj", "{12BC9F85-4D69-432C-8BFA-9ED4458A2534}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlatformerEditor", "PlatformerEditor\PlatformerEditor.csproj", "{E18A61BE-6B45-4013-B84E-C1BAD6698B01}"
 EndProject

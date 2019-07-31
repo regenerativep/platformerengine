@@ -38,7 +38,7 @@ namespace PlatformerEngine.Physics
             Vector2 newPosition = new Vector2(PhysicsObject.Position.X, PhysicsObject.Position.Y);
             if(GameObject.Sprite != null)
             {
-                newPosition -= GameObject.Sprite.Offset;
+                //newPosition += GameObject.Sprite.Offset;
             }
             GameObject.Position = newPosition;
         }
