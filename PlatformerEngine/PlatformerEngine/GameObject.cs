@@ -68,7 +68,6 @@ namespace PlatformerEngine
                     GameObject obj = Room.GameObjectList[i];
                     if (obj.GetType().IsEquivalentTo(PEngine.GetTypeFromName("obj_block")))
                     {
-                        //feel like there should be a better way to do collisions but idk that way
                         Rectangle targetRect = obj.GetHitbox();
                         targetRect.Location += obj.Position.ToPoint();
                         Rectangle fromRect = PlatformerMath.AddVectorToRect(GetHitbox(), Position, PlatformerMath.VectorCeil(new Vector2(0, Velocity.Y)));
@@ -86,7 +85,16 @@ namespace PlatformerEngine
                                 fromRect = PlatformerMath.AddVectorToRect(GetHitbox(), Position, PlatformerMath.VectorCeil(new Vector2(0, Velocity.Y)));
                             }
                         }
-                        fromRect = PlatformerMath.AddVectorToRect(GetHitbox(), Position, PlatformerMath.VectorCeil(new Vector2(Velocity.X, 0)));
+                    }
+                }
+                for (int i = 0; i < Room.GameObjectList.Count; i++)
+                {
+                    GameObject obj = Room.GameObjectList[i];
+                    if (obj.GetType().IsEquivalentTo(PEngine.GetTypeFromName("obj_block")))
+                    {
+                        Rectangle targetRect = obj.GetHitbox();
+                        targetRect.Location += obj.Position.ToPoint();
+                        Rectangle fromRect = PlatformerMath.AddVectorToRect(GetHitbox(), Position, PlatformerMath.VectorCeil(new Vector2(Velocity.X, 0)));
                         while (PlatformerMath.RectangleInRectangle(fromRect, targetRect))
                         {
                             Touching = true;
@@ -101,7 +109,16 @@ namespace PlatformerEngine
                                 fromRect = PlatformerMath.AddVectorToRect(GetHitbox(), Position, PlatformerMath.VectorCeil(new Vector2(Velocity.X, 0)));
                             }
                         }
-                        fromRect = PlatformerMath.AddVectorToRect(GetHitbox(), Position, PlatformerMath.VectorCeil(Velocity));
+                    }
+                }
+                for (int i = 0; i < Room.GameObjectList.Count; i++)
+                {
+                    GameObject obj = Room.GameObjectList[i];
+                    if (obj.GetType().IsEquivalentTo(PEngine.GetTypeFromName("obj_block")))
+                    {
+                        Rectangle targetRect = obj.GetHitbox();
+                        targetRect.Location += obj.Position.ToPoint();
+                        Rectangle fromRect = PlatformerMath.AddVectorToRect(GetHitbox(), Position, PlatformerMath.VectorCeil(Velocity));
                         while (PlatformerMath.RectangleInRectangle(fromRect, targetRect))
                         {
                             Touching = true;
